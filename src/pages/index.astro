@@ -1,0 +1,500 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "MusicSchool",
+  "name": "Arya Sanat Akademisi",
+  "description": "Kayseri Kocasinan'da profesyonel müzik eğitimi. Bateri, Gitar, Piyano, Keman, Yan Flüt ve Klarnet dersleri.",
+  "url": "https://arya-sanat-akademisi.vercel.app",
+  "telephone": "+905526112101",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Erciyesevler, Tuna Cd. No:22, 38020",
+    "addressLocality": "Kocasinan",
+    "addressRegion": "Kayseri",
+    "addressCountry": "TR"
+  },
+  "openingHours": ["Tu-Su 10:00-19:00"],
+  "priceRange": "$$",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Müzik Kursları",
+    "itemListElement": [
+      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Bateri Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/bateri"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Gitar Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/gitar"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Piyano Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/piyano"}},
+      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Keman & Telli Çalgılar", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/telli-uflemeli"}}
+    ]
+  }
+};
+---
+
+<Layout
+  title="Arya Sanat Akademisi — Profesyonel Müzik Eğitimi | Kayseri Kocasinan"
+  description="Kayseri Kocasinan'ın en iyi müzik akademisi. Bateri, Gitar, Piyano, Keman eğitimleri. MEB onaylı sertifika. Ücretsiz deneme dersi!"
+  keywords="müzik kursu kayseri, gitar dersi kocasinan, piyano dersi kayseri, bateri dersi, keman dersi kayseri, müzik okulu kocasinan, Arya Sanat Akademisi, MEB onaylı müzik sertifikası, çocuk müzik kursu"
+  schemaJson={JSON.stringify(schema)}
+>
+  <main id="main-content">
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="hero" aria-label="Arya Sanat Akademisi Ana Bölümü">
+      <div class="hero-bg" aria-hidden="true">
+        <img
+          src="/assets/hero_bg.png"
+          alt="Profesyonel müzik akademisi — sahne aydınlatması altında kuyruklu piyano"
+          class="hero-img"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="hero-overlay" aria-hidden="true"></div>
+      </div>
+
+      <div class="hero-content">
+        <p class="hero-tag">✦ MEB Onaylı Sertifikalı Eğitim</p>
+        <h1 class="hero-title">
+          Arya Sanat Akademisi<br />
+          <span class="hero-title-highlight">Profesyonel Müzik Eğitimi</span>
+        </h1>
+        <p class="hero-desc">
+          Müziğin büyülü dünyasına adım atın. Uzman eğitmenlerimizle Gitar, Piyano,
+          Bateri ve Keman derslerinde sınırlarınızı keşfedin.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary btn-lg" id="heroCta">
+            Ücretsiz Deneme Dersi Al
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="#courses" class="btn btn-outline btn-lg" id="heroCoursesBtn">
+            Kursları Keşfet
+          </a>
+        </div>
+        <div class="hero-stats" role="list" aria-label="Akademi İstatistikleri">
+          <div class="hero-stat" role="listitem">
+            <strong>500+</strong>
+            <span>Mutlu Öğrenci</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat" role="listitem">
+            <strong>15+</strong>
+            <span>Uzman Eğitmen</span>
+          </div>
+          <div class="hero-stat-divider" aria-hidden="true"></div>
+          <div class="hero-stat" role="listitem">
+            <strong>10+</strong>
+            <span>Yıllık Deneyim</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="#courses" class="scroll-indicator" aria-label="Aşağı kaydır">
+        <div class="scroll-dot"></div>
+      </a>
+    </section>
+
+    <!-- ===== COURSES SECTION ===== -->
+    <section class="section courses-section" id="courses" aria-labelledby="coursesHeading">
+      <div class="container">
+        <header class="section-header">
+          <p class="section-tag">🎵 Eğitim Programlarımız</p>
+          <h2 id="coursesHeading" class="section-title">Eğitimlerimiz</h2>
+          <p class="section-desc">
+            Her seviyeye uygun, uzman eğitmenler eşliğinde kapsamlı müzik eğitimleri.
+            Başlangıçtan profesyonele giden yolda yanınızdayız.
+          </p>
+        </header>
+
+        <div class="courses-grid" role="list">
+
+          <!-- Course Card: Bateri -->
+          <article class="course-card" id="card-drums" role="listitem" aria-label="Bateri eğitimi kartı">
+            <a href="/kurslar/bateri" class="card-img-link" aria-label="Bateri dersi hakkında detaylı bilgi">
+              <div class="card-img-wrapper">
+                <img
+                  src="/assets/kurslar/bateri-kurs.jpg"
+                  alt="Bateri dersi — Arya Sanat Akademisi profesyonel bateri eğitimi"
+                  class="card-img"
+                  loading="lazy"
+                  width="420"
+                  height="240"
+                />
+                <div class="card-img-overlay" aria-hidden="true"></div>
+              </div>
+            </a>
+            <div class="card-body">
+              <div class="card-icon" aria-hidden="true">🥁</div>
+              <h3 class="card-title">Bateri</h3>
+              <p class="card-desc">
+                Ritmin gücünü hissedin. Temel teknikleri öğrenin, kompleks ritim kalıplarına hâkim olun.
+                Rock'tan jazz'a her tarza uygun kapsamlı bateri eğitimi.
+              </p>
+              <ul class="card-features" aria-label="Bateri eğitim detayları">
+                <li>Temel ritim ve koordinasyon</li>
+                <li>Çeşitli müzik tarzları</li>
+                <li>Profesyonel ekipman kullanımı</li>
+              </ul>
+              <a href="/kurslar/bateri" class="btn btn-card" id="drumsBtn">Detaylı İncele →</a>
+            </div>
+          </article>
+
+          <!-- Course Card: Gitar -->
+          <article class="course-card" id="card-guitar" role="listitem" aria-label="Gitar eğitimi kartı">
+            <a href="/kurslar/gitar" class="card-img-link" aria-label="Gitar dersi hakkında detaylı bilgi">
+              <div class="card-img-wrapper">
+                <img
+                  src="/assets/kurslar/gitar-kurs.jpg"
+                  alt="Gitar dersi — Arya Sanat Akademisi akustik ve elektro gitar eğitimi"
+                  class="card-img"
+                  loading="lazy"
+                  width="420"
+                  height="240"
+                />
+                <div class="card-img-overlay" aria-hidden="true"></div>
+              </div>
+            </a>
+            <div class="card-body">
+              <div class="card-icon" aria-hidden="true">🎸</div>
+              <h3 class="card-title">Gitar</h3>
+              <p class="card-desc">
+                Klasik, akustik ve elektro gitar derslerinde temel akorlardan ileri düzey tekniklere
+                kadar kapsamlı eğitim alın.
+              </p>
+              <ul class="card-features" aria-label="Gitar eğitim detayları">
+                <li>Klasik &amp; Akustik &amp; Elektro Gitar</li>
+                <li>Parmak tekniği ve akort</li>
+                <li>Şarkı analizi ve kompozisyon</li>
+              </ul>
+              <a href="/kurslar/gitar" class="btn btn-card" id="guitarBtn">Detaylı İncele →</a>
+            </div>
+          </article>
+
+          <!-- Course Card: Piyano -->
+          <article class="course-card" id="card-piano" role="listitem" aria-label="Piyano eğitimi kartı">
+            <a href="/kurslar/piyano" class="card-img-link" aria-label="Piyano dersi hakkında detaylı bilgi">
+              <div class="card-img-wrapper">
+                <img
+                  src="/assets/kurslar/piyano-kurs.jpg"
+                  alt="Piyano dersi — Arya Sanat Akademisi klasik ve modern piyano eğitimi"
+                  class="card-img"
+                  loading="lazy"
+                  width="420"
+                  height="240"
+                />
+                <div class="card-img-overlay" aria-hidden="true"></div>
+              </div>
+            </a>
+            <div class="card-body">
+              <div class="card-icon" aria-hidden="true">🎹</div>
+              <h3 class="card-title">Piyano</h3>
+              <p class="card-desc">
+                Müziğin kraliçesiyle tanışın. Parmak egzersizlerinden klasik eserlere, modern pop
+                ve cazın dünyasına kapılar açın.
+              </p>
+              <ul class="card-features" aria-label="Piyano eğitim detayları">
+                <li>Nota okuma ve teori</li>
+                <li>Klasik &amp; Pop repertuvar</li>
+                <li>İki el koordinasyonu</li>
+              </ul>
+              <a href="/kurslar/piyano" class="btn btn-card" id="pianoBtn">Detaylı İncele →</a>
+            </div>
+          </article>
+
+          <!-- Course Card: Telli & Üflemeli -->
+          <article class="course-card" id="card-strings" role="listitem" aria-label="Telli ve üflemeli çalgılar eğitim kartı">
+            <a href="/kurslar/telli-uflemeli" class="card-img-link" aria-label="Telli ve üflemeli çalgılar dersi hakkında detaylı bilgi">
+              <div class="card-img-wrapper">
+                <img
+                  src="/assets/kurslar/telli-kurs.jpg"
+                  alt="Keman dersi — Arya Sanat Akademisi keman, yan flüt ve klarnet eğitimi"
+                  class="card-img"
+                  loading="lazy"
+                  width="420"
+                  height="240"
+                />
+                <div class="card-img-overlay" aria-hidden="true"></div>
+              </div>
+            </a>
+            <div class="card-body">
+              <div class="card-icon" aria-hidden="true">🎻</div>
+              <h3 class="card-title">Telli &amp; Üflemeli</h3>
+              <p class="card-desc">
+                Orkestranın ruhunu taşıyan enstrümanları keşfedin. Duygusal ve teknik derinliği
+                olan bir müzisyen olma yolunda adım atın.
+              </p>
+              <ul class="card-features" aria-label="Telli ve üflemeli çalgılar detayları">
+                <li>Keman — Klasik yorumlar</li>
+                <li>Yan Flüt — Nefes teknikleri</li>
+                <li>Klarnet — Ton ve artikülasyon</li>
+              </ul>
+              <a href="/kurslar/telli-uflemeli" class="btn btn-card" id="stringsBtn">Detaylı İncele →</a>
+            </div>
+          </article>
+
+        </div><!-- /.courses-grid -->
+      </div>
+    </section>
+
+    <!-- ===== WHY ARYA SECTION ===== -->
+    <section class="section why-section" id="why-arya" aria-labelledby="whyHeading">
+      <div class="container">
+        <header class="section-header">
+          <p class="section-tag">⭐ Fark Yaratan Eğitim</p>
+          <h2 id="whyHeading" class="section-title">Neden Arya Sanat?</h2>
+          <p class="section-desc">
+            On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde
+            standartları yeniden belirliyoruz.
+          </p>
+        </header>
+
+        <div class="features-grid" role="list">
+
+          <article class="feature-card" role="listitem" id="feature-teachers">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <div class="feature-icon">🎓</div>
+            </div>
+            <h3 class="feature-title">Deneyimli Eğitmenler</h3>
+            <p class="feature-desc">
+              Konservatuvar mezunu, sahne deneyimi yüksek eğitmenlerimiz her öğrencinin
+              potansiyelini ortaya çıkarmak için kişiselleştirilmiş eğitim sağlar.
+            </p>
+            <ul class="feature-list" aria-label="Eğitmen özellikleri">
+              <li>Konservatuvar mezunu kadro</li>
+              <li>Aktif müzisyen-eğitmenler</li>
+              <li>Bireysel öğrenme planı</li>
+            </ul>
+          </article>
+
+          <article class="feature-card feature-card--accent" role="listitem" id="feature-equipment">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <div class="feature-icon">🎙️</div>
+            </div>
+            <h3 class="feature-title">Profesyonel Ekipmanlar</h3>
+            <p class="feature-desc">
+              Steinway kuyruklu piyanodan, Roland elektronik bateri setlerine kadar
+              en kaliteli enstrümanlarla eğitim aldığınız, konser salonlarını andıran
+              stüdyo ortamı.
+            </p>
+            <ul class="feature-list" aria-label="Ekipman özellikleri">
+              <li>Ses yalıtımlı stüdyolar</li>
+              <li>Kayıt ekipmanları</li>
+              <li>Konser salonu</li>
+            </ul>
+          </article>
+
+          <article class="feature-card" role="listitem" id="feature-certificate">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <div class="feature-icon">📜</div>
+            </div>
+            <h3 class="feature-title">MEB Onaylı Sertifika</h3>
+            <p class="feature-desc">
+              Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi
+              bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav
+              hazırlık programlarımız da mevcuttur.
+            </p>
+            <ul class="feature-list" aria-label="Sertifika özellikleri">
+              <li>MEB onaylı belgeler</li>
+              <li>ABRSM sınav hazırlığı</li>
+              <li>Dijital sertifika sistemi</li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TEACHERS SECTION ===== -->
+    <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
+      <div class="container">
+        <header class="section-header">
+          <p class="section-tag">👨‍🏫 Uzman Kadromuz</p>
+          <h2 id="teachersHeading" class="section-title">Eğitmenlerimiz</h2>
+          <p class="section-desc">
+            Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu
+            güvenle sürdürün.
+          </p>
+        </header>
+
+        <div class="teachers-grid" role="list">
+
+          <article class="teacher-card" role="listitem" id="teacher-can">
+            <div class="teacher-img-wrapper">
+              <img
+                src="/assets/teacher_drums.png"
+                alt="Mehmet KAYA — Bateri Eğitmeni, Arya Sanat Akademisi"
+                class="teacher-img"
+                loading="lazy"
+                width="320"
+                height="320"
+              />
+              <div class="teacher-overlay" aria-hidden="true">
+                <p class="teacher-bio">
+                  Mehmet Kaya'nın biyografisi gelecek
+                </p>
+              </div>
+            </div>
+            <div class="teacher-info">
+              <h3 class="teacher-name">Mehmet KAYA</h3>
+              <p class="teacher-specialty">Bateri Eğitmeni</p>
+              <div class="teacher-tags" aria-label="Uzmanlık alanları">
+                <span class="tag">Rock</span>
+                <span class="tag">Jazz</span>
+                <span class="tag">Latin</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section class="section contact-section" id="contact" aria-labelledby="contactHeading">
+      <div class="container">
+        <div class="contact-grid">
+
+          <!-- Contact Info -->
+          <div class="contact-info">
+            <p class="section-tag">📞 Bize Ulaşın</p>
+            <h2 id="contactHeading" class="section-title contact-title">İletişim &amp; Kayıt</h2>
+            <p class="contact-desc">
+              Ücretsiz deneme dersimiz için formu doldurun veya doğrudan bizimle iletişime geçin.
+              Sizi müzik yolculuğunuzda karşılamak için sabırsızlanıyoruz.
+            </p>
+
+            <address class="contact-details" aria-label="Akademi iletişim bilgileri">
+              <div class="contact-item">
+                <span class="contact-icon" aria-hidden="true">📍</span>
+                <div>
+                  <strong>Adres</strong>
+                  <p>Erciyesevler, Tuna Cd. No:22, 38020 <br />Kocasinan / Kayseri</p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon" aria-hidden="true">📞</span>
+                <div>
+                  <strong>Telefon</strong>
+                  <p><a href="tel:+905526112101">+90 552 611 21 01</a></p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon" aria-hidden="true">✉️</span>
+                <div>
+                  <strong>E-Posta</strong>
+                  <p><a href="mailto:aryasanatakademisi@gmail.com">aryasanatakademisi@gmail.com</a></p>
+                </div>
+              </div>
+              <div class="contact-item">
+                <span class="contact-icon" aria-hidden="true">🕐</span>
+                <div>
+                  <strong>Çalışma Saatleri</strong>
+                  <p>Salı-Pazar: 10:00 — 19:00 <br />Pazartesi: Kapalı</p>
+                </div>
+              </div>
+            </address>
+
+            <!-- Social Media -->
+            <div class="social-links" aria-label="Sosyal medya bağlantıları">
+              <a href="https://www.instagram.com/aryasanatakademisi" class="social-link" id="instagramLink" aria-label="Instagram hesabımızı takip edin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                Instagram
+              </a>
+              <a href="#" class="social-link" id="facebookLink" aria-label="Facebook sayfamızı beğenin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                Facebook
+              </a>
+              <a href="#" class="social-link" id="youtubeLink" aria-label="YouTube kanalımıza abone olun">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.4 19.54C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"></path><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"></polygon></svg>
+                YouTube
+              </a>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form-wrapper">
+            <form class="contact-form" id="contactForm" novalidate aria-label="Kayıt ve iletişim formu">
+              <h3 class="form-title">Ücretsiz Deneme Dersi</h3>
+              <p class="form-subtitle">Formu doldurun, size 24 saat içinde ulaşalım.</p>
+
+              <div class="form-group">
+                <label for="fullName" class="form-label">Ad Soyad</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  class="form-input"
+                  placeholder="Ad Soyadınız"
+                  required
+                  autocomplete="name"
+                  aria-required="true"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="phone" class="form-label">Telefon</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  class="form-input"
+                  placeholder="05XX XXX XX XX"
+                  required
+                  autocomplete="tel"
+                  aria-required="true"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="form-label">E-Posta</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-input"
+                  placeholder="ornek@email.com"
+                  autocomplete="email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="instrument" class="form-label">İlgilendiğiniz Enstrüman</label>
+                <select id="instrument" name="instrument" class="form-input form-select" required aria-required="true">
+                  <option value="" disabled selected>Enstrüman Seçiniz</option>
+                  <option value="bateri">Bateri</option>
+                  <option value="gitar">Gitar</option>
+                  <option value="piyano">Piyano</option>
+                  <option value="keman">Keman</option>
+                  <option value="flut">Yan Flüt</option>
+                  <option value="klarnet">Klarnet</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message" class="form-label">Mesajınız (İsteğe Bağlı)</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  class="form-input form-textarea"
+                  placeholder="Müzik geçmişiniz, hedefleriniz veya sorularınız..."
+                  rows="4"
+                  aria-multiline="true"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                Ücretsiz Ders Talep Et
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+
+              <div class="form-success" id="formSuccess" role="alert" aria-live="polite" hidden>
+                <span aria-hidden="true">✅</span> Talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Layout>

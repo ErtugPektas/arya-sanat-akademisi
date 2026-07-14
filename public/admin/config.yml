@@ -1,0 +1,77 @@
+backend:
+  name: github
+  repo: ErtugPektas/arya-sanat-akademisi
+  branch: main
+
+media_folder: "public/assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "courses"
+    label: "Kurslar"
+    folder: "src/content/kurslar"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - {label: "Başlık (SEO)", name: "title", widget: "string"}
+      - {label: "Açıklama (SEO)", name: "description", widget: "text"}
+      - {label: "Anahtar Kelimeler (SEO)", name: "keywords", widget: "string", required: false}
+      - {label: "Rozet (Örn: 🥁 Bateri Eğitimi)", name: "badge", widget: "string"}
+      - {label: "Hero Başlık", name: "heroTitle", widget: "string"}
+      - {label: "Hero Vurgulanan Bölüm (Örn: Kayseri Kocasinan)", name: "heroTitleHighlight", widget: "string"}
+      - {label: "Hero Açıklaması", name: "heroDesc", widget: "text"}
+      - {label: "Ana Görsel", name: "image", widget: "image"}
+      - {label: "Ders Süresi", name: "duration", widget: "string", default: "45 dk / ders"}
+      - {label: "Sıklık", name: "frequency", widget: "string", default: "Haftada 1–2 ders"}
+      - {label: "Seviye", name: "level", widget: "string", default: "Başlangıç → İleri"}
+      - {label: "Sertifika Durumu", name: "certificate", widget: "string", default: "MEB Onaylı"}
+      - {label: "Özet Lead Yazı", name: "leadText", widget: "text"}
+      - label: "Kimler İçin Seviyeler"
+        name: "levels"
+        widget: "object"
+        fields:
+          - label: "Başlangıç Seviye"
+            name: "beginner"
+            widget: "object"
+            fields:
+              - {label: "Başlık", name: "title", widget: "string"}
+              - {label: "Açıklama", name: "desc", widget: "text"}
+          - label: "Orta Seviye"
+            name: "intermediate"
+            widget: "object"
+            fields:
+              - {label: "Başlık", name: "title", widget: "string"}
+              - {label: "Açıklama", name: "desc", widget: "text"}
+          - label: "İleri Seviye"
+            name: "advanced"
+            widget: "object"
+            fields:
+              - {label: "Başlık", name: "title", widget: "string"}
+              - {label: "Açıklama", name: "desc", widget: "text"}
+      - {label: "Galeri Görselleri", name: "gallery", widget: "list", field: {label: "Görsel", widget: "image"}}
+      - label: "Müfredat Aşamaları"
+        name: "curriculum"
+        widget: "list"
+        fields:
+          - {label: "Dönem (Örn: 1-3. Ay)", name: "period", widget: "string"}
+          - {label: "Aşama Başlığı", name: "title", widget: "string"}
+          - {label: "Kazanımlar / Ders İçeriği", name: "items", widget: "list", field: {label: "Madde", widget: "string"}}
+      - label: "Eğitmen Bilgileri"
+        name: "teacher"
+        widget: "object"
+        fields:
+          - {label: "Eğitmen Adı Soyadı", name: "name", widget: "string"}
+          - {label: "Uzmanlık Alanı", name: "specialty", widget: "string"}
+          - {label: "Eğitmen Görseli", name: "image", widget: "image"}
+          - {label: "Biyografi Paragrafı 1", name: "bio1", widget: "text"}
+          - {label: "Biyografi Paragrafı 2 (Opsiyonel)", name: "bio2", widget: "text", required: false}
+          - {label: "Etiketler (Örn: Rock, Jazz)", name: "tags", widget: "list", field: {label: "Etiket", widget: "string"}}
+      - label: "Sıkça Sorulan Sorular"
+        name: "faq"
+        widget: "list"
+        fields:
+          - {label: "Soru", name: "question", widget: "string"}
+          - {label: "Cevap", name: "answer", widget: "text"}
+      - {label: "Detaylı Sayfa İçeriği (Markdown)", name: "body", widget: "markdown"}

@@ -1,0 +1,12 @@
+# Visual Studio geçici dosyaları - deploy'a dahil etme
+.vs/
+*.user
+*.suo
+*.sln
+*.slnx
+
+# Node modules (varsa)
+node_modules/
+
+# Vercel local config
+.vercel/

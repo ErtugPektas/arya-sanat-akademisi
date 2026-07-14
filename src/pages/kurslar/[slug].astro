@@ -1,0 +1,307 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const courses = await getCollection('kurslar');
+  return courses.map(course => ({
+    params: { slug: course.id },
+    props: { course },
+  }));
+}
+
+const { course } = Astro.props;
+const { data } = course;
+const { Content } = await render(course);
+
+// Generate dynamic schema
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": data.heroTitle,
+    "description": data.description,
+    "url": `https://arya-sanat-akademisi.vercel.app/kurslar/${course.id}`,
+    "image": `https://arya-sanat-akademisi.vercel.app${data.image}`,
+    "provider": {
+      "@type": "Organization",
+      "name": "Arya Sanat Akademisi",
+      "url": "https://arya-sanat-akademisi.vercel.app"
+    },
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "onsite",
+      "location": {"@type": "Place", "name": "Arya Sanat Akademisi", "address": "Kocasinan, Kayseri"}
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://arya-sanat-akademisi.vercel.app/"},
+      {"@type": "ListItem", "position": 2, "name": "Eğitimler", "item": "https://arya-sanat-akademisi.vercel.app/#courses"},
+      {"@type": "ListItem", "position": 3, "name": data.heroTitle}
+    ]
+  }
+];
+---
+
+<Layout
+  title={`${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
+  description={data.description}
+  keywords={data.keywords}
+  canonical={`https://arya-sanat-akademisi.vercel.app/kurslar/${course.id}`}
+  ogTitle={`${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
+  ogDescription={data.description}
+  ogImage={data.image}
+  schemaJson={JSON.stringify(schema)}
+>
+  <!-- Custom course page styles -->
+  <link rel="stylesheet" href="/css/kurs.css" slot="head" />
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <div class="container">
+      <ol class="breadcrumb" aria-label="Sayfa konumu">
+        <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+        <li class="breadcrumb-sep" aria-hidden="true">›</li>
+        <li class="breadcrumb-item"><a href="/#courses">Eğitimler</a></li>
+        <li class="breadcrumb-sep" aria-hidden="true">›</li>
+        <li class="breadcrumb-item active" aria-current="page">{data.heroTitle}</li>
+      </ol>
+    </div>
+  </div>
+
+  <main>
+    <!-- KURS HERO -->
+    <section class="kurs-hero" aria-labelledby="courseHeroTitle">
+      <div class="kurs-hero-bg">
+        <img
+          src={data.image}
+          alt={`${data.heroTitle} — Arya Sanat Akademisi`}
+          class="kurs-hero-img"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="kurs-hero-overlay" aria-hidden="true"></div>
+      </div>
+      <div class="kurs-hero-content container">
+        <span class="kurs-badge">{data.badge}</span>
+        <h1 class="kurs-hero-title" id="courseHeroTitle">
+          {data.heroTitle}<br />
+          <span class="hero-title-highlight">{data.heroTitleHighlight}</span>
+        </h1>
+        <p class="kurs-hero-desc">{data.heroDesc}</p>
+        <div class="kurs-hero-actions">
+          <a href="/#contact" class="btn btn-primary btn-lg">Ücretsiz Deneme Dersi Al</a>
+          <a href="tel:+905526112101" class="btn btn-outline btn-lg">📞 Hemen Ara</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- KURS GENEL BİLGİ -->
+    <section class="section" id="course-details" aria-labelledby="courseDetailsTitle">
+      <div class="container">
+        <div class="kurs-info-grid" role="list" aria-label="Kurs özet bilgileri">
+          <div class="kurs-info-card" role="listitem">
+            <span class="kurs-info-icon" aria-hidden="true">🕐</span>
+            <div>
+              <span class="kurs-info-label">Ders Süresi</span>
+              <span class="kurs-info-value">{data.duration}</span>
+            </div>
+          </div>
+          <div class="kurs-info-card" role="listitem">
+            <span class="kurs-info-icon" aria-hidden="true">📅</span>
+            <div>
+              <span class="kurs-info-label">Sıklık</span>
+              <span class="kurs-info-value">{data.frequency}</span>
+            </div>
+          </div>
+          <div class="kurs-info-card" role="listitem">
+            <span class="kurs-info-icon" aria-hidden="true">🎯</span>
+            <div>
+              <span class="kurs-info-label">Seviye</span>
+              <span class="kurs-info-value">{data.level}</span>
+            </div>
+          </div>
+          <div class="kurs-info-card" role="listitem">
+            <span class="kurs-info-icon" aria-hidden="true">📜</span>
+            <div>
+              <span class="kurs-info-label">Sertifika</span>
+              <span class="kurs-info-value">{data.certificate}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kurs-detail-grid">
+          <div class="kurs-text-content">
+            <h2 id="courseDetailsTitle" class="section-title" style="text-align:left; margin-bottom:1.5rem">Eğitim Hakkında</h2>
+            <p class="kurs-lead">{data.leadText}</p>
+            <div class="kurs-text">
+              <Content />
+            </div>
+          </div>
+
+          <aside aria-label="Hedef kitle bilgisi">
+            <h3 class="section-title" style="font-size:1.5rem; text-align:left; margin-bottom:1.25rem">Kimler İçin?</h3>
+            <div class="level-cards">
+              <div class="level-card">
+                <span class="level-label beginner">Başlangıç</span>
+                <p class="level-title">{data.levels.beginner.title}</p>
+                <p class="level-desc">{data.levels.beginner.desc}</p>
+              </div>
+              <div class="level-card">
+                <span class="level-label intermediate">Orta Seviye</span>
+                <p class="level-title">{data.levels.intermediate.title}</p>
+                <p class="level-desc">{data.levels.intermediate.desc}</p>
+              </div>
+              <div class="level-card">
+                <span class="level-label advanced">İleri Seviye</span>
+                <p class="level-title">{data.levels.advanced.title}</p>
+                <p class="level-desc">{data.levels.advanced.desc}</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERİ -->
+    {data.gallery && data.gallery.length > 0 && (
+      <section class="section gallery-section" aria-labelledby="courseGalleryTitle">
+        <div class="container">
+          <header class="section-header">
+            <p class="section-tag">📷 Stüdyomuzdan</p>
+            <h2 id="courseGalleryTitle" class="section-title">Eğitim Alanımız</h2>
+          </header>
+          <div class="gallery-grid">
+            {data.gallery.map((img) => (
+              <figure class="gallery-item">
+                <img
+                  src={img}
+                  alt={`${data.heroTitle} dersi - Arya Sanat`}
+                  class="gallery-img"
+                  loading="lazy"
+                  width="600"
+                  height="375"
+                />
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- MÜFREDAT -->
+    {data.curriculum && data.curriculum.length > 0 && (
+      <section class="section curriculum-section" aria-labelledby="courseCurriculumTitle">
+        <div class="container">
+          <header class="section-header">
+            <p class="section-tag">📚 Ders Planı</p>
+            <h2 id="courseCurriculumTitle" class="section-title">Eğitim Müfredatı</h2>
+            <p class="section-desc">Sistematik ve ilerlemeye dayalı eğitim programımız.</p>
+          </header>
+          <div class="curriculum-steps">
+            {data.curriculum.map((step) => (
+              <div class="curriculum-step">
+                <span class="curriculum-period">{step.period}</span>
+                <h3 class="curriculum-title">{step.title}</h3>
+                <ul class="curriculum-list">
+                  {step.items.map(item => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- EĞİTMEN -->
+    <section class="section" id="course-teacher" aria-labelledby="courseTeacherTitle">
+      <div class="container">
+        <header class="section-header">
+          <p class="section-tag">👨‍🏫 Uzman Kadromuz</p>
+          <h2 id="courseTeacherTitle" class="section-title">Eğitmeniniz</h2>
+        </header>
+        <div class="kurs-teacher-card">
+          <div class="kurs-teacher-img-wrapper">
+            <img
+              src={data.teacher.image}
+              alt={`${data.teacher.name} — ${data.teacher.specialty}`}
+              class="kurs-teacher-img"
+              loading="lazy"
+              width="320"
+              height="380"
+            />
+          </div>
+          <div class="kurs-teacher-body">
+            <h3 class="kurs-teacher-name">{data.teacher.name}</h3>
+            <p class="kurs-teacher-specialty">{data.teacher.specialty}</p>
+            <p class="kurs-teacher-bio">{data.teacher.bio1}</p>
+            {data.teacher.bio2 && <p class="kurs-teacher-bio">{data.teacher.bio2}</p>}
+            <div class="teacher-tags">
+              {data.teacher.tags.map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSS -->
+    {data.faq && data.faq.length > 0 && (
+      <section class="section faq-section" aria-labelledby="courseFaqTitle">
+        <div class="container">
+          <header class="section-header">
+            <p class="section-tag">❓ Sıkça Sorulan Sorular</p>
+            <h2 id="courseFaqTitle" class="section-title">Merak Edilenler</h2>
+          </header>
+          <div class="faq-list" role="list">
+            {data.faq.map((item, idx) => (
+              <div class="faq-item" role="listitem">
+                <button class="faq-question" aria-expanded="false" id={`faq${idx}-btn`} aria-controls={`faq${idx}-ans`}>
+                  {item.question}
+                  <svg class="faq-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </button>
+                <div class="faq-answer" id={`faq${idx}-ans`} role="region" aria-labelledby={`faq${idx}-btn`} hidden>
+                  {item.answer}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA -->
+    <section class="kurs-cta-section" aria-labelledby="courseCtaTitle">
+      <div class="container">
+        <h2 class="kurs-cta-title" id="courseCtaTitle">Yolculuğunuza Başlayın</h2>
+        <p class="kurs-cta-desc">İlk dersiniz tamamen ücretsiz. Akademimizi ve eğitmeninizi tanıma fırsatı yakalayın.</p>
+        <div class="kurs-cta-actions">
+          <a href="/#contact" class="btn btn-primary btn-lg">Ücretsiz Deneme Dersi Al</a>
+          <a href="tel:+905526112101" class="btn btn-outline btn-lg">📞 +90 552 611 21 01</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FAQ functionality script -->
+  <script is:inline>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = document.getElementById(btn.getAttribute('aria-controls'));
+        const isOpen = !answer.hidden;
+        document.querySelectorAll('.faq-answer').forEach(a => { a.hidden = true; });
+        document.querySelectorAll('.faq-question').forEach(b => b.setAttribute('aria-expanded', 'false'));
+        if (!isOpen) { answer.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+  </script>
+</Layout>
