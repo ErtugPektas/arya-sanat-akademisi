@@ -2,6 +2,9 @@ backend:
   name: github
   repo: ErtugPektas/arya-sanat-akademisi
   branch: main
+  base_url: https://arya-sanat-akademisi.vercel.app
+  auth_endpoint: api/auth
+
 
 media_folder: "public/assets/uploads"
 public_folder: "/assets/uploads"
