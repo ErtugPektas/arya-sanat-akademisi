@@ -21,3 +21,5 @@ Thumbs.db
 # Editor
 .vs/
 .vscode/settings.json
+
+.vercel
