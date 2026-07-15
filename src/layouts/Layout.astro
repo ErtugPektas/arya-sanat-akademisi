@@ -130,6 +130,17 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
   <!-- Content Slot -->
   <slot />
 
+  <!-- Page View Tracking -->
+  {!isAdmin && (
+    <script is:inline>
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: window.location.pathname })
+      }).catch(() => {});
+    </script>
+  )}
+
   <!-- ===== FOOTER ===== -->
   {!isAdmin && (
     <>
