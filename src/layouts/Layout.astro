@@ -64,7 +64,7 @@ const currentOgDescription = ogDescription || description;
 <body>
 
   <!-- ===== HEADER / NAV ===== -->
-  <header class="site-header" id="site-header" role="banner">
+  <header class={`site-header ${Astro.url.pathname !== '/' ? 'scrolled' : ''}`} id="site-header" role="banner">
     <nav class="navbar" aria-label="Ana Navigasyon">
       <div class="nav-container">
 
