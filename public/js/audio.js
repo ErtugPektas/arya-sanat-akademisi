@@ -2,6 +2,7 @@
  * audio.js — Arya Sanat Akademisi
  * Ludovico Einaudi tarzında (Nuvole Bianche akışında) aralıksız çalan dinlendirici piyano sentezi.
  * Sıfır yükleme gecikmesi ve Edge CDN tasarrufu için tamamen Web Audio API ile üretilmiştir.
+ * Bu sürümde, piyano seslerine kilise akustiği (reverb/delay) katan programatik bir geciktirici eklenmiştir.
  */
 
 'use strict';
@@ -9,6 +10,9 @@
 const AudioManager = (() => {
   let audioCtx = null;
   let masterGainNode = null;
+  let delayNode = null;
+  let delayFeedback = null;
+  let delayWet = null;
   let isMuted = false;
   
   let schedulerTimer = null;
@@ -16,12 +20,10 @@ const AudioManager = (() => {
   let currentNoteIndex = 0;
   let currentChordIndex = 0;
   
-  const tempo = 90; // BPM
-  const noteLength = 0.17; // 170ms aralıklarla sekizlik notalar (akıcı arpej)
+  const noteLength = 0.18; // 180ms aralıklarla sekizlik notalar (akıcı arpej)
 
   // Ludovico Einaudi tarzında (Am - F - C - G) akan piyano akor arpejleri
   const CHORDS = [
-    // Her akor 8 adet sırayla çalınacak frekanstan oluşur (sol el eşliği)
     [110.00, 164.81, 220.00, 261.63, 329.63, 261.63, 220.00, 164.81], // Am: A2, E3, A3, C4, E4, C4, A3, E3
     [87.31,  130.81, 174.61, 218.27, 261.63, 218.27, 174.61, 130.81], // F: F2, C3, F3, A3, C4, A3, F3, C3
     [130.81, 196.00, 261.63, 329.63, 392.00, 329.63, 261.63, 196.00], // C: C3, G3, C4, E4, G4, E4, C4, G3
@@ -70,14 +72,34 @@ const AudioManager = (() => {
   };
 
   /**
-   * AudioContext ve Master Gain Node başlatıcı
+   * AudioContext, Master Gain ve Reverb (Delay) Efekti başlatıcı
    */
   function init() {
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Master Gain
       masterGainNode = audioCtx.createGain();
       masterGainNode.gain.setValueAtTime(isMuted ? 0 : 1, audioCtx.currentTime);
       masterGainNode.connect(audioCtx.destination);
+
+      // Reverb/Echo Efekti için Gecikme Ünitesi (Delay Node)
+      delayNode = audioCtx.createDelay(2.0);
+      delayNode.delayTime.setValueAtTime(0.38, audioCtx.currentTime); // 380ms gecikme (yankı)
+
+      delayFeedback = audioCtx.createGain();
+      delayFeedback.gain.setValueAtTime(0.42, audioCtx.currentTime); // Yankı kuyruğu uzunluğu (reverb hissi)
+
+      delayWet = audioCtx.createGain();
+      delayWet.gain.setValueAtTime(0.22, audioCtx.currentTime); // Efektin genel ses miksajı oranı
+
+      // Yankı Geri Besleme Döngüsü (Feedback loop)
+      delayNode.connect(delayFeedback);
+      delayFeedback.connect(delayNode);
+
+      // Efekti Master Çıkışa bağla
+      delayNode.connect(delayWet);
+      delayWet.connect(masterGainNode);
     }
     if (audioCtx.state === 'suspended') {
       audioCtx.resume();
@@ -96,11 +118,15 @@ const AudioManager = (() => {
 
     // Dinlendirici lo-fi piyano tonu için lowpass filtre
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(580, startTime);
+    filter.frequency.setValueAtTime(620, startTime);
 
     osc.connect(gainNode);
     gainNode.connect(filter);
+    
+    // Filtrelenmiş sesi doğrudan masterGain'e (kuru ses) bağla
     filter.connect(masterGainNode);
+    // Aynı zamanda filtrelenmiş sesi yankı ünitesine (ıslak ses) göndererek derinlik ekle
+    filter.connect(delayNode);
 
     osc.type = 'sine'; // Yuvarlak ve pürüzsüz dalga formu
     osc.frequency.setValueAtTime(freq, startTime);
@@ -124,13 +150,13 @@ const AudioManager = (() => {
     const baseFreq = CHORDS[chordIndex][noteIndex];
     playPianoTone(baseFreq, time, 0.45, 0.012, 0.15, 0.3, 0.4);
 
-    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.016 ses seviyesi)
+    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.015 ses seviyesi)
     if (noteIndex === 0) {
       const melodyFreq = MELODY_BEAT_0[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.016, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.015, 0.2, 0.4, 0.8);
     } else if (noteIndex === 4) {
       const melodyFreq = MELODY_BEAT_4[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.016, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.015, 0.2, 0.4, 0.8);
     }
   }
 
