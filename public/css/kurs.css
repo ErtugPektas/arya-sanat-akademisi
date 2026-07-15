@@ -141,6 +141,15 @@
   font-size: 1.5rem;
   flex-shrink: 0;
   line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.kurs-info-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-primary);
+  display: block;
 }
 
 .kurs-info-label {
