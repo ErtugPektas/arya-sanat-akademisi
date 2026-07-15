@@ -1,0 +1,238 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = false;
+
+// Check session
+const cookie = Astro.request.headers.get('cookie') || '';
+const isLoggedIn = cookie.includes('admin_session=true');
+
+if (!isLoggedIn) {
+  return Astro.redirect('/admin');
+}
+
+// Get course parameter
+const url = new URL(Astro.request.url);
+const courseId = url.searchParams.get('course');
+
+if (!courseId) {
+  return Astro.redirect('/admin');
+}
+
+const course = await getEntry('kurslar', courseId);
+
+if (!course) {
+  return Astro.redirect('/admin');
+}
+
+const { data, body } = course;
+---
+
+<Layout title={`${data.heroTitle} Düzenle | Yönetim Paneli`} description="Kurs Düzenleme Alanı">
+  <link rel="stylesheet" href="/css/style.css" slot="head" />
+
+  <div class="admin-container" style="min-height: 100vh; padding: 3rem 1rem; background: #0b0b0e; color: #fff; font-family: sans-serif;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      
+      <!-- HEADER -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #232330; padding-bottom: 1rem; margin-bottom: 2.5rem;">
+        <div>
+          <a href="/admin" style="color: #8b8b9f; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.25rem;">
+            ← Panele Geri Dön
+          </a>
+          <h1 style="font-size: 1.8rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">{data.heroTitle} Düzenle</h1>
+        </div>
+        <button 
+          id="btn-save" 
+          style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 0.8rem 1.6rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;"
+        >
+          <span>Kaydet ve Yayınla 🚀</span>
+        </button>
+      </div>
+
+      <!-- FORM -->
+      <form id="course-form" style="display: flex; flex-direction: column; gap: 2.5rem;">
+        <input type="hidden" name="courseId" value={courseId} />
+
+        <!-- 1. SEO AYARLARI -->
+        <fieldset style="border: 1px solid #232330; border-radius: 8px; padding: 2rem; background: #13131a; display: flex; flex-direction: column; gap: 1.5rem;">
+          <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1.1rem;">🔍 SEO & Meta Ayarları</legend>
+          
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">SEO Başlığı (Sayfa Sekme Başlığı)</label>
+            <input type="text" name="title" value={data.title} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; outline: none; width: 100%;" />
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">SEO Açıklaması (Google Arama Özeti)</label>
+            <textarea name="description" rows="3" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{data.description}</textarea>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Anahtar Kelimeler (Virgülle Ayırın)</label>
+            <input type="text" name="keywords" value={data.keywords} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; outline: none; width: 100%;" />
+          </div>
+        </fieldset>
+
+        <!-- 2. GİRİŞ & HERO BÖLÜMÜ -->
+        <fieldset style="border: 1px solid #232330; border-radius: 8px; padding: 2rem; background: #13131a; display: flex; flex-direction: column; gap: 1.5rem;">
+          <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1.1rem;">⚡ Hero & Tanıtım Ayarları</legend>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kategori Rozeti (Emoji ile)</label>
+              <input type="text" name="badge" value={data.badge} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kurs Başlığı</label>
+              <input type="text" name="heroTitle" value={data.heroTitle} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem;" />
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Başlık Vurgusu (Örn: Kayseri Kocasinan)</label>
+            <input type="text" name="heroTitleHighlight" value={data.heroTitleHighlight} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem;" />
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Hero Kısa Açıklaması</label>
+            <textarea name="heroDesc" rows="2" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.heroDesc}</textarea>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kurs Görsel Yolu</label>
+            <input type="text" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem;" />
+          </div>
+        </fieldset>
+
+        <!-- 3. DETAY KARTLARI & ÖZETLER -->
+        <fieldset style="border: 1px solid #232330; border-radius: 8px; padding: 2rem; background: #13131a; display: flex; flex-direction: column; gap: 1.5rem;">
+          <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1.1rem;">⏱️ Özet & Detay Bilgileri</legend>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Ders Süresi</label>
+              <input type="text" name="duration" value={data.duration} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Ders Sıklığı</label>
+              <input type="text" name="frequency" value={data.frequency} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Seviye Aralığı</label>
+              <input type="text" name="level" value={data.level} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Sertifika Durumu</label>
+              <input type="text" name="certificate" value={data.certificate} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Özet Giriş Yazısı (Lead Text)</label>
+            <textarea name="leadText" rows="2" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.leadText}</textarea>
+          </div>
+        </fieldset>
+
+        <!-- 4. EĞİTMEN BİLGİLERİ -->
+        <fieldset style="border: 1px solid #232330; border-radius: 8px; padding: 2rem; background: #13131a; display: flex; flex-direction: column; gap: 1.5rem;">
+          <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1.1rem;">👨‍🏫 Eğitmen Bilgileri</legend>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Adı</label>
+              <input type="text" name="teacher_name" value={data.teacher.name} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Uzmanlık Alanı</label>
+              <input type="text" name="teacher_specialty" value={data.teacher.specialty} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Görsel Yolu</label>
+              <input type="text" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Etiketleri (Virgülle Ayırın)</label>
+              <input type="text" name="teacher_tags" value={data.teacher.tags ? data.teacher.tags.join(', ') : ''} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Biyografisi (Paragraf 1)</label>
+            <textarea name="teacher_bio1" rows="3" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher.bio1}</textarea>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Biyografisi (Paragraf 2 - Opsiyonel)</label>
+            <textarea name="teacher_bio2" rows="3" style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher.bio2 || ''}</textarea>
+          </div>
+        </fieldset>
+
+        <!-- 5. DETAYLI METİN İÇERİĞİ -->
+        <fieldset style="border: 1px solid #232330; border-radius: 8px; padding: 2rem; background: #13131a; display: flex; flex-direction: column; gap: 1.5rem;">
+          <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1.1rem;">📝 Detaylı Sayfa İçeriği (Markdown)</legend>
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitim Hakkında Bölümü İçin Alt Yazılar & Metinler</label>
+            <textarea name="bodyContent" rows="8" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: monospace; resize: vertical; line-height: 1.5;">{body}</textarea>
+          </div>
+        </fieldset>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- SAVING LOGIC -->
+  <script is:inline>
+    const saveBtn = document.getElementById('btn-save');
+    const form = document.getElementById('course-form');
+
+    saveBtn.addEventListener('click', async () => {
+      saveBtn.disabled = true;
+      const originalText = saveBtn.innerHTML;
+      saveBtn.innerHTML = '<span>Yayınlanıyor... ⏳</span>';
+
+      const formData = new FormData(form);
+      const payload = {};
+      formData.forEach((value, key) => {
+        payload[key] = value;
+      });
+
+      try {
+        const response = await fetch('/api/save-course', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Başarıyla kaydedildi ve yayınlandı! Değişikliklerin canlı sitede görünmesi 30-45 saniye sürebilir.');
+          window.location.href = '/admin';
+        } else {
+          alert('Hata: ' + (result.error || 'Bilinmeyen bir hata oluştu.'));
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = originalText;
+        }
+      } catch (err) {
+        alert('İletişim hatası: ' + err.message);
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
+      }
+    });
+  </script>
+</Layout>

@@ -1,0 +1,171 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = false;
+
+let errorMsg = '';
+const adminPassword = process.env.ADMIN_PASSWORD || 'arya2026';
+
+// Check logout
+const url = new URL(Astro.request.url);
+if (url.searchParams.get('action') === 'logout') {
+  Astro.response.headers.append('Set-Cookie', 'admin_session=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict');
+  return Astro.redirect('/admin');
+}
+
+// Handle login post
+if (Astro.request.method === 'POST') {
+  try {
+    const data = await Astro.request.formData();
+    const password = data.get('password');
+    
+    if (password === adminPassword) {
+      Astro.response.headers.append('Set-Cookie', 'admin_session=true; Path=/; Max-Age=86400; HttpOnly; SameSite=Strict');
+      return Astro.redirect('/admin');
+    } else {
+      errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
+    }
+  } catch (e) {
+    errorMsg = 'Bir hata oluştu.';
+  }
+}
+
+// Check session
+const cookie = Astro.request.headers.get('cookie') || '';
+const isLoggedIn = cookie.includes('admin_session=true');
+
+let courses = [];
+if (isLoggedIn) {
+  courses = await getCollection('kurslar');
+}
+---
+
+<Layout title="Yönetim Paneli | Arya Sanat Akademisi" description="Arya Sanat Akademisi Yönetim Paneli">
+  <link rel="stylesheet" href="/css/style.css" slot="head" />
+  
+  <div class="admin-container" style="min-height: 80vh; padding: 4rem 1rem; background: #0b0b0e; color: #fff; font-family: sans-serif;">
+    <div style="max-width: 900px; margin: 0 auto;">
+      
+      {!isLoggedIn ? (
+        // LOGIN FORM
+        <div style="max-width: 400px; margin: 6rem auto; background: #13131a; padding: 2.5rem; border-radius: 12px; border: 1px solid #232330; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <span style="font-size: 3rem;">🔐</span>
+            <h1 style="font-size: 1.8rem; margin-top: 1rem; color: #fff; font-weight: 700;">Yönetici Girişi</h1>
+            <p style="color: #8b8b9f; font-size: 0.9rem; margin-top: 0.5rem;">İçerikleri düzenlemek için şifrenizi girin</p>
+          </div>
+          
+          {errorMsg && (
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center;">
+              {errorMsg}
+            </div>
+          )}
+          
+          <form method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <label for="password" style="font-size: 0.85rem; color: #b4b4c6; text-transform: uppercase; letter-spacing: 0.05em;">Giriş Şifresi</label>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                required 
+                style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.85rem 1rem; border-radius: 6px; font-size: 1rem; outline: none; transition: border-color 0.2s;"
+                placeholder="••••••••"
+              />
+            </div>
+            
+            <button 
+              type="submit" 
+              style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 1rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.2s;"
+              onmouseover="this.style.opacity='0.9'"
+              onmouseout="this.style.opacity='1'"
+            >
+              Giriş Yap
+            </button>
+          </form>
+        </div>
+      ) : (
+        // DASHBOARD
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #232330; padding-bottom: 1.5rem; margin-bottom: 3rem;">
+            <div>
+              <h1 style="font-size: 2.2rem; font-weight: 700; color: #fff; margin: 0;">Yönetici Paneli</h1>
+              <p style="color: #8b8b9f; margin-top: 0.5rem;">Arya Sanat Akademisi web sitesi içerik yönetim alanı</p>
+            </div>
+            <a 
+              href="/admin?action=logout" 
+              style="background: rgba(239, 68, 68, 0.1); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s;"
+              onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'"
+              onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'"
+            >
+              Çıkış Yap 🚪
+            </a>
+          </div>
+
+          <h2 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem; color: #d4af37; display: flex; align-items: center; gap: 0.5rem;">
+            📚 Kurs Sayfaları Düzenleme
+          </h2>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem;">
+            {courses.map((course) => (
+              <div style="background: #13131a; border: 1px solid #232330; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;">
+                <div style="height: 160px; overflow: hidden; position: relative;">
+                  <img 
+                    src={course.data.image} 
+                    alt={course.data.heroTitle} 
+                    style="width: 100%; height: 100%; object-fit: cover;"
+                  />
+                  <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; color: #d4af37; font-weight: 500;">
+                    {course.data.badge}
+                  </div>
+                </div>
+                
+                <div style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; gap: 1rem;">
+                  <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin: 0; color: #fff;">{course.data.heroTitle}</h3>
+                    <p style="color: #8b8b9f; font-size: 0.85rem; margin-top: 0.5rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                      {course.data.description}
+                    </p>
+                  </div>
+                  
+                  <div style="margin-top: auto; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8rem; color: #b4b4c6;">
+                    <div>⏱️ <strong>Süre:</strong> {course.data.duration}</div>
+                    <div>📅 <strong>Sıklık:</strong> {course.data.frequency}</div>
+                    <div>👨‍🏫 <strong>Eğitmen:</strong> {course.data.teacher.name}</div>
+                  </div>
+                  
+                  <a 
+                    href={`/admin/edit?course=${course.id}`}
+                    style="display: block; text-align: center; background: #1a1a24; color: #fff; border: 1px solid #2d2d3d; padding: 0.8rem; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s, border-color 0.2s;"
+                    onmouseover="this.style.background='#d4af37'; this.style.color='#000'; this.style.borderColor='#d4af37';"
+                    onmouseout="this.style.background='#1a1a24'; this.style.color='#fff'; this.style.borderColor='#2d2d3d';"
+                  >
+                    Düzenle ✏️
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div style="margin-top: 4rem; background: #13131a; border: 1px solid #232330; padding: 2rem; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+            <div>
+              <h3 style="margin: 0; font-size: 1.2rem; color: #fff;">💡 İpucu: Site Şifresini Değiştirme</h3>
+              <p style="margin: 0.5rem 0 0 0; color: #8b8b9f; font-size: 0.9rem; line-height: 1.4;">
+                Giriş şifresini değiştirmek için Vercel Dashboard'unuzdaki <strong>ADMIN_PASSWORD</strong> ortam değişkenini güncelleyebilirsiniz.
+              </p>
+            </div>
+            <a 
+              href="https://vercel.com/ertugpektas/arya-sanat-akademisi/settings/environment-variables" 
+              target="_blank"
+              style="background: #222230; color: #fff; border: 1px solid #33334d; padding: 0.75rem 1.25rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 500;"
+            >
+              Vercel Ayarlarına Git 🔗
+            </a>
+          </div>
+        </div>
+      )}
+
+    </div>
+  </div>
+</Layout>
