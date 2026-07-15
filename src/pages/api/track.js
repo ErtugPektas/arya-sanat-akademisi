@@ -20,9 +20,29 @@ export async function POST({ request }) {
         headers: { Authorization: `Bearer ${kvToken}` }
       });
 
-      // Günlük toplam hit değerini artır (views:YYYY-MM-DD)
-      const today = new Date().toISOString().split('T')[0];
+      // Günlük, Saatlik ve Aylık toplam hit değerlerini artır
+      const now = new Date();
+      // Türkiye saati (UTC+3) veya sunucu saatine göre düzeltmek için yerel tarih alalım
+      const offset = 3 * 60 * 60 * 1000; // UTC+3
+      const trTime = new Date(now.getTime() + offset);
+      const today = trTime.toISOString().split('T')[0];
+      const hour = trTime.getUTCHours();
+      const month = today.substring(0, 7); // YYYY-MM
+
+      // Günlük hit
       await fetch(`${kvUrl}/incr/views:${today}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${kvToken}` }
+      });
+
+      // Saatlik hit
+      await fetch(`${kvUrl}/incr/views:hour:${today}-${hour}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${kvToken}` }
+      });
+
+      // Aylık hit
+      await fetch(`${kvUrl}/incr/views:month:${month}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${kvToken}` }
       });
