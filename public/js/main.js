@@ -156,6 +156,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const soundOnIcon   = document.getElementById('soundOnIcon');
   const soundOffIcon  = document.getElementById('soundOffIcon');
 
+  if (window.AudioManager && muteBtn) {
+    const muted = AudioManager.getMuted();
+    muteBtn.classList.toggle('muted', muted);
+    soundOnIcon.style.display  = muted ? 'none' : 'block';
+    soundOffIcon.style.display = muted ? 'block' : 'none';
+    muteBtn.setAttribute('aria-label', muted ? 'Sesi aç' : 'Sesi kapat');
+  }
+
   muteBtn.addEventListener('click', () => {
     // AudioManager'ı başlat (kullanıcı etkileşimi)
     if (window.AudioManager) {

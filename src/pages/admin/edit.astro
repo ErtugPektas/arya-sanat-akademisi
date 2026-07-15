@@ -31,20 +31,45 @@ const { data, body } = course;
 <Layout title={`${data.heroTitle} Düzenle | Yönetim Paneli`} description="Kurs Düzenleme Alanı">
   <link rel="stylesheet" href="/css/style.css" slot="head" />
 
-  <div class="admin-container" style="min-height: 100vh; padding: 3rem 1rem; background: #0b0b0e; color: #fff; font-family: sans-serif;">
-    <div style="max-width: 800px; margin: 0 auto;">
+  <div class="admin-container" style="min-height: 100vh; padding: 0 0 4rem 0; background: #07070a; color: #fff; font-family: sans-serif;">
+    
+    <!-- CUSTOM ADMIN TOPBAR -->
+    <div style="background: #101016; border-bottom: 1px solid #1f1f2e; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-bottom: 3rem;">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.5rem; color: #d4af37;">♩</span>
+        <div>
+          <strong style="color: #fff; font-size: 1.05rem; display: block; font-weight: 700;">Arya Sanat</strong>
+          <span style="color: #d4af37; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Yönetim Paneli</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="/" target="_blank" style="color: #b4b4c6; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#b4b4c6'"> Canlı Siteyi Gör 🌐</a>
+        <a 
+          href="/admin?action=logout" 
+          style="background: rgba(239, 68, 68, 0.12); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.25); padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.borderColor='rgba(239,68,68,0.4)';"
+          onmouseout="this.style.background='rgba(239, 68, 68, 0.12)'; this.style.borderColor='rgba(239,68,68,0.25)';"
+        >
+          Güvenli Çıkış 🚪
+        </a>
+      </div>
+    </div>
+
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 1.5rem;">
       
       <!-- HEADER -->
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #232330; padding-bottom: 1rem; margin-bottom: 2.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f1f2e; padding-bottom: 1.5rem; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <a href="/admin" style="color: #8b8b9f; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.25rem;">
-            ← Panele Geri Dön
+          <a href="/admin" style="color: #8b8b9f; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.25rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8b8b9f'">
+            ← Yönetim Masasına Geri Dön
           </a>
-          <h1 style="font-size: 1.8rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">{data.heroTitle} Düzenle</h1>
+          <h1 style="font-size: 2rem; font-weight: 800; margin-top: 0.75rem; color: #fff; letter-spacing: -0.01em;">{data.heroTitle} Düzenle</h1>
         </div>
         <button 
           id="btn-save" 
-          style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 0.8rem 1.6rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;"
+          style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 0.85rem 1.75rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212,175,55,0.25);"
+          onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(212,175,55,0.4)';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(212,175,55,0.25)';"
         >
           <span>Kaydet ve Yayınla 🚀</span>
         </button>

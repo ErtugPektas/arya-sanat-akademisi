@@ -13,7 +13,7 @@ const AudioManager = (() => {
   let delayNode = null;
   let delayFeedback = null;
   let delayWet = null;
-  let isMuted = false;
+  let isMuted = typeof window !== 'undefined' && localStorage.getItem('audioMuted') === 'true';
   
   let schedulerTimer = null;
   let nextNoteTime = 0.0;
@@ -30,9 +30,9 @@ const AudioManager = (() => {
     [98.00,  146.83, 196.00, 246.94, 293.66, 246.94, 196.00, 146.83]  // G: G2, D3, G3, B3, D4, B3, G3, D3
   ];
 
-  // Sağ el melodi notaları (akorların 0. ve 4. vuruşlarında devreye girer)
-  const MELODY_BEAT_0 = [659.25, 698.46, 783.99, 587.33 * 2]; // E5, F5, G5, D6
-  const MELODY_BEAT_4 = [523.25, 523.25, 659.25, 493.88];     // C5, C5, E5, B4
+  // Sağ el melodi notaları (akorların 0. ve 4. vuruşlarında devreye girer - yumuşak oktav)
+  const MELODY_BEAT_0 = [329.63, 349.23, 392.00, 587.33]; // E4, F4, G4, D5 (Keskinliği alınmış ılık melodi)
+  const MELODY_BEAT_4 = [261.63, 261.63, 329.63, 246.94]; // C4, C4, E4, B3
 
   const EFFECT_SOUNDS = {
     piano: {
@@ -146,17 +146,17 @@ const AudioManager = (() => {
    * Audio zamanlaması için nota planlayıcı
    */
   function scheduleNote(noteIndex, chordIndex, time) {
-    // Sol el eşlik arpeji (Çok derinden ve hafif: 0.012 ses seviyesi)
+    // Sol el eşlik arpeji (Çok derinden ve hafif: 0.006 ses seviyesi)
     const baseFreq = CHORDS[chordIndex][noteIndex];
-    playPianoTone(baseFreq, time, 0.45, 0.012, 0.15, 0.3, 0.4);
+    playPianoTone(baseFreq, time, 0.45, 0.006, 0.15, 0.3, 0.4);
 
-    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.015 ses seviyesi)
+    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.008 ses seviyesi)
     if (noteIndex === 0) {
       const melodyFreq = MELODY_BEAT_0[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.015, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.008, 0.2, 0.4, 0.8);
     } else if (noteIndex === 4) {
       const melodyFreq = MELODY_BEAT_4[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.015, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.008, 0.2, 0.4, 0.8);
     }
   }
 
@@ -374,6 +374,7 @@ const AudioManager = (() => {
    */
   function toggleMute() {
     isMuted = !isMuted;
+    localStorage.setItem('audioMuted', isMuted ? 'true' : 'false');
     init();
 
     const now = audioCtx.currentTime;
@@ -393,7 +394,9 @@ const AudioManager = (() => {
   const handleUserInteraction = () => {
     init();
     if (audioCtx && audioCtx.state === 'running') {
-      startBackgroundMusic();
+      if (!isMuted) {
+        startBackgroundMusic();
+      }
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('touchstart', handleUserInteraction);
     }
