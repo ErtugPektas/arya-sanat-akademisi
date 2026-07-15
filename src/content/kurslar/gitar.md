@@ -1,9 +1,9 @@
 ---
 title: "Gitar Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
-description: "Kayseri Kocasinan gitar dersi — Arya Sanat Akademisi. Klasik, akustik ve elektro gitar eğitimi. Başlangıçtan ileri seviyeye bireysel dersler. MEB onaylı sertifika."
+description: "Kayseri Kocasinan gitar dersi — Arya Sanat Akademisi. Klasik, akustik ve elektro gitar eğitimi. Başlangıçtan ileri seviyeye bireysel dersler. MEB onaylı sertifika. Ücretsiz deneme dersi!"
 keywords: "gitar dersi Kayseri, gitar kursu kocasinan, akustik gitar dersi, elektro gitar kursu, klasik gitar dersi kayseri, gitar öğrenmek"
 badge: "🎸 Gitar Eğitimi"
-heroTitle: "Gitar Dersi"
+heroTitle: "Gitar Dersi DEĞİL"
 heroTitleHighlight: "Kayseri Kocasinan"
 heroDesc: "Klasik gitarın zarafetinden elektro gitarın enerjisine — her stilin ustası olun. Berklee sertifikalı eğitmenimizle müzik yolculuğunuza başlayın."
 image: "/assets/teacher_guitar.png"
