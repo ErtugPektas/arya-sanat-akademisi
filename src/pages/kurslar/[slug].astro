@@ -47,11 +47,11 @@ const schema = [
 ---
 
 <Layout
-  title={`${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
+  title={data.title || `${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
   description={data.description}
   keywords={data.keywords}
   canonical={`https://arya-sanat-akademisi.vercel.app/kurslar/${course.id}`}
-  ogTitle={`${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
+  ogTitle={data.title || `${data.heroTitle} Dersi Kayseri | Arya Sanat Akademisi`}
   ogDescription={data.description}
   ogImage={data.image}
   schemaJson={JSON.stringify(schema)}

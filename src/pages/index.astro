@@ -1,5 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+
+const courses = await getCollection('kurslar');
 
 const schema = {
   "@context": "https://schema.org",
@@ -106,131 +109,41 @@ const schema = {
         </header>
 
         <div class="courses-grid" role="list">
-
-          <!-- Course Card: Bateri -->
-          <article class="course-card" id="card-drums" role="listitem" aria-label="Bateri eğitimi kartı">
-            <a href="/kurslar/bateri" class="card-img-link" aria-label="Bateri dersi hakkında detaylı bilgi">
-              <div class="card-img-wrapper">
-                <img
-                  src="/assets/kurslar/bateri-kurs.jpg"
-                  alt="Bateri dersi — Arya Sanat Akademisi profesyonel bateri eğitimi"
-                  class="card-img"
-                  loading="lazy"
-                  width="420"
-                  height="240"
-                />
-                <div class="card-img-overlay" aria-hidden="true"></div>
+          {courses.map((course) => (
+            <article class="course-card" id={`card-${course.id}`} role="listitem" aria-label={`${course.data.heroTitle} eğitimi kartı`}>
+              <a href={`/kurslar/${course.id}`} class="card-img-link" aria-label={`${course.data.heroTitle} dersi hakkında detaylı bilgi`}>
+                <div class="card-img-wrapper">
+                  <img
+                    src={course.data.image}
+                    alt={`${course.data.heroTitle} dersi — Arya Sanat Akademisi`}
+                    class="card-img"
+                    loading="lazy"
+                    width="420"
+                    height="240"
+                  />
+                  <div class="card-img-overlay" aria-hidden="true"></div>
+                </div>
+              </a>
+              <div class="card-body">
+                <div class="card-icon" aria-hidden="true">
+                  {course.id === 'bateri' && '🥁'}
+                  {course.id === 'gitar' && '🎸'}
+                  {course.id === 'piyano' && '🎹'}
+                  {course.id === 'telli-uflemeli' && '🎻'}
+                </div>
+                <h3 class="card-title">{course.data.heroTitle}</h3>
+                <p class="card-desc">
+                  {course.data.description}
+                </p>
+                <ul class="card-features" aria-label={`${course.data.heroTitle} eğitim detayları`}>
+                  <li>⏱️ {course.data.duration}</li>
+                  <li>📅 {course.data.frequency}</li>
+                  <li>📜 {course.data.certificate}</li>
+                </ul>
+                <a href={`/kurslar/${course.id}`} class="btn btn-card" id={`${course.id}Btn`}>Detaylı İncele →</a>
               </div>
-            </a>
-            <div class="card-body">
-              <div class="card-icon" aria-hidden="true">🥁</div>
-              <h3 class="card-title">Bateri</h3>
-              <p class="card-desc">
-                Ritmin gücünü hissedin. Temel teknikleri öğrenin, kompleks ritim kalıplarına hâkim olun.
-                Rock'tan jazz'a her tarza uygun kapsamlı bateri eğitimi.
-              </p>
-              <ul class="card-features" aria-label="Bateri eğitim detayları">
-                <li>Temel ritim ve koordinasyon</li>
-                <li>Çeşitli müzik tarzları</li>
-                <li>Profesyonel ekipman kullanımı</li>
-              </ul>
-              <a href="/kurslar/bateri" class="btn btn-card" id="drumsBtn">Detaylı İncele →</a>
-            </div>
-          </article>
-
-          <!-- Course Card: Gitar -->
-          <article class="course-card" id="card-guitar" role="listitem" aria-label="Gitar eğitimi kartı">
-            <a href="/kurslar/gitar" class="card-img-link" aria-label="Gitar dersi hakkında detaylı bilgi">
-              <div class="card-img-wrapper">
-                <img
-                  src="/assets/kurslar/gitar-kurs.jpg"
-                  alt="Gitar dersi — Arya Sanat Akademisi akustik ve elektro gitar eğitimi"
-                  class="card-img"
-                  loading="lazy"
-                  width="420"
-                  height="240"
-                />
-                <div class="card-img-overlay" aria-hidden="true"></div>
-              </div>
-            </a>
-            <div class="card-body">
-              <div class="card-icon" aria-hidden="true">🎸</div>
-              <h3 class="card-title">Gitar</h3>
-              <p class="card-desc">
-                Klasik, akustik ve elektro gitar derslerinde temel akorlardan ileri düzey tekniklere
-                kadar kapsamlı eğitim alın.
-              </p>
-              <ul class="card-features" aria-label="Gitar eğitim detayları">
-                <li>Klasik &amp; Akustik &amp; Elektro Gitar</li>
-                <li>Parmak tekniği ve akort</li>
-                <li>Şarkı analizi ve kompozisyon</li>
-              </ul>
-              <a href="/kurslar/gitar" class="btn btn-card" id="guitarBtn">Detaylı İncele →</a>
-            </div>
-          </article>
-
-          <!-- Course Card: Piyano -->
-          <article class="course-card" id="card-piano" role="listitem" aria-label="Piyano eğitimi kartı">
-            <a href="/kurslar/piyano" class="card-img-link" aria-label="Piyano dersi hakkında detaylı bilgi">
-              <div class="card-img-wrapper">
-                <img
-                  src="/assets/kurslar/piyano-kurs.jpg"
-                  alt="Piyano dersi — Arya Sanat Akademisi klasik ve modern piyano eğitimi"
-                  class="card-img"
-                  loading="lazy"
-                  width="420"
-                  height="240"
-                />
-                <div class="card-img-overlay" aria-hidden="true"></div>
-              </div>
-            </a>
-            <div class="card-body">
-              <div class="card-icon" aria-hidden="true">🎹</div>
-              <h3 class="card-title">Piyano</h3>
-              <p class="card-desc">
-                Müziğin kraliçesiyle tanışın. Parmak egzersizlerinden klasik eserlere, modern pop
-                ve cazın dünyasına kapılar açın.
-              </p>
-              <ul class="card-features" aria-label="Piyano eğitim detayları">
-                <li>Nota okuma ve teori</li>
-                <li>Klasik &amp; Pop repertuvar</li>
-                <li>İki el koordinasyonu</li>
-              </ul>
-              <a href="/kurslar/piyano" class="btn btn-card" id="pianoBtn">Detaylı İncele →</a>
-            </div>
-          </article>
-
-          <!-- Course Card: Telli & Üflemeli -->
-          <article class="course-card" id="card-strings" role="listitem" aria-label="Telli ve üflemeli çalgılar eğitim kartı">
-            <a href="/kurslar/telli-uflemeli" class="card-img-link" aria-label="Telli ve üflemeli çalgılar dersi hakkında detaylı bilgi">
-              <div class="card-img-wrapper">
-                <img
-                  src="/assets/kurslar/telli-kurs.jpg"
-                  alt="Keman dersi — Arya Sanat Akademisi keman, yan flüt ve klarnet eğitimi"
-                  class="card-img"
-                  loading="lazy"
-                  width="420"
-                  height="240"
-                />
-                <div class="card-img-overlay" aria-hidden="true"></div>
-              </div>
-            </a>
-            <div class="card-body">
-              <div class="card-icon" aria-hidden="true">🎻</div>
-              <h3 class="card-title">Telli &amp; Üflemeli</h3>
-              <p class="card-desc">
-                Orkestranın ruhunu taşıyan enstrümanları keşfedin. Duygusal ve teknik derinliği
-                olan bir müzisyen olma yolunda adım atın.
-              </p>
-              <ul class="card-features" aria-label="Telli ve üflemeli çalgılar detayları">
-                <li>Keman — Klasik yorumlar</li>
-                <li>Yan Flüt — Nefes teknikleri</li>
-                <li>Klarnet — Ton ve artikülasyon</li>
-              </ul>
-              <a href="/kurslar/telli-uflemeli" class="btn btn-card" id="stringsBtn">Detaylı İncele →</a>
-            </div>
-          </article>
-
+            </article>
+          ))}
         </div><!-- /.courses-grid -->
       </div>
     </section>
