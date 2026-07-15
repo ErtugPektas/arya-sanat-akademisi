@@ -1,7 +1,7 @@
 /**
  * audio.js — Arya Sanat Akademisi
- * Web Audio API ile programatik enstrüman sesleri ve arka plan piyanosu
- * Sıfır yükleme gecikmesi ve maksimum performans için tamamen programatik sentez
+ * Ludovico Einaudi tarzında (Nuvole Bianche akışında) aralıksız çalan dinlendirici piyano sentezi.
+ * Sıfır yükleme gecikmesi ve Edge CDN tasarrufu için tamamen Web Audio API ile üretilmiştir.
  */
 
 'use strict';
@@ -11,50 +11,60 @@ const AudioManager = (() => {
   let masterGainNode = null;
   let isMuted = false;
   
-  let bgMusicInterval = null;
+  let schedulerTimer = null;
+  let nextNoteTime = 0.0;
+  let currentNoteIndex = 0;
   let currentChordIndex = 0;
+  
+  const tempo = 90; // BPM
+  const noteLength = 0.17; // 170ms aralıklarla sekizlik notalar (akıcı arpej)
 
-  // C Majör / A Minör geçişli dinlendirici piyano akorları
-  const AMBIENT_CHORDS = [
-    [130.81, 196.00, 261.63, 329.63, 392.00], // C3, G3, C4, E4, G4 (C Major)
-    [110.00, 164.81, 220.00, 261.63, 329.63], // A2, E3, A3, C4, E4 (Am7)
-    [87.31,  130.81, 174.61, 218.27, 261.63], // F2, C3, F3, A3, C4 (Fmaj7)
-    [98.00,  146.83, 196.00, 246.94, 293.66]  // G2, D3, G3, B3, D4 (G Major)
+  // Ludovico Einaudi tarzında (Am - F - C - G) akan piyano akor arpejleri
+  const CHORDS = [
+    // Her akor 8 adet sırayla çalınacak frekanstan oluşur (sol el eşliği)
+    [110.00, 164.81, 220.00, 261.63, 329.63, 261.63, 220.00, 164.81], // Am: A2, E3, A3, C4, E4, C4, A3, E3
+    [87.31,  130.81, 174.61, 218.27, 261.63, 218.27, 174.61, 130.81], // F: F2, C3, F3, A3, C4, A3, F3, C3
+    [130.81, 196.00, 261.63, 329.63, 392.00, 329.63, 261.63, 196.00], // C: C3, G3, C4, E4, G4, E4, C4, G3
+    [98.00,  146.83, 196.00, 246.94, 293.66, 246.94, 196.00, 146.83]  // G: G2, D3, G3, B3, D4, B3, G3, D3
   ];
 
-  const SOUNDS = {
+  // Sağ el melodi notaları (akorların 0. ve 4. vuruşlarında devreye girer)
+  const MELODY_BEAT_0 = [659.25, 698.46, 783.99, 587.33 * 2]; // E5, F5, G5, D6
+  const MELODY_BEAT_4 = [523.25, 523.25, 659.25, 493.88];     // C5, C5, E5, B4
+
+  const EFFECT_SOUNDS = {
     piano: {
-      notes: [523.25, 659.25, 783.99], // C5, E5, G5 (C majör)
+      notes: [523.25, 659.25, 783.99],
       type: 'sine',
-      duration: 1.5,
+      duration: 1.2,
       attack: 0.01,
-      decay: 0.3,
+      decay: 0.2,
       sustain: 0.4,
-      release: 1.0,
+      release: 0.8,
     },
     guitar: {
-      notes: [329.63, 415.30, 493.88, 659.25], // E4, Ab4, B4, E5 (arpej)
+      notes: [329.63, 415.30, 493.88, 659.25],
       type: 'triangle',
-      duration: 1.8,
+      duration: 1.5,
       attack: 0.005,
-      decay: 0.2,
+      decay: 0.15,
       sustain: 0.3,
-      release: 1.2,
+      release: 1.0,
       arpeggio: true,
-      arpeggioDelay: 0.07,
+      arpeggioDelay: 0.06,
     },
     drums: {
       type: 'drums',
       duration: 0.8
     },
     violin: {
-      notes: [659.25, 880.00], // E5, A5
+      notes: [659.25, 880.00],
       type: 'sawtooth',
-      duration: 1.8,
-      attack: 0.15,
+      duration: 1.5,
+      attack: 0.1,
       decay: 0.1,
-      sustain: 0.7,
-      release: 0.8,
+      sustain: 0.6,
+      release: 0.7,
       vibrato: true,
     }
   };
@@ -75,75 +85,103 @@ const AudioManager = (() => {
   }
 
   /**
-   * Arka plan piyano akoru çalma fonksiyonu
+   * Yumuşak hisli felt-piano tuş sesi üretir
    */
-  function playBackgroundChord(notes) {
-    if (!audioCtx || isMuted) return;
-    const now = audioCtx.currentTime;
+  function playPianoTone(freq, startTime, duration, volume, attack, decay, release) {
+    if (!audioCtx) return;
 
-    notes.forEach((freq, idx) => {
-      const startTime = now + idx * 0.15; // İnsansı piyano tuş arpeji
-      const duration = 4.2;
-      const attack = 0.8;
-      const decay = 0.6;
-      const sustain = 0.5;
-      const release = 2.0;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
 
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
+    // Dinlendirici lo-fi piyano tonu için lowpass filtre
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(580, startTime);
 
-      // Yumuşak piyano hissi için lowpass filtre
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(550, startTime);
+    osc.connect(gainNode);
+    gainNode.connect(filter);
+    filter.connect(masterGainNode);
 
-      osc.connect(gainNode);
-      gainNode.connect(filter);
-      filter.connect(masterGainNode);
+    osc.type = 'sine'; // Yuvarlak ve pürüzsüz dalga formu
+    osc.frequency.setValueAtTime(freq, startTime);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
+    // ADSR ses zarfı (Tıkırtıyı önlemek için hafif attack ve uzun sönümleme)
+    gainNode.gain.setValueAtTime(0, startTime);
+    gainNode.gain.linearRampToValueAtTime(volume, startTime + attack);
+    gainNode.gain.linearRampToValueAtTime(volume * 0.4, startTime + attack + decay);
+    gainNode.gain.setValueAtTime(volume * 0.4, startTime + duration - release);
+    gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
 
-      // Çok hafif arka plan ses seviyesi (0.035)
-      gainNode.gain.setValueAtTime(0, startTime);
-      gainNode.gain.linearRampToValueAtTime(0.035, startTime + attack);
-      gainNode.gain.linearRampToValueAtTime(0.035 * sustain, startTime + attack + decay);
-      gainNode.gain.setValueAtTime(0.035 * sustain, startTime + duration - release);
-      gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
-
-      osc.start(startTime);
-      osc.stop(startTime + duration + 0.1);
-    });
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.1);
   }
 
   /**
-   * Arka plan müziği döngüsünü başlat
+   * Audio zamanlaması için nota planlayıcı
+   */
+  function scheduleNote(noteIndex, chordIndex, time) {
+    // Sol el eşlik arpeji (Çok derinden ve hafif: 0.012 ses seviyesi)
+    const baseFreq = CHORDS[chordIndex][noteIndex];
+    playPianoTone(baseFreq, time, 0.45, 0.012, 0.15, 0.3, 0.4);
+
+    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.016 ses seviyesi)
+    if (noteIndex === 0) {
+      const melodyFreq = MELODY_BEAT_0[chordIndex];
+      playPianoTone(melodyFreq, time, 1.2, 0.016, 0.2, 0.4, 0.8);
+    } else if (noteIndex === 4) {
+      const melodyFreq = MELODY_BEAT_4[chordIndex];
+      playPianoTone(melodyFreq, time, 1.2, 0.016, 0.2, 0.4, 0.8);
+    }
+  }
+
+  function nextNote() {
+    currentNoteIndex++;
+    if (currentNoteIndex >= 8) {
+      currentNoteIndex = 0;
+      currentChordIndex = (currentChordIndex + 1) % CHORDS.length;
+    }
+    nextNoteTime += noteLength;
+  }
+
+  function scheduler() {
+    // Bir sonraki notayı zamanında planlamak için 100ms önceden bakar
+    while (nextNoteTime < audioCtx.currentTime + 0.1) {
+      scheduleNote(currentNoteIndex, currentChordIndex, nextNoteTime);
+      nextNote();
+    }
+  }
+
+  /**
+   * Sürekli akan dinlendirici piyano müziğini başlat
    */
   function startBackgroundMusic() {
-    if (bgMusicInterval) return;
+    init();
+    if (schedulerTimer || isMuted) return;
 
-    // İlk akoru hemen çal
-    playBackgroundChord(AMBIENT_CHORDS[currentChordIndex]);
-    currentChordIndex = (currentChordIndex + 1) % AMBIENT_CHORDS.length;
+    nextNoteTime = audioCtx.currentTime + 0.05;
+    currentNoteIndex = 0;
+    currentChordIndex = 0;
 
-    // Her 6 saniyede bir yeni akor çal
-    bgMusicInterval = setInterval(() => {
-      if (!isMuted && audioCtx && audioCtx.state === 'running') {
-        playBackgroundChord(AMBIENT_CHORDS[currentChordIndex]);
-        currentChordIndex = (currentChordIndex + 1) % AMBIENT_CHORDS.length;
-      }
-    }, 6000);
+    // Planlayıcıyı 25ms aralıklarla çalıştırarak kesintisiz döngü oluştur
+    schedulerTimer = setInterval(scheduler, 25);
+  }
+
+  function stopBackgroundMusic() {
+    if (schedulerTimer) {
+      clearInterval(schedulerTimer);
+      schedulerTimer = null;
+    }
   }
 
   /**
-   * Genel not çalma fonksiyonu (Efekt sesleri için)
+   * Not oynatma (sine/triangle/sawtooth) — Kart efektleri için
    */
-  function playNote(freq, type, startTime, duration, attack, decay, sustain, release) {
+  function playEffectNote(freq, type, startTime, duration, attack, decay, sustain, release) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     const localGain = audioCtx.createGain();
 
-    localGain.gain.value = 0.15; // Efekt sesleri genel seviyesi
+    localGain.gain.value = 0.12; // Kart tıklandığında çalacak efekt seviyesi
 
     osc.connect(gain);
     gain.connect(localGain);
@@ -169,7 +207,7 @@ const AudioManager = (() => {
     const gainNode = audioCtx.createGain();
     const localGain = audioCtx.createGain();
 
-    localGain.gain.value = 0.12;
+    localGain.gain.value = 0.08;
 
     vibratoOsc.type = 'sine';
     vibratoOsc.frequency.value = 5.5;
@@ -204,7 +242,7 @@ const AudioManager = (() => {
     osc.frequency.setValueAtTime(150, startTime);
     osc.frequency.exponentialRampToValueAtTime(0.01, startTime + 0.3);
 
-    gain.gain.setValueAtTime(0.6, startTime);
+    gain.gain.setValueAtTime(0.5, startTime);
     gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.3);
 
     osc.connect(gain);
@@ -229,7 +267,7 @@ const AudioManager = (() => {
     filter.frequency.value = 2000;
 
     const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.35, startTime);
+    gain.gain.setValueAtTime(0.25, startTime);
     gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
 
     noise.connect(filter);
@@ -255,7 +293,7 @@ const AudioManager = (() => {
     filter.frequency.value = 8000;
 
     const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.18, startTime);
+    gain.gain.setValueAtTime(0.12, startTime);
     gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.05);
 
     noise.connect(filter);
@@ -266,14 +304,14 @@ const AudioManager = (() => {
   }
 
   /**
-   * Enstrüman ses efekti çal
+   * Enstrüman ses efekti çal (Kartların üzerine gelince)
    */
   function play(instrument) {
     if (isMuted) return;
     init();
 
     const now = audioCtx.currentTime;
-    const recipe = SOUNDS[instrument];
+    const recipe = EFFECT_SOUNDS[instrument];
     if (!recipe) return;
 
     if (instrument === 'drums') {
@@ -296,17 +334,17 @@ const AudioManager = (() => {
 
     if (recipe.arpeggio) {
       recipe.notes.forEach((freq, i) => {
-        playNote(freq, recipe.type, now + i * recipe.arpeggioDelay, recipe.duration, recipe.attack, recipe.decay, recipe.sustain, recipe.release);
+        playEffectNote(freq, recipe.type, now + i * recipe.arpeggioDelay, recipe.duration, recipe.attack, recipe.decay, recipe.sustain, recipe.release);
       });
     } else {
       recipe.notes.forEach(freq => {
-        playNote(freq, recipe.type, now, recipe.duration, recipe.attack, recipe.decay, recipe.sustain, recipe.release);
+        playEffectNote(freq, recipe.type, now, recipe.duration, recipe.attack, recipe.decay, recipe.sustain, recipe.release);
       });
     }
   }
 
   /**
-   * Sesi aç / kapat (Master Gain üzerinden)
+   * Sesi aç / kapat
    */
   function toggleMute() {
     isMuted = !isMuted;
@@ -314,11 +352,10 @@ const AudioManager = (() => {
 
     const now = audioCtx.currentTime;
     if (isMuted) {
-      // Sesi yumuşakça sıfırla (tıkırtı engelleme)
-      masterGainNode.gain.setTargetAtTime(0, now, 0.08);
+      masterGainNode.gain.setTargetAtTime(0, now, 0.05);
+      stopBackgroundMusic();
     } else {
-      // Sesi yumuşakça aç
-      masterGainNode.gain.setTargetAtTime(1, now, 0.08);
+      masterGainNode.gain.setTargetAtTime(1, now, 0.05);
       startBackgroundMusic();
     }
     return isMuted;
@@ -326,12 +363,11 @@ const AudioManager = (() => {
 
   function getMuted() { return isMuted; }
 
-  // İlk etkileşimde ses sistemini uyandır ve arka plan müziğini başlat
+  // İlk kullanıcı etkileşimiyle ses sistemini uyandır ve sürekli çalan ambient piyanoyu başlat
   const handleUserInteraction = () => {
     init();
     if (audioCtx && audioCtx.state === 'running') {
       startBackgroundMusic();
-      // Dinleyicileri temizle
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('touchstart', handleUserInteraction);
     }
