@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 export const prerender = false;
 
 export async function POST({ request, cookies }) {
@@ -147,6 +150,17 @@ export async function POST({ request, cookies }) {
 
     // Reconstruct entire markdown content
     const updatedContent = `---\n${frontmatter.trim()}\n---\n${bodyContent.trim()}\n`;
+
+    // Local development write fallback
+    const isLocal = !process.env.VERCEL;
+    if (isLocal) {
+      const fullPath = path.resolve(process.cwd(), filePath);
+      fs.writeFileSync(fullPath, updatedContent, 'utf8');
+      return new Response(JSON.stringify({ success: true, local: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     // 3. Commit/Push updated content to GitHub
     const putBody = JSON.stringify({

@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 export const prerender = false;
 
 export async function POST({ request, cookies }) {
@@ -20,9 +23,24 @@ export async function POST({ request, cookies }) {
       });
     }
 
+    const filePath = "src/content/duyurular.json";
+    const newContent = JSON.stringify(announcements, null, 2);
+
+    // Check if running locally (Vercel sets VERCEL=1)
+    const isLocal = !process.env.VERCEL;
+
+    if (isLocal) {
+      const fullPath = path.resolve(process.cwd(), filePath);
+      fs.writeFileSync(fullPath, newContent, 'utf8');
+      return new Response(JSON.stringify({ success: true, local: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Production / Vercel: Write to GitHub
     const githubToken = process.env.GITHUB_TOKEN;
     const repo = "ErtugPektas/arya-sanat-akademisi";
-    const filePath = "src/content/duyurular.json";
 
     if (!githubToken) {
       return new Response(JSON.stringify({ error: 'GITHUB_TOKEN environment variable is not set on Vercel.' }), {
@@ -47,10 +65,7 @@ export async function POST({ request, cookies }) {
       sha = fileData.sha;
     }
 
-    // 2. Format JSON beautifully
-    const newContent = JSON.stringify(announcements, null, 2);
-
-    // 3. Commit updated content back to GitHub
+    // 2. Commit updated content back to GitHub
     const putUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
     const newContentBase64 = Buffer.from(newContent).toString('base64');
     
