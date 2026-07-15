@@ -10,7 +10,7 @@ const adminPassword = process.env.ADMIN_PASSWORD || 'arya2026';
 // Check logout
 const url = new URL(Astro.request.url);
 if (url.searchParams.get('action') === 'logout') {
-  Astro.response.headers.append('Set-Cookie', 'admin_session=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict');
+  Astro.cookies.delete('admin_session', { path: '/' });
   return Astro.redirect('/admin');
 }
 
@@ -21,7 +21,7 @@ if (Astro.request.method === 'POST') {
     const password = data.get('password');
     
     if (password === adminPassword) {
-      Astro.response.headers.append('Set-Cookie', 'admin_session=true; Path=/; Max-Age=86400; HttpOnly; SameSite=Strict');
+      Astro.cookies.set('admin_session', 'true', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
       return Astro.redirect('/admin');
     } else {
       errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
@@ -32,8 +32,7 @@ if (Astro.request.method === 'POST') {
 }
 
 // Check session
-const cookie = Astro.request.headers.get('cookie') || '';
-const isLoggedIn = cookie.includes('admin_session=true');
+const isLoggedIn = Astro.cookies.has('admin_session') && Astro.cookies.get('admin_session').value === 'true';
 
 let courses = [];
 if (isLoggedIn) {

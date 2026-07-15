@@ -1,9 +1,8 @@
 export const prerender = false;
 
-export async function POST({ request }) {
+export async function POST({ request, cookies }) {
   // Check session cookie
-  const cookie = request.headers.get('cookie') || '';
-  const isLoggedIn = cookie.includes('admin_session=true');
+  const isLoggedIn = cookies.has('admin_session') && cookies.get('admin_session').value === 'true';
 
   if (!isLoggedIn) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
