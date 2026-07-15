@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import duyurular from '../content/duyurular.json';
 
 const courses = await getCollection('kurslar');
 
@@ -91,9 +92,41 @@ const schema = {
         </div>
       </div>
 
-      <a href="#courses" class="scroll-indicator" aria-label="Aşağı kaydır">
+      <a href="#announcements" class="scroll-indicator" aria-label="Aşağı kaydır">
         <div class="scroll-dot"></div>
       </a>
+    </section>
+
+    <!-- ===== ANNOUNCEMENTS SECTION ===== -->
+    <section class="section announcements-section" id="announcements" aria-labelledby="announcementsHeading" style="background: #0b0b0e; border-top: 1px solid #1c1c28; border-bottom: 1px solid #1c1c28; padding: 5rem 0;">
+      <div class="container">
+        <header class="section-header" style="margin-bottom: 3.5rem; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto;">
+          <p class="section-tag" style="color: #d4af37; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 0.5rem;">Duyuru &amp; Fırsatlar</p>
+          <h2 id="announcementsHeading" class="section-title" style="font-size: 2.5rem; font-family: 'Playfair Display', serif; font-weight: 700; color: #fff; margin: 0; line-height: 1.2;">Duyurular &amp; Kampanyalar</h2>
+          <p class="section-desc" style="color: #8b8b9f; font-size: 1rem; margin-top: 0.75rem; line-height: 1.6;">Akademimizden güncel duyurular, etkinlik haberleri ve avantajlı kayıt dönemleri.</p>
+        </header>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+          {duyurular.map((duyuru) => (
+            <article style="background: #101016; border: 1px solid #1f1f2e; border-radius: 16px; padding: 2.25rem 2rem; position: relative; transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                  <span style={`background: ${duyuru.badge === 'Kampanya' ? 'rgba(212,175,55,0.08)' : 'rgba(30,144,255,0.08)'}; color: ${duyuru.badge === 'Kampanya' ? '#d4af37' : '#1e90ff'}; border: 1px solid ${duyuru.badge === 'Kampanya' ? 'rgba(212,175,55,0.15)' : 'rgba(30,144,255,0.15)'}; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;`}>
+                    {duyuru.badge}
+                  </span>
+                  <span style="color: #8b8b9f; font-size: 0.8rem; font-family: monospace;">{duyuru.date}</span>
+                </div>
+                <h3 style="font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0 0 1rem 0; font-family: 'Playfair Display', serif; line-height: 1.3;">{duyuru.title}</h3>
+                <p style="color: #b4b4c6; font-size: 0.925rem; line-height: 1.65; margin: 0 0 2rem 0;">{duyuru.content}</p>
+              </div>
+              <a href="#contact" style="color: #d4af37; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#d4af37'">
+                Detaylı Bilgi &amp; İletişim
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
     </section>
 
     <!-- ===== COURSES SECTION ===== -->

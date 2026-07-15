@@ -7,8 +7,8 @@ export async function POST({ request }) {
       return new Response(JSON.stringify({ error: 'Path required' }), { status: 400 });
     }
 
-    const kvUrl = process.env.KV_REST_API_URL;
-    const kvToken = process.env.KV_REST_API_TOKEN;
+    const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+    const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
     if (kvUrl && kvToken) {
       // Temizlenmiş path formatı (XSS veya hatalı tuş kirliliğini önlemek için)

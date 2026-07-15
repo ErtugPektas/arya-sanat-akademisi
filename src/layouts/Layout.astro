@@ -52,6 +52,7 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
 
   <!-- Styles -->
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
 
   <!-- Dynamic Schema.org injection -->
   {schemaJson && <script type="application/ld+json" set:html={schemaJson} />}

@@ -4,8 +4,8 @@ export async function GET({ request }) {
   const url = new URL(request.url);
   const period = url.searchParams.get('period') || 'day'; // 'hour', 'day', 'month'
 
-  const kvUrl = process.env.KV_REST_API_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN;
+  const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
   let isLive = false;
   let pageviews = {};
