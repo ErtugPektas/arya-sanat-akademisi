@@ -53,14 +53,14 @@ collections:
             fields:
               - {label: "Başlık", name: "title", widget: "string"}
               - {label: "Açıklama", name: "desc", widget: "text"}
-      - {label: "Galeri Görselleri", name: "gallery", widget: "list", field: {label: "Görsel", widget: "image"}}
+      - {label: "Galeri Görselleri", name: "gallery", widget: "list", field: {label: "Görsel", name: "image", widget: "image"}}
       - label: "Müfredat Aşamaları"
         name: "curriculum"
         widget: "list"
         fields:
           - {label: "Dönem (Örn: 1-3. Ay)", name: "period", widget: "string"}
           - {label: "Aşama Başlığı", name: "title", widget: "string"}
-          - {label: "Kazanımlar / Ders İçeriği", name: "items", widget: "list", field: {label: "Madde", widget: "string"}}
+          - {label: "Kazanımlar / Ders İçeriği", name: "items", widget: "list", field: {label: "Madde", name: "item", widget: "string"}}
       - label: "Eğitmen Bilgileri"
         name: "teacher"
         widget: "object"
@@ -70,7 +70,7 @@ collections:
           - {label: "Eğitmen Görseli", name: "image", widget: "image"}
           - {label: "Biyografi Paragrafı 1", name: "bio1", widget: "text"}
           - {label: "Biyografi Paragrafı 2 (Opsiyonel)", name: "bio2", widget: "text", required: false}
-          - {label: "Etiketler (Örn: Rock, Jazz)", name: "tags", widget: "list", field: {label: "Etiket", widget: "string"}}
+          - {label: "Etiketler (Örn: Rock, Jazz)", name: "tags", widget: "list", field: {label: "Etiket", name: "tag", widget: "string"}}
       - label: "Sıkça Sorulan Sorular"
         name: "faq"
         widget: "list"
