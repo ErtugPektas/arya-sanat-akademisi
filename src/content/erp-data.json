@@ -45,6 +45,29 @@
       "progress": {
         "2026-07": 0
       }
+    },
+    {
+      "id": "std_1784204464354",
+      "name": "asdasd",
+      "phone": "asdasd",
+      "courseId": "piyano",
+      "teacherName": "burak",
+      "monthlyFee": 1200,
+      "payments": {
+        "2026-07": "Unpaid"
+      },
+      "attendance": {
+        "2026-07": {
+          "attended": 0,
+          "total": 4
+        }
+      },
+      "notes": {
+        "2026-07": ""
+      },
+      "progress": {
+        "2026-07": 0
+      }
     }
   ],
   "lessons": [
