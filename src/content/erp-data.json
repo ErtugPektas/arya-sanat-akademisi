@@ -28,12 +28,6 @@
   ],
   "teachers": [
     {
-      "id": "t_default_1",
-      "name": "Elif SÖNMEZ",
-      "specialty": "Piyano",
-      "hourlyRate": 350
-    },
-    {
       "id": "t_default_2",
       "name": "Mehmet KAYA",
       "specialty": "Bateri",
