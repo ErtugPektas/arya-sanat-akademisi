@@ -15,6 +15,7 @@ const teacherPassword = process.env.TEACHER_PASSWORD || 'egitmen2026';
 const url = new URL(Astro.request.url);
 if (url.searchParams.get('action') === 'logout') {
   Astro.cookies.delete('admin_session', { path: '/' });
+  Astro.cookies.delete('teacher_name', { path: '/' });
   return Astro.redirect('/admin');
 }
 
@@ -27,11 +28,22 @@ if (Astro.request.method === 'POST') {
     if (password === adminPassword) {
       Astro.cookies.set('admin_session', 'admin', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
       return Astro.redirect('/admin');
-    } else if (password === teacherPassword) {
-      Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
-      return Astro.redirect('/admin');
     } else {
-      errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
+      // Check teachers collection dynamically
+      const teachersList = erpData.teachers || [];
+      const matchedTeacher = teachersList.find(t => t.password === password);
+      
+      if (matchedTeacher) {
+        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        Astro.cookies.set('teacher_name', matchedTeacher.name, { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        return Astro.redirect('/admin');
+      } else if (password === teacherPassword) {
+        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        Astro.cookies.set('teacher_name', 'Elif SÖNMEZ', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        return Astro.redirect('/admin');
+      } else {
+        errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
+      }
     }
   } catch (e) {
     errorMsg = 'Bir hata oluştu.';
@@ -41,6 +53,7 @@ if (Astro.request.method === 'POST') {
 // Check session
 const isLoggedIn = Astro.cookies.has('admin_session');
 const role = isLoggedIn ? Astro.cookies.get('admin_session').value : '';
+const activeTeacherName = Astro.cookies.has('teacher_name') ? Astro.cookies.get('teacher_name').value : '';
 
 let courses = [];
 if (isLoggedIn) {
@@ -632,12 +645,15 @@ if (isLoggedIn) {
                       <input type="text" id="erp-new-teacher-name" placeholder="Eğitmen Ad Soyad" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.8rem;" />
                       <input type="text" id="erp-new-teacher-spec" placeholder="Branş (Örn: Piyano)" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.8rem;" />
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; align-items: center;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                       <div style="display: flex; align-items: center; background: #1a1a2a; border: 1px solid #2d2d42; border-radius: 6px; padding: 0 0.5rem;">
                         <input type="number" id="erp-new-teacher-rate" placeholder="Saatlik Hakediş" value="300" style="background: transparent; border: none; color: #fff; padding: 0.4rem 0.1rem; width: 100%; font-size: 0.8rem; outline: none;" />
                         <span style="color: #8b8b9f; font-size: 0.8rem; font-weight: 600;">₺/Sa</span>
                       </div>
-                      <button onclick="addNewTeacher()" style="background: #d4af37; color: #000; border: none; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">Eğitmen Ekle</button>
+                      <input type="text" id="erp-new-teacher-password" placeholder="Giriş Şifresi" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.8rem;" />
+                    </div>
+                    <div style="display: flex; justify-content: flex-end;">
+                      <button onclick="addNewTeacher()" style="background: #d4af37; color: #000; border: none; padding: 0.45rem 1.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; width: 100%;">Eğitmen Ekle</button>
                     </div>
                   </div>
 
@@ -858,7 +874,7 @@ if (isLoggedIn) {
 </style>
 
 <!-- CLIENT-SIDE TABS AND SVG GRAPH SCHEDULER -->
-<script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData, userRole: role }}>
+<script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData, userRole: role, activeTeacher: activeTeacherName }}>
   const tabCourses = document.getElementById('tab-courses');
   const tabAnnouncements = document.getElementById('tab-announcements');
   const tabAnalytics = document.getElementById('tab-analytics');
@@ -1355,11 +1371,16 @@ if (isLoggedIn) {
     const lessons = erpDataObj.lessons || [];
     const archivedStudents = erpDataObj.archivedStudents || [];
 
+    // Filter visible students for logged-in teacher context
+    const visibleStudents = userRole === 'teacher'
+      ? students.filter(s => s.teacherName === activeTeacher)
+      : students;
+
     // Calculate Summary Metrics for selected Month
-    const totalStudents = students.length;
-    const expectedRevenue = students.reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
-    const paidRevenue = students.filter(s => ((s.payments && s.payments[erpActiveMonth]) || 'Unpaid') === 'Paid').reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
-    const unpaidCount = students.filter(s => ((s.payments && s.payments[erpActiveMonth]) || 'Unpaid') === 'Unpaid').length;
+    const totalStudents = visibleStudents.length;
+    const expectedRevenue = visibleStudents.reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
+    const paidRevenue = visibleStudents.filter(s => ((s.payments && s.payments[erpActiveMonth]) || 'Unpaid') === 'Paid').reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
+    const unpaidCount = visibleStudents.filter(s => ((s.payments && s.payments[erpActiveMonth]) || 'Unpaid') === 'Unpaid').length;
 
     document.getElementById('erp-stat-students').innerText = `${totalStudents} Öğrenci`;
     document.getElementById('erp-stat-revenue').innerText = `${expectedRevenue.toLocaleString()} ₺`;
@@ -1367,11 +1388,11 @@ if (isLoggedIn) {
     document.getElementById('erp-stat-unpaid').innerText = `${unpaidCount} Bekleyen`;
 
     // Render Student Table
-    if (students.length === 0) {
+    if (visibleStudents.length === 0) {
       tbodyStudents.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #8b8b9f;">Kayıtlı öğrenci bulunmuyor.</td></tr>`;
     } else {
       let rowsHtml = '';
-      students.forEach((std, idx) => {
+      visibleStudents.forEach((std) => {
         const payStatus = (std.payments && std.payments[erpActiveMonth]) || 'Unpaid';
         const att = (std.attendance && std.attendance[erpActiveMonth]) || { attended: 0, total: 4 };
         const notesVal = (std.notes && std.notes[erpActiveMonth]) || '';
@@ -1384,24 +1405,24 @@ if (isLoggedIn) {
         // Read-only payment status for teachers
         const paymentBtn = userRole === 'teacher'
           ? `<span style="background: ${statusBg}; color: ${statusColor}; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${statusLabel}</span>`
-          : `<button onclick="togglePaymentStatus(${idx})" style="background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBg}; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">${statusLabel} ⇅</button>`;
+          : `<button onclick="togglePaymentStatus('${std.id}')" style="background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBg}; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">${statusLabel} ⇅</button>`;
 
         // Attendance controller (+ / - buttons for teachers)
         const attendanceController = `
           <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-            <button onclick="decrementAttendance(${idx})" style="background: #1f1f2e; color: #fff; border: 1px solid #2d2d42; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">-</button>
+            <button onclick="decrementAttendance('${std.id}')" style="background: #1f1f2e; color: #fff; border: 1px solid #2d2d42; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">-</button>
             <span style="font-weight: 600; font-family: monospace; font-size: 0.85rem; min-width: 32px; text-align: center;">${att.attended} / ${att.total}</span>
-            <button onclick="incrementAttendance(${idx})" style="background: #1f1f2e; color: #fff; border: 1px solid #2d2d42; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">+</button>
+            <button onclick="incrementAttendance('${std.id}')" style="background: #1f1f2e; color: #fff; border: 1px solid #2d2d42; width: 22px; height: 22px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">+</button>
           </div>
         `;
 
         const actionCell = userRole === 'teacher'
           ? `<span style="color: #6b6b7f; font-size: 0.75rem;">Yetki Yok</span>`
-          : `<button onclick="deleteStudent(${idx})" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Arşivle</button>`;
+          : `<button onclick="deleteStudent('${std.id}')" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Arşivle</button>`;
 
         rowsHtml += `
           <tr style="border-bottom: 1px solid #161622;">
-            <td style="padding: 1rem 0.5rem; color: #fff; font-weight: 600; cursor: pointer;" onclick="toggleStudentDetails(${idx})">
+            <td style="padding: 1rem 0.5rem; color: #fff; font-weight: 600; cursor: pointer;" onclick="toggleStudentDetails('${std.id}')">
               <span style="border-bottom: 1px dashed rgba(212,175,55,0.4);">${std.name}</span>
               <span style="font-size: 0.75rem; color: #8b8b9f; margin-left: 0.35rem;">ℹ️ Detay</span>
             </td>
@@ -1415,19 +1436,19 @@ if (isLoggedIn) {
             <td style="padding: 1rem 0.5rem; text-align: center;">${attendanceController}</td>
             <td style="padding: 1rem 0.5rem; text-align: center;">${actionCell}</td>
           </tr>
-          <tr id="erp-details-row-${idx}" style="display: none; background: #0b0b10;">
+          <tr id="erp-details-row-${std.id}" style="display: none; background: #0b0b10;">
             <td colspan="7" style="padding: 1rem 1.5rem; border-bottom: 1px solid #161622;">
               <div style="display: flex; gap: 2rem; align-items: start; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 0.5rem;">
                   <label style="font-size: 0.8rem; color: #a4a4b6; font-weight: 600;">Ders Notları &amp; Ödevler (${erpActiveMonth}):</label>
-                  <textarea id="erp-student-notes-${idx}" rows="2" style="background: #161622; border: 1px solid #232335; color: #fff; padding: 0.5rem; border-radius: 6px; font-size: 0.8rem; width: 100%; resize: vertical;" placeholder="Örn: Bugün piyano tuşe egzersizleri yapıldı.">${notesVal}</textarea>
+                  <textarea id="erp-student-notes-${std.id}" rows="2" style="background: #161622; border: 1px solid #232335; color: #fff; padding: 0.5rem; border-radius: 6px; font-size: 0.8rem; width: 100%; resize: vertical;" placeholder="Örn: Bugün piyano tuşe egzersizleri yapıldı.">${notesVal}</textarea>
                 </div>
                 <div style="width: 220px; display: flex; flex-direction: column; gap: 0.5rem;">
-                  <label style="font-size: 0.8rem; color: #a4a4b6; font-weight: 600;">Öğrenci Gelişimi: <strong id="erp-progress-lbl-${idx}" style="color: #d4af37;">%${progressVal}</strong></label>
-                  <input type="range" id="erp-student-progress-${idx}" min="0" max="100" value="${progressVal}" style="width: 100%; accent-color: #d4af37;" oninput="document.getElementById('erp-progress-lbl-${idx}').innerText = '%' + this.value" />
+                  <label style="font-size: 0.8rem; color: #a4a4b6; font-weight: 600;">Öğrenci Gelişimi: <strong id="erp-progress-lbl-${std.id}" style="color: #d4af37;">%${progressVal}</strong></label>
+                  <input type="range" id="erp-student-progress-${std.id}" min="0" max="100" value="${progressVal}" style="width: 100%; accent-color: #d4af37;" oninput="document.getElementById('erp-progress-lbl-${std.id}').innerText = '%' + this.value" />
                 </div>
                 <div style="display: flex; align-items: flex-end; height: 100%; padding-top: 1.25rem;">
-                  <button onclick="saveStudentProgress(${idx})" style="background: #d4af37; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: background 0.2s;">Notları Kaydet 💾</button>
+                  <button onclick="saveStudentProgress('${std.id}')" style="background: #d4af37; color: #000; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: background 0.2s;">Notları Kaydet 💾</button>
                 </div>
               </div>
             </td>
@@ -1441,11 +1462,25 @@ if (isLoggedIn) {
     const teachers = erpDataObj.teachers || [];
     const selectStdTeacher = document.getElementById('erp-new-student-teacher');
     const selectLesTeacher = document.getElementById('erp-new-lesson-teacher');
-    if (selectStdTeacher) {
-      selectStdTeacher.innerHTML = teachers.map(t => `<option value="${t.name}">${t.name} (${t.specialty})</option>`).join('');
-    }
-    if (selectLesTeacher) {
-      selectLesTeacher.innerHTML = teachers.map(t => `<option value="${t.name}">${t.name} (${t.specialty})</option>`).join('');
+    
+    if (userRole === 'teacher') {
+      if (selectStdTeacher) {
+        selectStdTeacher.innerHTML = `<option value="${activeTeacher}">${activeTeacher}</option>`;
+        selectStdTeacher.disabled = true;
+      }
+      if (selectLesTeacher) {
+        selectLesTeacher.innerHTML = `<option value="${activeTeacher}">${activeTeacher}</option>`;
+        selectLesTeacher.disabled = true;
+      }
+    } else {
+      if (selectStdTeacher) {
+        selectStdTeacher.innerHTML = teachers.map(t => `<option value="${t.name}">${t.name} (${t.specialty})</option>`).join('');
+        selectStdTeacher.disabled = false;
+      }
+      if (selectLesTeacher) {
+        selectLesTeacher.innerHTML = teachers.map(t => `<option value="${t.name}">${t.name} (${t.specialty})</option>`).join('');
+        selectLesTeacher.disabled = false;
+      }
     }
 
     const tbodyTeachers = document.getElementById('erp-teachers-list-tbody');
@@ -1481,8 +1516,21 @@ if (isLoggedIn) {
         };
       });
 
+      // Calculate hours from scheduled weekly lessons (1 lesson slot = 4 hours per month)
+      lessons.forEach(les => {
+        if (!instructors[les.teacherName]) {
+          instructors[les.teacherName] = {
+            name: les.teacherName,
+            hourlyRate: 300,
+            completedHours: 0,
+            tuitionReceived: 0
+          };
+        }
+        instructors[les.teacherName].completedHours += 4;
+      });
+
+      // Calculate tuition received from students assigned to this teacher
       students.forEach(std => {
-        const att = (std.attendance && std.attendance[erpActiveMonth]) || { attended: 0, total: 4 };
         const payStatus = (std.payments && std.payments[erpActiveMonth]) || 'Unpaid';
         
         if (!instructors[std.teacherName]) {
@@ -1493,7 +1541,6 @@ if (isLoggedIn) {
             tuitionReceived: 0
           };
         }
-        instructors[std.teacherName].completedHours += (att.attended || 0);
         if (payStatus === 'Paid') {
           instructors[std.teacherName].tuitionReceived += (std.monthlyFee || 0);
         }
@@ -1526,7 +1573,7 @@ if (isLoggedIn) {
       if (archivedStudents.length === 0) {
         tbodyArchive.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 1.5rem; color: #6b6b7f;">Arşivlenmiş kayıt bulunmuyor.</td></tr>`;
       } else {
-        tbodyArchive.innerHTML = archivedStudents.map((std, idx) => `
+        tbodyArchive.innerHTML = archivedStudents.map((std) => `
           <tr style="border-bottom: 1px solid #161622; opacity: 0.75;">
             <td style="padding: 0.75rem 0.5rem; color: #fff; font-weight: 500;">${std.name}</td>
             <td style="padding: 0.75rem 0.5rem; font-family: monospace;">${std.phone}</td>
@@ -1534,8 +1581,8 @@ if (isLoggedIn) {
             <td style="padding: 0.75rem 0.5rem; text-align: right;">${std.monthlyFee} ₺</td>
             <td style="padding: 0.75rem 0.5rem; text-align: center;">
               <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                <button onclick="restoreStudent(${idx})" style="background: rgba(16,185,129,0.12); color: #10b981; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Geri Yükle</button>
-                <button onclick="deleteArchivedStudent(${idx})" style="background: rgba(239,68,68,0.12); color: #fca5a5; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Kalıcı Sil</button>
+                <button onclick="restoreStudent('${std.id}')" style="background: rgba(16,185,129,0.12); color: #10b981; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Geri Yükle</button>
+                <button onclick="deleteArchivedStudent('${std.id}')" style="background: rgba(239,68,68,0.12); color: #fca5a5; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Kalıcı Sil</button>
               </div>
             </td>
           </tr>
@@ -1547,10 +1594,10 @@ if (isLoggedIn) {
     if (lessons.length === 0) {
       listLessons.innerHTML = `<div style="text-align: center; padding: 2rem; color: #8b8b9f; background: #161622; border-radius: 8px;">Planlanmış ders bulunmuyor.</div>`;
     } else {
-      listLessons.innerHTML = lessons.map((les, idx) => {
-        const cancelBtn = userRole === 'teacher'
+      listLessons.innerHTML = lessons.map((les) => {
+        const cancelBtn = (userRole === 'teacher' && les.teacherName !== activeTeacher)
           ? ''
-          : `<button onclick="deleteLesson(${idx})" style="background: transparent; color: #fca5a5; border: none; font-size: 0.75rem; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">İptal Et</button>`;
+          : `<button onclick="deleteLesson('${les.id}')" style="background: transparent; color: #fca5a5; border: none; font-size: 0.75rem; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">İptal Et</button>`;
 
         return `
           <div style="background: #161622; border: 1px solid #1f1f2e; border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: relative;">
