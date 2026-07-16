@@ -1,16 +1,6 @@
 {
   "students": [],
-  "lessons": [
-    {
-      "id": "les_1784171902852",
-      "studentName": "a",
-      "courseName": "a",
-      "teacherName": "Mehmet KAYA",
-      "studio": "a",
-      "day": "Pazartesi",
-      "time": "12:00 - 13:00"
-    }
-  ],
+  "lessons": [],
   "archivedStudents": [],
   "teachers": [
     {
