@@ -1,0 +1,26 @@
+{
+  "seo": {
+    "title": "Arya Sanat Akademisi | Kayseri Müzik Kursu",
+    "description": "Kayseri Kocasinan'da profesyonel müzik eğitimi. Bateri, Gitar, Piyano ve Telli/Üflemeli enstrüman dersleri."
+  },
+  "contact": {
+    "phone": "+90 552 611 21 01",
+    "email": "info@aryasanatakademisi.com",
+    "address": "Erciyesevler, Tuna Cd. No:22, 38020 Kocasinan/Kayseri",
+    "workingHours": "Her Gün: 09:00 - 21:00",
+    "whatsapp": "905526112101"
+  },
+  "stats": {
+    "certification": "MEB Onaylı",
+    "location": "Kocasinan",
+    "studentsCount": "500+",
+    "teachersCount": "15+",
+    "experienceYears": "10+"
+  },
+  "hero": {
+    "tag": "✦ MEB Onaylı Sertifikalı Eğitim",
+    "title": "Arya Sanat Akademisi",
+    "titleHighlight": "Profesyonel Müzik Eğitimi",
+    "desc": "Müziğin büyülü dünyasına adım atın. Uzman eğitmenlerimizle Gitar, Piyano, Bateri ve Keman derslerinde sınırlarınızı keşfedin."
+  }
+}

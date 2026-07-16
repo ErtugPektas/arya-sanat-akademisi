@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import duyurular from '../../content/duyurular.json';
+import siteSettings from '../../content/site-settings.json';
 
 export const prerender = false;
 
@@ -147,6 +148,13 @@ if (isLoggedIn) {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
               <span>Trafik Analitiği</span>
             </button>
+            <button 
+              id="tab-settings" 
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span>Site Ayarları</span>
+            </button>
           </div>
 
           <!-- SECTION 1: COURSES (VISIBLE BY DEFAULT) -->
@@ -168,7 +176,7 @@ if (isLoggedIn) {
                 </span>
                 <div>
                   <span style="color: #8b8b9f; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Sertifikasyon</span>
-                  <strong style="color: #fff; font-size: 1.4rem; display: block; margin-top: 0.25rem;">MEB Onaylı</strong>
+                  <strong style="color: #fff; font-size: 1.4rem; display: block; margin-top: 0.25rem;">{siteSettings.stats.certification}</strong>
                 </div>
               </div>
               <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 1.25rem;">
@@ -177,7 +185,7 @@ if (isLoggedIn) {
                 </span>
                 <div>
                   <span style="color: #8b8b9f; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">Konum Detayı</span>
-                  <strong style="color: #fff; font-size: 1.4rem; display: block; margin-top: 0.25rem;">Kocasinan</strong>
+                  <strong style="color: #fff; font-size: 1.4rem; display: block; margin-top: 0.25rem;">{siteSettings.stats.location}</strong>
                 </div>
               </div>
             </div>
@@ -378,6 +386,124 @@ if (isLoggedIn) {
 
           </div>
 
+          <!-- SECTION 4: SITE SETTINGS -->
+          <div id="sec-settings" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f1f2e; padding-bottom: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h2 style="font-size: 1.4rem; font-weight: 700; margin: 0; color: #d4af37; display: flex; align-items: center; gap: 0.75rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  <span>Genel Site Ayarları</span>
+                </h2>
+                <p style="color: #8b8b9f; margin-top: 0.25rem; font-size: 0.85rem;">SEO başlıkları, iletişim detayları, sayaç değerleri ve ana sayfa karşılama metinleri</p>
+              </div>
+              <button 
+                id="btn-save-settings" 
+                style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s;"
+              >
+                <span>Ayarları Kaydet 💾</span>
+              </button>
+            </div>
+
+            <!-- Settings Form Layout -->
+            <form id="settings-form" style="display: flex; flex-direction: column; gap: 2rem;">
+              
+              <!-- 1. SEO Ayarları -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.25rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">🔍 SEO & Meta Arama Ayarları</legend>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Varsayılan Site Başlığı (Title)</label>
+                  <input type="text" name="seo_title" value={siteSettings.seo.title} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%;" />
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Varsayılan Site Açıklaması (Meta Description)</label>
+                  <textarea name="seo_desc" rows="2" required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{siteSettings.seo.description}</textarea>
+                </div>
+              </fieldset>
+
+              <!-- 2. İletişim Bilgileri -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.25rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">📞 İletişim & Adres Bilgileri</legend>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Telefon Numarası (Görünür)</label>
+                    <input type="text" name="contact_phone" value={siteSettings.contact.phone} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">E-posta Adresi</label>
+                    <input type="email" name="contact_email" value={siteSettings.contact.email} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">WhatsApp Numarası (Ülke Kodlu, Boşluksuz. Örn: 905526112101)</label>
+                    <input type="text" name="contact_whatsapp" value={siteSettings.contact.whatsapp} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Çalışma Saatleri</label>
+                    <input type="text" name="contact_hours" value={siteSettings.contact.workingHours} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Açık Adres</label>
+                  <input type="text" name="contact_address" value={siteSettings.contact.address} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%;" />
+                </div>
+              </fieldset>
+
+              <!-- 3. Sayaçlar & Rozetler -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.25rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">📊 Sayaçlar & Rozet Bilgileri</legend>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Sertifikasyon Etiketi (Örn: MEB Onaylı)</label>
+                    <input type="text" name="stats_cert" value={siteSettings.stats.certification} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Konum Detayı (Örn: Kocasinan)</label>
+                    <input type="text" name="stats_loc" value={siteSettings.stats.location} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Öğrenci Sayısı (Örn: 500+)</label>
+                    <input type="text" name="stats_students" value={siteSettings.stats.studentsCount} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Eğitmen Sayısı (Örn: 15+)</label>
+                    <input type="text" name="stats_teachers" value={siteSettings.stats.teachersCount} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Deneyim Yılı (Örn: 10+)</label>
+                    <input type="text" name="stats_exp" value={siteSettings.stats.experienceYears} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- 4. Ana Sayfa Karşılama Ekranı -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.25rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">⚡ Ana Sayfa Karşılama (Hero) Metinleri</legend>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Hero Üst Rozet Metni (Emoji ile)</label>
+                  <input type="text" name="hero_tag" value={siteSettings.hero.tag} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%;" />
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Ana Başlık (Örn: Arya Sanat Akademisi)</label>
+                    <input type="text" name="hero_title" value={siteSettings.hero.title} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Vurgulu Başlık Alt Satır (Altın Renk)</label>
+                    <input type="text" name="hero_highlight" value={siteSettings.hero.titleHighlight} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Giriş Tanıtım Yazısı</label>
+                  <textarea name="hero_desc" rows="3" required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{siteSettings.hero.desc}</textarea>
+                </div>
+              </fieldset>
+
+            </form>
+          </div>
+
         </div>
       )}
 
@@ -390,70 +516,59 @@ if (isLoggedIn) {
   const tabCourses = document.getElementById('tab-courses');
   const tabAnnouncements = document.getElementById('tab-announcements');
   const tabAnalytics = document.getElementById('tab-analytics');
+  const tabSettings = document.getElementById('tab-settings');
   
   const secCourses = document.getElementById('sec-courses');
   const secAnnouncements = document.getElementById('sec-announcements');
   const secAnalytics = document.getElementById('sec-analytics');
+  const secSettings = document.getElementById('sec-settings');
 
   let activePeriod = 'day'; // Default period
 
-  if (tabCourses && tabAnnouncements && tabAnalytics && secCourses && secAnnouncements && secAnalytics) {
+  if (tabCourses && tabAnnouncements && tabAnalytics && tabSettings && secCourses && secAnnouncements && secAnalytics && secSettings) {
+    function resetTabs() {
+      [tabCourses, tabAnnouncements, tabAnalytics, tabSettings].forEach(tab => {
+        tab.style.background = '#101016';
+        tab.style.color = '#b4b4c6';
+        tab.style.borderColor = '#1f1f2e';
+      });
+      [secCourses, secAnnouncements, secAnalytics, secSettings].forEach(sec => {
+        sec.style.display = 'none';
+      });
+    }
+
     tabCourses.addEventListener('click', () => {
+      resetTabs();
       tabCourses.style.background = '#1c1c28';
       tabCourses.style.color = '#d4af37';
       tabCourses.style.borderColor = '#d4af37';
-      
-      tabAnnouncements.style.background = '#101016';
-      tabAnnouncements.style.color = '#b4b4c6';
-      tabAnnouncements.style.borderColor = '#1f1f2e';
-      
-      tabAnalytics.style.background = '#101016';
-      tabAnalytics.style.color = '#b4b4c6';
-      tabAnalytics.style.borderColor = '#1f1f2e';
-      
       secCourses.style.display = 'block';
-      secAnnouncements.style.display = 'none';
-      secAnalytics.style.display = 'none';
     });
 
     tabAnnouncements.addEventListener('click', () => {
+      resetTabs();
       tabAnnouncements.style.background = '#1c1c28';
       tabAnnouncements.style.color = '#d4af37';
       tabAnnouncements.style.borderColor = '#d4af37';
-      
-      tabCourses.style.background = '#101016';
-      tabCourses.style.color = '#b4b4c6';
-      tabCourses.style.borderColor = '#1f1f2e';
-      
-      tabAnalytics.style.background = '#101016';
-      tabAnalytics.style.color = '#b4b4c6';
-      tabAnalytics.style.borderColor = '#1f1f2e';
-      
-      secCourses.style.display = 'none';
       secAnnouncements.style.display = 'block';
-      secAnalytics.style.display = 'none';
-      
       renderAnnouncementsList();
     });
 
     tabAnalytics.addEventListener('click', () => {
+      resetTabs();
       tabAnalytics.style.background = '#1c1c28';
       tabAnalytics.style.color = '#d4af37';
       tabAnalytics.style.borderColor = '#d4af37';
-      
-      tabCourses.style.background = '#101016';
-      tabCourses.style.color = '#b4b4c6';
-      tabCourses.style.borderColor = '#1f1f2e';
-      
-      tabAnnouncements.style.background = '#101016';
-      tabAnnouncements.style.color = '#b4b4c6';
-      tabAnnouncements.style.borderColor = '#1f1f2e';
-      
-      secCourses.style.display = 'none';
-      secAnnouncements.style.display = 'none';
       secAnalytics.style.display = 'block';
-      
       loadAnalytics(activePeriod);
+    });
+
+    tabSettings.addEventListener('click', () => {
+      resetTabs();
+      tabSettings.style.background = '#1c1c28';
+      tabSettings.style.color = '#d4af37';
+      tabSettings.style.borderColor = '#d4af37';
+      secSettings.style.display = 'block';
     });
   }
 
@@ -727,5 +842,74 @@ if (isLoggedIn) {
     } catch (e) {
       console.error('Error fetching analytics details:', e);
     }
+  }
+
+  // SITE SETTINGS SAVE CONTROLLER
+  const btnSaveSettings = document.getElementById('btn-save-settings');
+  const formSettings = document.getElementById('settings-form');
+
+  if (btnSaveSettings && formSettings) {
+    btnSaveSettings.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(formSettings);
+      
+      const settings = {
+        seo: {
+          title: formData.get('seo_title'),
+          description: formData.get('seo_desc')
+        },
+        contact: {
+          phone: formData.get('contact_phone'),
+          email: formData.get('contact_email'),
+          address: formData.get('contact_address'),
+          workingHours: formData.get('contact_hours'),
+          whatsapp: formData.get('contact_whatsapp')
+        },
+        stats: {
+          certification: formData.get('stats_cert'),
+          location: formData.get('stats_loc'),
+          studentsCount: formData.get('stats_students'),
+          teachersCount: formData.get('stats_teachers'),
+          experienceYears: formData.get('stats_exp')
+        },
+        hero: {
+          tag: formData.get('hero_tag'),
+          title: formData.get('hero_title'),
+          titleHighlight: formData.get('hero_highlight'),
+          desc: formData.get('hero_desc')
+        }
+      };
+
+      btnSaveSettings.disabled = true;
+      btnSaveSettings.innerText = 'Kaydediliyor... ⏳';
+
+      try {
+        const response = await fetch('/api/save-settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ settings })
+        });
+
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          alert(result.local 
+            ? '✓ Ayarlar yerel diske başarıyla kaydedildi!' 
+            : '✓ Ayarlar başarıyla kaydedildi! Vercel derlemesi başlatıldı, güncellenmesi ~1 dakika sürecektir.'
+          );
+          location.reload();
+        } else {
+          alert('❌ Hata oluştu: ' + (result.error || 'Bilinmeyen hata'));
+        }
+      } catch (err) {
+        alert('❌ Bağlantı hatası: ' + err.message);
+      } finally {
+        btnSaveSettings.disabled = false;
+        btnSaveSettings.innerText = 'Ayarları Kaydet 💾';
+      }
+    });
   }
 </script>

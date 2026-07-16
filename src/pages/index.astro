@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import duyurular from '../content/duyurular.json';
+import siteSettings from '../content/site-settings.json';
 
 const courses = await getCollection('kurslar');
 
@@ -56,14 +57,13 @@ const schema = {
       </div>
 
       <div class="hero-content">
-        <p class="hero-tag">✦ MEB Onaylı Sertifikalı Eğitim</p>
+        <p class="hero-tag">{siteSettings.hero.tag}</p>
         <h1 class="hero-title">
-          Arya Sanat Akademisi<br />
-          <span class="hero-title-highlight">Profesyonel Müzik Eğitimi</span>
+          {siteSettings.hero.title}<br />
+          <span class="hero-title-highlight">{siteSettings.hero.titleHighlight}</span>
         </h1>
         <p class="hero-desc">
-          Müziğin büyülü dünyasına adım atın. Uzman eğitmenlerimizle Gitar, Piyano,
-          Bateri ve Keman derslerinde sınırlarınızı keşfedin.
+          {siteSettings.hero.desc}
         </p>
         <div class="hero-actions">
           <a href="#contact" class="btn btn-primary btn-lg" id="heroCta">
@@ -76,17 +76,17 @@ const schema = {
         </div>
         <div class="hero-stats" role="list" aria-label="Akademi İstatistikleri">
           <div class="hero-stat" role="listitem">
-            <strong>500+</strong>
+            <strong>{siteSettings.stats.studentsCount}</strong>
             <span>Mutlu Öğrenci</span>
           </div>
           <div class="hero-stat-divider" aria-hidden="true"></div>
           <div class="hero-stat" role="listitem">
-            <strong>15+</strong>
+            <strong>{siteSettings.stats.teachersCount}</strong>
             <span>Uzman Eğitmen</span>
           </div>
           <div class="hero-stat-divider" aria-hidden="true"></div>
           <div class="hero-stat" role="listitem">
-            <strong>10+</strong>
+            <strong>{siteSettings.stats.experienceYears}</strong>
             <span>Yıllık Deneyim</span>
           </div>
         </div>

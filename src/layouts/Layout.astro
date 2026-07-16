@@ -1,4 +1,6 @@
 ---
+import siteSettings from '../content/site-settings.json';
+
 interface Props {
   title: string;
   description: string;
@@ -11,8 +13,8 @@ interface Props {
 }
 
 const {
-  title,
-  description,
+  title = siteSettings.seo.title,
+  description = siteSettings.seo.description,
   keywords = "müzik kursu kayseri, gitar dersi kayseri, piyano dersi kayseri, bateri dersi kayseri, keman dersi kayseri, müzik okulu kayseri, Arya Sanat Akademisi, MEB onaylı müzik sertifikası",
   canonical = "https://arya-sanat-akademisi.vercel.app/",
   ogTitle,
@@ -193,9 +195,9 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
             <div class="footer-contact">
               <h3 class="footer-heading">İletişim</h3>
               <address class="footer-address" aria-label="Kısa iletişim bilgileri">
-                <p>📍 Kocasinan / Kayseri</p>
-                <p><a href="tel:+905526112101">📞 +90 (552) 611 21 01</a></p>
-                <p><a href="mailto:aryasanatakademisi@gmail.com">✉️ aryasanatakademisi@gmail.com</a></p>
+                <p>📍 {siteSettings.contact.address}</p>
+                <p><a href={`tel:${siteSettings.contact.phone.replace(/\s+/g, '')}`}>📞 {siteSettings.contact.phone}</a></p>
+                <p><a href={`mailto:${siteSettings.contact.email}`}>✉️ {siteSettings.contact.email}</a></p>
               </address>
             </div>
 
@@ -220,7 +222,7 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
       <!-- ===== FLOATING BUTTONS ===== -->
       <!-- WhatsApp -->
       <a
-        href="https://wa.me/905526112101?text=Merhaba%2C%20ücretsiz%20deneme%20dersi%20hakkında%20bilgi%20almak%20istiyorum."
+        href={`https://wa.me/${siteSettings.contact.whatsapp}?text=Merhaba%2C%20ücretsiz%20deneme%20dersi%20hakkında%20bilgi%20almak%20istiyorum.`}
         class="whatsapp-float"
         id="whatsappFloat"
         target="_blank"

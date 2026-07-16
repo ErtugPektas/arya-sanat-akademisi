@@ -125,9 +125,14 @@ const { data, body } = course;
             <textarea name="heroDesc" rows="2" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.heroDesc}</textarea>
           </div>
 
-          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kurs Görsel Yolu</label>
-            <input type="text" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem;" />
+          <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kurs Görsel Yolu (URL veya Assets Yolu)</label>
+              <input type="text" id="input-image" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-image').src = this.value" />
+            </div>
+            <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem;">
+              <img id="preview-image" src={data.image} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
+            </div>
           </div>
         </fieldset>
 
@@ -181,15 +186,20 @@ const { data, body } = course;
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Görsel Yolu</label>
-              <input type="text" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+            <div style="display: flex; gap: 1.25rem; align-items: center;">
+              <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+                <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Görsel Yolu (URL veya Assets Yolu)</label>
+                <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
+              </div>
+              <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem; flex-shrink: 0;">
+                <img id="preview-teacher-image" src={data.teacher.image} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
+              </div>
             </div>
             
             <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
               <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Etiketleri (Virgülle Ayırın)</label>
-              <input type="text" name="teacher_tags" value={data.teacher.tags ? data.teacher.tags.join(', ') : ''} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+              <input type="text" name="teacher_tags" value={data.teacher.tags ? data.teacher.tags.join(', ') : ''} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; height: 42px; margin-top: 1.5rem;" />
             </div>
           </div>
 
