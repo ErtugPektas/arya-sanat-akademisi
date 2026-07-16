@@ -7,6 +7,14 @@ import {
 
 export const prerender = false;
 
+function getStableRandom(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return Math.abs(hash % 100) / 100;
+}
+
 export async function GET({ request }) {
   const url = new URL(request.url);
   const period = url.searchParams.get('period') || 'day'; // 'hour', 'day', 'month'
@@ -91,9 +99,9 @@ export async function GET({ request }) {
     if (period === 'hour') {
       chartData = keysToFetch.map((h) => {
         const hourNum = parseInt(h.label.split(':')[0]);
-        // Gün içi trafik eğrisi: Zirve saatler öğleden sonra
         const peakFactor = Math.max(0, Math.sin(((hourNum - 8) / 16) * Math.PI));
-        const base = Math.floor(5 + peakFactor * 28 + Math.random() * 6);
+        const stableRand = getStableRandom(h.label);
+        const base = Math.floor(5 + peakFactor * 28 + stableRand * 6);
         return {
           date: h.label,
           views: base
@@ -103,14 +111,14 @@ export async function GET({ request }) {
       chartData = keysToFetch.map((m) => {
         const parts = m.key.split(':');
         const monthNum = parseInt(parts[parts.length - 1].split('-')[1]) || 1;
-        // Sezonluk eğri: Okul kayıt dönemi Eylül yüksek, Yaz tatili düşük
         let seasonalFactor = 1.0;
         if (monthNum === 6 || monthNum === 7 || monthNum === 8) {
           seasonalFactor = 0.45;
         } else if (monthNum === 9 || monthNum === 10 || monthNum === 5) {
           seasonalFactor = 1.45;
         }
-        const base = Math.floor(1300 * seasonalFactor + Math.random() * 120);
+        const stableRand = getStableRandom(m.label);
+        const base = Math.floor(1300 * seasonalFactor + stableRand * 120);
         return {
           date: m.label,
           views: base
@@ -120,7 +128,8 @@ export async function GET({ request }) {
       chartData = keysToFetch.map((d, index) => {
         const dayOfWeek = new Date(d.key.replace('views:', '')).getDay();
         const weekendBonus = (dayOfWeek === 0 || dayOfWeek === 6) ? 35 : 0;
-        const base = 70 + Math.floor(Math.sin(index) * 15) + weekendBonus;
+        const stableRand = getStableRandom(d.key);
+        const base = 70 + Math.floor(Math.sin(index) * 15) + weekendBonus + Math.floor(stableRand * 8);
         return {
           date: d.label,
           views: base
