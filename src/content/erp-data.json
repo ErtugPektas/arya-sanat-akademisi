@@ -1,5 +1,7 @@
 {
-  "students": [
+  "students": [],
+  "lessons": [],
+  "archivedStudents": [
     {
       "id": "std_1784169402749",
       "name": "asdasd",
@@ -13,7 +15,5 @@
         "total": 4
       }
     }
-  ],
-  "lessons": [],
-  "archivedStudents": []
+  ]
 }
