@@ -648,8 +648,9 @@ if (isLoggedIn) {
         const kvOk = env.KV_REST_API_URL && env.KV_REST_API_TOKEN;
         const upstashOk = env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN;
         
-        diagHtml += `<li>Vercel KV: ${kvOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
-        diagHtml += `<li>Upstash Redis: ${upstashOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
+        diagHtml += `<li>Standart Redis (TCP): ${env.REDIS_URL ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
+        diagHtml += `<li>Vercel KV (REST): ${kvOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
+        diagHtml += `<li>Upstash (REST): ${upstashOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
         diagHtml += `<li>GitHub Token: ${env.GITHUB_TOKEN ? '✅ Tanımlı' : '❌ Tanımsız'}</li>`;
         diagHtml += `</ul>`;
         

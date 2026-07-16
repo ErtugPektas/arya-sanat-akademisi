@@ -1,11 +1,15 @@
+import { 
+  getPageViews, 
+  getKeysValues, 
+  isLiveConnection, 
+  hasRedisConfig 
+} from '../../utils/redis.js';
+
 export const prerender = false;
 
 export async function GET({ request }) {
   const url = new URL(request.url);
   const period = url.searchParams.get('period') || 'day'; // 'hour', 'day', 'month'
-
-  const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
   let isLive = false;
   let pageviews = {};
@@ -51,46 +55,27 @@ export async function GET({ request }) {
     }).reverse();
   }
 
-  if (kvUrl && kvToken) {
+  if (hasRedisConfig) {
     try {
-      // 1. Tüm sayfa gösterimlerini al
-      const pvRes = await fetch(`${kvUrl}/hgetall/pageviews`, {
-        headers: { Authorization: `Bearer ${kvToken}` }
-      });
-      if (!pvRes.ok) {
-        throw new Error(`HTTP Error response from Redis REST: ${pvRes.status} ${pvRes.statusText}`);
-      }
-      const pvData = await pvRes.json();
-      
-      if (pvData && Array.isArray(pvData.result)) {
+      // 1. Canlı bağlantı testi yap
+      const connectionOk = await isLiveConnection();
+      if (connectionOk) {
+        // 2. Sayfa gösterimlerini al
+        pageviews = await getPageViews();
+        
+        // 3. Zaman serisi verilerini al
+        chartData = await getKeysValues(keysToFetch);
+        
         isLive = true;
-        for (let i = 0; i < pvData.result.length; i += 2) {
-          const path = pvData.result[i];
-          const count = parseInt(pvData.result[i+1]) || 0;
-          pageviews[path] = count;
-        }
-      } else if (pvData && pvData.error) {
-        throw new Error(`Redis REST error: ${pvData.error}`);
-      }
-
-      // 2. Periyodik grafik verilerini al
-      for (const item of keysToFetch) {
-        const dRes = await fetch(`${kvUrl}/get/${item.key}`, {
-          headers: { Authorization: `Bearer ${kvToken}` }
-        });
-        const dData = await dRes.json();
-        const viewsCount = dData && dData.result ? parseInt(dData.result) : 0;
-        chartData.push({
-          date: item.label,
-          views: viewsCount
-        });
+      } else {
+        throw new Error('Redis server connection timed out or auth failed.');
       }
     } catch (e) {
       isLive = false;
       errorDetail = e.message || String(e);
     }
   } else {
-    errorDetail = 'No Redis URL or Token found in process.env (Vercel KV or Upstash Redis integration missing)';
+    errorDetail = 'No Redis environment variables configured. Check REDIS_URL, KV_REST_API_URL or UPSTASH_REDIS_REST_URL.';
   }
 
   // Eğer canlı bağlantı yoksa (simülasyon) gerçekçi mock verileri oluştur
@@ -106,7 +91,7 @@ export async function GET({ request }) {
     if (period === 'hour') {
       chartData = keysToFetch.map((h) => {
         const hourNum = parseInt(h.label.split(':')[0]);
-        // Gün içi trafik eğrisi: Öğleden sonra (14-20) zirve yapar
+        // Gün içi trafik eğrisi: Zirve saatler öğleden sonra
         const peakFactor = Math.max(0, Math.sin(((hourNum - 8) / 16) * Math.PI));
         const base = Math.floor(5 + peakFactor * 28 + Math.random() * 6);
         return {
@@ -118,12 +103,12 @@ export async function GET({ request }) {
       chartData = keysToFetch.map((m) => {
         const parts = m.key.split(':');
         const monthNum = parseInt(parts[parts.length - 1].split('-')[1]) || 1;
-        // Sezonluk okullaşma eğrisi: Eylül-Mayıs yüksek, Yaz düşük
+        // Sezonluk eğri: Okul kayıt dönemi Eylül yüksek, Yaz tatili düşük
         let seasonalFactor = 1.0;
         if (monthNum === 6 || monthNum === 7 || monthNum === 8) {
-          seasonalFactor = 0.45; // Yaz tatili düşüşü
+          seasonalFactor = 0.45;
         } else if (monthNum === 9 || monthNum === 10 || monthNum === 5) {
-          seasonalFactor = 1.45; // Dönem başlangıcı/sonu yoğunluğu
+          seasonalFactor = 1.45;
         }
         const base = Math.floor(1300 * seasonalFactor + Math.random() * 120);
         return {
@@ -160,9 +145,10 @@ export async function GET({ request }) {
     friendlyPageviews[translatedName] = (friendlyPageviews[translatedName] || 0) + count;
   });
 
-  // Diagnostics check details
+  // Tanılama Raporu Detayları
   const diagnostics = {
     env: {
+      REDIS_URL: !!process.env.REDIS_URL,
       KV_REST_API_URL: !!process.env.KV_REST_API_URL,
       KV_REST_API_TOKEN: !!process.env.KV_REST_API_TOKEN,
       UPSTASH_REDIS_REST_URL: !!process.env.UPSTASH_REDIS_REST_URL,
