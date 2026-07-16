@@ -10,6 +10,7 @@ export async function GET({ request }) {
   let isLive = false;
   let pageviews = {};
   let chartData = [];
+  let errorDetail = null;
 
   const now = new Date();
   const offset = 3 * 60 * 60 * 1000; // UTC+3
@@ -56,6 +57,9 @@ export async function GET({ request }) {
       const pvRes = await fetch(`${kvUrl}/hgetall/pageviews`, {
         headers: { Authorization: `Bearer ${kvToken}` }
       });
+      if (!pvRes.ok) {
+        throw new Error(`HTTP Error response from Redis REST: ${pvRes.status} ${pvRes.statusText}`);
+      }
       const pvData = await pvRes.json();
       
       if (pvData && Array.isArray(pvData.result)) {
@@ -65,6 +69,8 @@ export async function GET({ request }) {
           const count = parseInt(pvData.result[i+1]) || 0;
           pageviews[path] = count;
         }
+      } else if (pvData && pvData.error) {
+        throw new Error(`Redis REST error: ${pvData.error}`);
       }
 
       // 2. Periyodik grafik verilerini al
@@ -81,7 +87,10 @@ export async function GET({ request }) {
       }
     } catch (e) {
       isLive = false;
+      errorDetail = e.message || String(e);
     }
+  } else {
+    errorDetail = 'No Redis URL or Token found in process.env (Vercel KV or Upstash Redis integration missing)';
   }
 
   // Eğer canlı bağlantı yoksa (simülasyon) gerçekçi mock verileri oluştur
@@ -146,13 +155,24 @@ export async function GET({ request }) {
   };
 
   Object.entries(pageviews).forEach(([path, count]) => {
-    // URL parametrelerini temizle ve eşleştir
     const cleanPath = path.split('?')[0].split('#')[0] || '/';
     const translatedName = pathTranslations[cleanPath] || cleanPath;
     friendlyPageviews[translatedName] = (friendlyPageviews[translatedName] || 0) + count;
   });
 
-  return new Response(JSON.stringify({ isLive, pageviews: friendlyPageviews, dailyViews: chartData }), {
+  // Diagnostics check details
+  const diagnostics = {
+    env: {
+      KV_REST_API_URL: !!process.env.KV_REST_API_URL,
+      KV_REST_API_TOKEN: !!process.env.KV_REST_API_TOKEN,
+      UPSTASH_REDIS_REST_URL: !!process.env.UPSTASH_REDIS_REST_URL,
+      UPSTASH_REDIS_REST_TOKEN: !!process.env.UPSTASH_REDIS_REST_TOKEN,
+      GITHUB_TOKEN: !!process.env.GITHUB_TOKEN
+    },
+    error: errorDetail
+  };
+
+  return new Response(JSON.stringify({ isLive, pageviews: friendlyPageviews, dailyViews: chartData, diagnostics }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

@@ -269,9 +269,12 @@ if (isLoggedIn) {
           <div id="sec-analytics" style="display: none;">
             
             <!-- Connection Status -->
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #101016; border: 1px solid #1f1f2e; padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-              <span style="font-size: 0.9rem; color: #8b8b9f; font-weight: 600;">Veri İzleme Durumu:</span>
-              <span id="kv-status-badge" style="padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid #232335; color: #b4b4c6;">Yükleniyor...</span>
+            <div style="display: flex; flex-direction: column; background: #101016; border: 1px solid #1f1f2e; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; gap: 1rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span style="font-size: 0.9rem; color: #8b8b9f; font-weight: 600;">Veri İzleme Durumu:</span>
+                <span id="kv-status-badge" style="padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid #232335; color: #b4b4c6;">Yükleniyor...</span>
+              </div>
+              <div id="diagnostics-panel" style="padding-top: 1rem; border-top: 1px solid #1f1f2e; font-size: 0.825rem; line-height: 1.6; color: #b4b4c6; display: none;"></div>
             </div>
 
             <!-- KV Activation Instructions -->
@@ -630,6 +633,33 @@ if (isLoggedIn) {
         badge.style.background = 'rgba(245,166,35,0.1)';
         badge.style.borderColor = 'rgba(245,166,35,0.2)';
         if (kvInstructions) kvInstructions.style.display = 'block';
+      }
+
+      // Render Diagnostics Checklist
+      const diagPanel = document.getElementById('diagnostics-panel');
+      if (diagPanel && data.diagnostics) {
+        diagPanel.style.display = 'block';
+        const env = data.diagnostics.env;
+        const err = data.diagnostics.error;
+        
+        let diagHtml = `<strong style="color: #fff; display: block; margin-bottom: 0.5rem; font-size: 0.85rem;">Sistem Tanılama Raporu:</strong>`;
+        diagHtml += `<ul style="list-style: none; padding: 0; margin: 0 0 0.75rem 0; display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.75rem;">`;
+        
+        const kvOk = env.KV_REST_API_URL && env.KV_REST_API_TOKEN;
+        const upstashOk = env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN;
+        
+        diagHtml += `<li>Vercel KV: ${kvOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
+        diagHtml += `<li>Upstash Redis: ${upstashOk ? '✅ Aktif' : '❌ Bağlı Değil'}</li>`;
+        diagHtml += `<li>GitHub Token: ${env.GITHUB_TOKEN ? '✅ Tanımlı' : '❌ Tanımsız'}</li>`;
+        diagHtml += `</ul>`;
+        
+        if (err) {
+          diagHtml += `<div style="background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); padding: 0.5rem 0.75rem; border-radius: 6px; color: #fca5a5; font-family: monospace; font-size: 0.75rem; word-break: break-all;">Sistem Mesajı: ${err}</div>`;
+        } else {
+          diagHtml += `<div style="color: #10b981; font-weight: 500; font-size: 0.75rem;">✓ Veritabanı bağlantısı sorunsuz kuruldu. Canlı trafik izleniyor.</div>`;
+        }
+        
+        diagPanel.innerHTML = diagHtml;
       }
       
       // Calculate statistics metrics
