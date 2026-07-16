@@ -36,16 +36,23 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
   <meta name="description" content={description} />
   <meta name="keywords" content={keywords} />
   <meta name="author" content="Arya Sanat Akademisi" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href={canonical} />
   
-  <!-- Open Graph -->
+  <!-- Open Graph / Facebook -->
   <meta property="og:title" content={currentOgTitle} />
   <meta property="og:description" content={currentOgDescription} />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
+  <meta property="og:site_name" content="Arya Sanat Akademisi" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={currentOgTitle} />
+  <meta name="twitter:description" content={currentOgDescription} />
+  <meta name="twitter:image" content={ogImage} />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -196,7 +203,7 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
               <h3 class="footer-heading">İletişim</h3>
               <address class="footer-address" aria-label="Kısa iletişim bilgileri">
                 <p>📍 {siteSettings.contact.address}</p>
-                <p><a href={`tel:${siteSettings.contact.phone.replace(/\s+/g, '')}`}>📞 {siteSettings.contact.phone}</a></p>
+                <p><a href={`tel:${siteSettings.contact.phone.replace(/[^\d+]/g, '')}`}>📞 {siteSettings.contact.phone}</a></p>
                 <p><a href={`mailto:${siteSettings.contact.email}`}>✉️ {siteSettings.contact.email}</a></p>
               </address>
             </div>

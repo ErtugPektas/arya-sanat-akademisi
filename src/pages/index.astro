@@ -6,31 +6,66 @@ import siteSettings from '../content/site-settings.json';
 
 const courses = await getCollection('kurslar');
 
+const cleanPhone = siteSettings.contact.phone.replace(/[^\d+]/g, '');
+
 const schema = {
   "@context": "https://schema.org",
   "@type": "MusicSchool",
   "name": "Arya Sanat Akademisi",
-  "description": "Kayseri Kocasinan'da profesyonel müzik eğitimi. Bateri, Gitar, Piyano, Keman, Yan Flüt ve Klarnet dersleri.",
+  "description": siteSettings.seo.description,
   "url": "https://arya-sanat-akademisi.vercel.app",
-  "telephone": "+905526112101",
+  "logo": "https://arya-sanat-akademisi.vercel.app/assets/favicon.svg",
+  "image": "https://arya-sanat-akademisi.vercel.app/assets/hero_bg.png",
+  "telephone": cleanPhone,
+  "email": siteSettings.contact.email,
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Erciyesevler, Tuna Cd. No:22, 38020",
-    "addressLocality": "Kocasinan",
+    "streetAddress": siteSettings.contact.address,
+    "addressLocality": siteSettings.stats.location || "Kocasinan",
     "addressRegion": "Kayseri",
+    "postalCode": "38020",
     "addressCountry": "TR"
   },
-  "openingHours": ["Tu-Su 10:00-19:00"],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ],
+    "opens": "09:00",
+    "closes": "21:00"
+  },
+  "sameAs": [
+    "https://www.instagram.com/aryasanatakademisi",
+    "https://www.facebook.com/aryasanatakademisi"
+  ],
   "priceRange": "$$",
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 38.7337,
+    "longitude": 35.5186
+  },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Müzik Kursları",
-    "itemListElement": [
-      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Bateri Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/bateri"}},
-      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Gitar Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/gitar"}},
-      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Piyano Dersi", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/piyano"}},
-      {"@type": "Offer", "itemOffered": {"@type": "Course", "name": "Keman & Telli Çalgılar", "url": "https://arya-sanat-akademisi.vercel.app/kurslar/telli-uflemeli"}}
-    ]
+    "name": "Müzik Eğitim Programları",
+    "itemListElement": courses.map(course => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Course",
+        "name": `${course.data.title} Kursu`,
+        "description": course.data.description,
+        "provider": {
+          "@type": "LocalBusiness",
+          "name": "Arya Sanat Akademisi",
+          "url": "https://arya-sanat-akademisi.vercel.app"
+        }
+      }
+    }))
   }
 };
 ---
@@ -368,7 +403,7 @@ const schema = {
                 </span>
                 <div>
                   <strong>Adres</strong>
-                  <p>Erciyesevler, Tuna Cd. No:22, 38020 <br />Kocasinan / Kayseri</p>
+                  <p>{siteSettings.contact.address}</p>
                 </div>
               </div>
               <div class="contact-item">
@@ -379,7 +414,7 @@ const schema = {
                 </span>
                 <div>
                   <strong>Telefon</strong>
-                  <p><a href="tel:+905526112101">+90 552 611 21 01</a></p>
+                  <p><a href={`tel:${siteSettings.contact.phone.replace(/[^\d+]/g, '')}`}>{siteSettings.contact.phone}</a></p>
                 </div>
               </div>
               <div class="contact-item">
@@ -391,7 +426,7 @@ const schema = {
                 </span>
                 <div>
                   <strong>E-Posta</strong>
-                  <p><a href="mailto:aryasanatakademisi@gmail.com">aryasanatakademisi@gmail.com</a></p>
+                  <p><a href={`mailto:${siteSettings.contact.email}`}>{siteSettings.contact.email}</a></p>
                 </div>
               </div>
               <div class="contact-item">
@@ -403,7 +438,7 @@ const schema = {
                 </span>
                 <div>
                   <strong>Çalışma Saatleri</strong>
-                  <p>Salı-Pazar: 10:00 — 19:00 <br />Pazartesi: Kapalı</p>
+                  <p>{siteSettings.contact.workingHours}</p>
                 </div>
               </div>
             </address>
