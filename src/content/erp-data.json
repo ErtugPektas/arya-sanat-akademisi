@@ -8,7 +8,7 @@
       "teacherName": "aaa",
       "monthlyFee": 1200,
       "payments": {
-        "2026-07": "Paid"
+        "2026-07": "Unpaid"
       },
       "attendance": {
         "2026-07": {
@@ -25,19 +25,5 @@
     }
   ],
   "lessons": [],
-  "archivedStudents": [
-    {
-      "id": "std_1784169402749",
-      "name": "asdasd",
-      "phone": "asdasd",
-      "courseId": "piyano",
-      "teacherName": "asdasd",
-      "monthlyFee": 1201,
-      "paymentStatus": "Unpaid",
-      "attendance": {
-        "attended": 0,
-        "total": 4
-      }
-    }
-  ]
+  "archivedStudents": []
 }
