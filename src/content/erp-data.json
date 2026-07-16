@@ -8,7 +8,7 @@
       "teacherName": "aaa",
       "monthlyFee": 1200,
       "payments": {
-        "2026-07": "Paid"
+        "2026-07": "Unpaid"
       },
       "attendance": {
         "2026-07": {
