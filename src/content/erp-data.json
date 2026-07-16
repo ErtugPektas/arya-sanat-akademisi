@@ -25,5 +25,25 @@
         "2026-07": 0
       }
     }
+  ],
+  "teachers": [
+    {
+      "id": "t_default_1",
+      "name": "Elif SÖNMEZ",
+      "specialty": "Piyano",
+      "hourlyRate": 350
+    },
+    {
+      "id": "t_default_2",
+      "name": "Mehmet KAYA",
+      "specialty": "Bateri",
+      "hourlyRate": 300
+    },
+    {
+      "id": "t_1784171145596",
+      "name": "ertuğ",
+      "specialty": "elektro",
+      "hourlyRate": 300
+    }
   ]
 }
