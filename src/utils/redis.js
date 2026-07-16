@@ -9,25 +9,36 @@ const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_
 
 export const hasRedisConfig = !!(redisUrl || (kvUrl && kvToken));
 
+let tcpClient = null;
+
+async function getTcpClient() {
+  if (!redisUrl) return null;
+  
+  if (!tcpClient) {
+    tcpClient = createClient({ 
+      url: redisUrl,
+      socket: {
+        connectTimeout: 5000,
+        reconnectStrategy: (retries) => Math.min(retries * 50, 1000)
+      }
+    });
+    tcpClient.on('error', (err) => console.error('Redis Client Error:', err));
+    await tcpClient.connect();
+  } else if (!tcpClient.isOpen) {
+    await tcpClient.connect();
+  }
+  
+  return tcpClient;
+}
+
 export async function isLiveConnection() {
   if (redisUrl) {
-    let client = null;
     try {
-      client = createClient({ 
-        url: redisUrl,
-        socket: {
-          connectTimeout: 5000
-        }
-      });
-      client.on('error', () => {}); // Prevent crash on connection error
-      await client.connect();
+      const client = await getTcpClient();
       await client.ping();
-      await client.disconnect();
       return true;
     } catch (e) {
-      if (client) {
-        try { await client.disconnect(); } catch (_) {}
-      }
+      console.error('TCP Ping failed:', e);
       return false;
     }
   }
@@ -50,18 +61,11 @@ export async function isLiveConnection() {
 // Increment page views: path view count
 export async function incrementPageView(path) {
   if (redisUrl) {
-    let client = null;
     try {
-      client = createClient({ url: redisUrl });
-      client.on('error', () => {});
-      await client.connect();
+      const client = await getTcpClient();
       await client.hIncrBy('pageviews', path, 1);
-      await client.disconnect();
       return;
     } catch (e) {
-      if (client) {
-        try { await client.disconnect(); } catch (_) {}
-      }
       console.error('Local TCP Redis increment error:', e);
     }
   }
@@ -81,18 +85,11 @@ export async function incrementPageView(path) {
 // Increment period/date view count
 export async function incrementCount(key) {
   if (redisUrl) {
-    let client = null;
     try {
-      client = createClient({ url: redisUrl });
-      client.on('error', () => {});
-      await client.connect();
+      const client = await getTcpClient();
       await client.incr(key);
-      await client.disconnect();
       return;
     } catch (e) {
-      if (client) {
-        try { await client.disconnect(); } catch (_) {}
-      }
       console.error('Local TCP Redis incr error:', e);
     }
   }
@@ -112,13 +109,9 @@ export async function incrementCount(key) {
 // Fetch page views HASH map
 export async function getPageViews() {
   if (redisUrl) {
-    let client = null;
     try {
-      client = createClient({ url: redisUrl });
-      client.on('error', () => {});
-      await client.connect();
+      const client = await getTcpClient();
       const result = await client.hGetAll('pageviews') || {};
-      await client.disconnect();
       
       const pv = {};
       for (const [k, v] of Object.entries(result)) {
@@ -126,9 +119,6 @@ export async function getPageViews() {
       }
       return pv;
     } catch (e) {
-      if (client) {
-        try { await client.disconnect(); } catch (_) {}
-      }
       throw e;
     }
   }
@@ -158,11 +148,8 @@ export async function getPageViews() {
 // Fetch multi keys
 export async function getKeysValues(keysWithLabels) {
   if (redisUrl) {
-    let client = null;
     try {
-      client = createClient({ url: redisUrl });
-      client.on('error', () => {});
-      await client.connect();
+      const client = await getTcpClient();
       const result = [];
       for (const item of keysWithLabels) {
         const val = await client.get(item.key);
@@ -171,12 +158,8 @@ export async function getKeysValues(keysWithLabels) {
           views: parseInt(val) || 0
         });
       }
-      await client.disconnect();
       return result;
     } catch (e) {
-      if (client) {
-        try { await client.disconnect(); } catch (_) {}
-      }
       throw e;
     }
   }
