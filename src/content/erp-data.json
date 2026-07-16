@@ -1,5 +1,7 @@
 {
-  "students": [
+  "students": [],
+  "lessons": [],
+  "archivedStudents": [
     {
       "id": "std_1784170340188",
       "name": "aaa",
@@ -23,7 +25,5 @@
         "2026-07": 0
       }
     }
-  ],
-  "lessons": [],
-  "archivedStudents": []
+  ]
 }
