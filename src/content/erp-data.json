@@ -1,5 +1,19 @@
 {
-  "students": [],
+  "students": [
+    {
+      "id": "std_1784169402749",
+      "name": "asdasd",
+      "phone": "asdasd",
+      "courseId": "piyano",
+      "teacherName": "asdasd",
+      "monthlyFee": 1201,
+      "paymentStatus": "Unpaid",
+      "attendance": {
+        "attended": 0,
+        "total": 4
+      }
+    }
+  ],
   "lessons": [],
   "archivedStudents": []
 }
