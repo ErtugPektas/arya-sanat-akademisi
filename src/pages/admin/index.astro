@@ -396,6 +396,15 @@ if (isLoggedIn) {
 
           <!-- SECTION 5: ACADEMY ERP -->
           <div id="sec-erp" style="display: none;">
+            
+            <!-- ERP Guidance Banner -->
+            <div style="background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.15); padding: 1rem 1.5rem; border-radius: 12px; margin-bottom: 2.1rem; display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 1.5rem;">💡</span>
+              <p style="margin: 0; color: #b4b4c6; font-size: 0.875rem; line-height: 1.5;">
+                <strong>Akademi ERP Sistemine Hoş Geldiniz!</strong> Sistem verileri sıfırlanmıştır. Lütfen <strong>Öğrenci Ekle</strong> ve <strong>Ders Planla</strong> butonlarını kullanarak Arya Sanat Akademisi'nin gerçek öğrenci, eğitmen ve haftalık ders programı verilerini girmeye başlayın. Girilen ve silinen tüm veriler güvenli bir şekilde arşivlenecektir.
+              </p>
+            </div>
+
             <!-- Top ERP Metrics Summary -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
               <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 12px;">
@@ -544,11 +553,39 @@ if (isLoggedIn) {
 
                 <!-- Schedule Card List -->
                 <div id="erp-lessons-list" style="display: flex; flex-direction: column; gap: 1rem;">
-                  <!-- Rendered via Javascript -->
                 </div>
               </div>
 
             </div>
+
+            <!-- Archive Collapsible Panel -->
+            <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.5rem; border-radius: 12px; margin-top: 2rem;">
+              <div id="btn-toggle-archive" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none;">
+                <h3 style="margin: 0; font-size: 1.05rem; color: #8b8b9f; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                  <span>📁 Kayıt Arşivi (Pasif / Eski Öğrenciler)</span>
+                </h3>
+                <span id="archive-toggle-icon" style="color: #8b8b9f; font-size: 0.95rem;">Göster ▾</span>
+              </div>
+              
+              <div id="panel-archive" style="display: none; margin-top: 1.5rem; border-top: 1px solid #1f1f2e; padding-top: 1rem; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; color: #8b8b9f;">
+                  <thead>
+                    <tr style="border-bottom: 1px solid #1f1f2e; color: #fff;">
+                      <th style="padding: 0.5rem;">Ad Soyad</th>
+                      <th style="padding: 0.5rem;">İletişim</th>
+                      <th style="padding: 0.5rem;">Branş</th>
+                      <th style="padding: 0.5rem; text-align: right;">Eski Aidat</th>
+                      <th style="padding: 0.5rem; text-align: center;">İşlem</th>
+                    </tr>
+                  </thead>
+                  <tbody id="erp-archive-tbody">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
 
           <!-- SECTION 4: SITE SETTINGS -->
@@ -1021,7 +1058,12 @@ if (isLoggedIn) {
   }
 
   // ACADEMY ERP MANAGEMENT LOGIC
-  let erpDataObj = { ...initialErpData };
+  let erpDataObj = { 
+    students: [], 
+    lessons: [], 
+    archivedStudents: [],
+    ...initialErpData 
+  };
 
   const tbodyStudents = document.getElementById('erp-student-tbody');
   const listLessons = document.getElementById('erp-lessons-list');
@@ -1058,12 +1100,30 @@ if (isLoggedIn) {
     });
   }
 
+  // Toggle Archive Collapsible Panel
+  const btnToggleArchive = document.getElementById('btn-toggle-archive');
+  const panelArchive = document.getElementById('panel-archive');
+  const archiveToggleIcon = document.getElementById('archive-toggle-icon');
+
+  if (btnToggleArchive && panelArchive && archiveToggleIcon) {
+    btnToggleArchive.addEventListener('click', () => {
+      if (panelArchive.style.display === 'none') {
+        panelArchive.style.display = 'block';
+        archiveToggleIcon.innerText = 'Gizle ▴';
+      } else {
+        panelArchive.style.display = 'none';
+        archiveToggleIcon.innerText = 'Göster ▾';
+      }
+    });
+  }
+
   // Render Dashboard Summary Metrics & Tables
   window.renderErpDashboard = function() {
     if (!tbodyStudents || !listLessons) return;
 
     const students = erpDataObj.students || [];
     const lessons = erpDataObj.lessons || [];
+    const archivedStudents = erpDataObj.archivedStudents || [];
 
     const totalStudents = students.length;
     const expectedRevenue = students.reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
@@ -1100,11 +1160,34 @@ if (isLoggedIn) {
               <div style="font-size: 0.7rem; color: #8b8b9f;">Katılım: %${Math.round((std.attendance.attended / std.attendance.total) * 100)}</div>
             </td>
             <td style="padding: 1rem 0.5rem; text-align: center;">
-              <button onclick="deleteStudent(${idx})" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Kaldır</button>
+              <button onclick="deleteStudent(${idx})" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Arşivle</button>
             </td>
           </tr>
         `;
       }).join('');
+    }
+
+    // Render Archive Students Table
+    const tbodyArchive = document.getElementById('erp-archive-tbody');
+    if (tbodyArchive) {
+      if (archivedStudents.length === 0) {
+        tbodyArchive.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 1.5rem; color: #6b6b7f;">Arşivlenmiş kayıt bulunmuyor.</td></tr>`;
+      } else {
+        tbodyArchive.innerHTML = archivedStudents.map((std, idx) => `
+          <tr style="border-bottom: 1px solid #161622; opacity: 0.75;">
+            <td style="padding: 0.75rem 0.5rem; color: #fff; font-weight: 500;">${std.name}</td>
+            <td style="padding: 0.75rem 0.5rem; font-family: monospace;">${std.phone}</td>
+            <td style="padding: 0.75rem 0.5rem; text-transform: uppercase; font-size: 0.75rem;">${std.courseId}</td>
+            <td style="padding: 0.75rem 0.5rem; text-align: right;">${std.monthlyFee} ₺</td>
+            <td style="padding: 0.75rem 0.5rem; text-align: center;">
+              <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                <button onclick="restoreStudent(${idx})" style="background: rgba(16,185,129,0.12); color: #10b981; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Geri Yükle</button>
+                <button onclick="deleteArchivedStudent(${idx})" style="background: rgba(239,68,68,0.12); color: #fca5a5; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Kalıcı Sil</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      }
     }
 
     if (lessons.length === 0) {
@@ -1210,9 +1293,35 @@ if (isLoggedIn) {
   };
 
   window.deleteStudent = async function(idx) {
-    if (confirm('Bu öğrenciyi sistemden silmek istediğinize emin misiniz?')) {
-      erpDataObj.students.splice(idx, 1);
-      await saveErpData();
+    const student = erpDataObj.students[idx];
+    if (student) {
+      if (confirm(`"${student.name}" isimli öğrenciyi arşive taşımak istiyor musunuz? Geçmiş ödeme ve katılım bilgileri saklanacaktır.`)) {
+        if (!erpDataObj.archivedStudents) erpDataObj.archivedStudents = [];
+        erpDataObj.archivedStudents.push(student);
+        erpDataObj.students.splice(idx, 1);
+        await saveErpData();
+      }
+    }
+  };
+
+  window.restoreStudent = async function(idx) {
+    const student = erpDataObj.archivedStudents[idx];
+    if (student) {
+      if (confirm(`"${student.name}" isimli öğrenciyi aktif öğrenci listesine geri taşımak istiyor musunuz?`)) {
+        erpDataObj.students.push(student);
+        erpDataObj.archivedStudents.splice(idx, 1);
+        await saveErpData();
+      }
+    }
+  };
+
+  window.deleteArchivedStudent = async function(idx) {
+    const student = erpDataObj.archivedStudents[idx];
+    if (student) {
+      if (confirm(`"${student.name}" isimli öğrenciyi arşivden tamamen silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) {
+        erpDataObj.archivedStudents.splice(idx, 1);
+        await saveErpData();
+      }
     }
   };
 
