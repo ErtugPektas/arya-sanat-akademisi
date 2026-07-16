@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import duyurular from '../../content/duyurular.json';
 import siteSettings from '../../content/site-settings.json';
+import erpData from '../../content/erp-data.json';
 
 export const prerender = false;
 
@@ -147,6 +148,13 @@ if (isLoggedIn) {
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
               <span>Trafik Analitiği</span>
+            </button>
+            <button 
+              id="tab-erp" 
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+              <span>Akademi ERP</span>
             </button>
             <button 
               id="tab-settings" 
@@ -386,6 +394,163 @@ if (isLoggedIn) {
 
           </div>
 
+          <!-- SECTION 5: ACADEMY ERP -->
+          <div id="sec-erp" style="display: none;">
+            <!-- Top ERP Metrics Summary -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 12px;">
+                <span style="color: #8b8b9f; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Aktif Kayıtlı Öğrenci</span>
+                <strong id="erp-stat-students" style="color: #fff; font-size: 1.5rem; display: block; margin-top: 0.25rem;">-</strong>
+              </div>
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 12px;">
+                <span style="color: #8b8b9f; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Aylık Toplam Ciro</span>
+                <strong id="erp-stat-revenue" style="color: #10b981; font-size: 1.5rem; display: block; margin-top: 0.25rem;">-</strong>
+              </div>
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 12px;">
+                <span style="color: #8b8b9f; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Ödenen Aidat</span>
+                <strong id="erp-stat-paid" style="color: #fff; font-size: 1.5rem; display: block; margin-top: 0.25rem;">-</strong>
+              </div>
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 12px;">
+                <span style="color: #8b8b9f; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Ödenmeyen Aidat Uyarı</span>
+                <strong id="erp-stat-unpaid" style="color: #ef4444; font-size: 1.5rem; display: block; margin-top: 0.25rem;">-</strong>
+              </div>
+            </div>
+
+            <!-- Two Column ERP Layout -->
+            <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start; flex-wrap: wrap;">
+              
+              <!-- Left Column: Student List -->
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 2rem; border-radius: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f1f2e; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                  <h3 style="margin: 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>Aktif Öğrenci Listesi</span>
+                  </h3>
+                  <button id="btn-add-student" style="background: rgba(212,175,55,0.12); color: #d4af37; border: 1px solid rgba(212,175,55,0.25); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(212,175,55,0.2)'" onmouseout="this.style.background='rgba(212,175,55,0.12)'">+ Yeni Öğrenci Ekle</button>
+                </div>
+
+                <!-- Add Student Inline Form (Hidden by default) -->
+                <div id="panel-add-student" style="display: none; background: #161622; border: 1px solid #232335; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; gap: 1rem; flex-direction: column;">
+                  <h4 style="margin: 0 0 0.5rem 0; color: #d4af37; font-size: 0.95rem;">Yeni Öğrenci Ekle</h4>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Öğrenci Ad Soyad</label>
+                      <input type="text" id="erp-new-student-name" placeholder="Ahmet Yılmaz" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Telefon Numarası</label>
+                      <input type="text" id="erp-new-student-phone" placeholder="+90 532 ..." style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none;" />
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Kurs</label>
+                      <select id="erp-new-student-course" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none;">
+                        <option value="piyano">Piyano Dersi</option>
+                        <option value="gitar">Gitar Dersi</option>
+                        <option value="bateri">Bateri Dersi</option>
+                        <option value="telli-uflemeli">Keman &amp; Telli</option>
+                      </select>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Eğitmen</label>
+                      <input type="text" id="erp-new-student-teacher" placeholder="Elif Sönmez" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none;" />
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Aylık Aidat Tutarı (TL)</label>
+                      <input type="number" id="erp-new-student-fee" value="1200" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none;" />
+                    </div>
+                    <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 0.5rem;">
+                      <button id="btn-save-new-student" style="background: #d4af37; color: #000; border: none; padding: 0.5rem 1.25rem; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;" onmouseover="this.style.background='#cfa426'" onmouseout="this.style.background='#d4af37'">Öğrenciyi Kaydet</button>
+                      <button id="btn-cancel-new-student" style="background: transparent; color: #8b8b9f; border: 1px solid #2d2d42; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">İptal</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                  <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; color: #b4b4c6;">
+                    <thead>
+                      <tr style="border-bottom: 1px solid #1f1f2e; color: #fff;">
+                        <th style="padding: 0.75rem 0.5rem;">Öğrenci</th>
+                        <th style="padding: 0.75rem 0.5rem;">İletişim</th>
+                        <th style="padding: 0.75rem 0.5rem;">Program (Eğitmen)</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: right;">Aidat</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Durum</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">Ders Katılım</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: center;">İşlem</th>
+                      </tr>
+                    </thead>
+                    <tbody id="erp-student-tbody">
+                      <!-- Rendered via Javascript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Right Column: Weekly Schedule -->
+              <div style="background: #101016; border: 1px solid #1f1f2e; padding: 2rem; border-radius: 16px; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f1f2e; padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                  <h3 style="margin: 0; font-size: 1.2rem; color: #fff; font-weight: 700;">Haftalık Ders Programı</h3>
+                  <button id="btn-add-lesson" style="background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(16,185,129,0.2)'" onmouseout="this.style.background='rgba(16,185,129,0.12)'">+ Ders Planla</button>
+                </div>
+
+                <!-- Add Lesson Inline Form (Hidden by default) -->
+                <div id="panel-add-lesson" style="display: none; background: #161622; border: 1px solid #232335; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; gap: 1rem; flex-direction: column;">
+                  <h4 style="margin: 0 0 0.5rem 0; color: #10b981; font-size: 0.95rem;">Yeni Ders Planla</h4>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Öğrenci Adı</label>
+                      <input type="text" id="erp-new-lesson-student" placeholder="Ahmet Yılmaz" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Enstrüman / Kurs</label>
+                      <input type="text" id="erp-new-lesson-course" placeholder="Piyano" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Eğitmen Adı</label>
+                      <input type="text" id="erp-new-lesson-teacher" placeholder="Elif Sönmez" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Çalışma Sınıfı / Stüdyo</label>
+                      <input type="text" id="erp-new-lesson-studio" placeholder="Piyano Odası A" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                    </div>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Gün</label>
+                      <select id="erp-new-lesson-day" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;">
+                        <option value="Pazartesi">Pazartesi</option>
+                        <option value="Salı">Salı</option>
+                        <option value="Çarşamba">Çarşamba</option>
+                        <option value="Perşembe">Perşembe</option>
+                        <option value="Cuma">Cuma</option>
+                        <option value="Cumartesi">Cumartesi</option>
+                        <option value="Pazar">Pazar</option>
+                      </select>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                      <label style="font-size: 0.75rem; color: #a4a4b6;">Saat (Örn: 14:00 - 15:00)</label>
+                      <input type="text" id="erp-new-lesson-time" placeholder="14:00 - 15:00" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+                    <button id="btn-save-new-lesson" style="background: #10b981; color: #fff; border: none; padding: 0.5rem 1.25rem; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Dersi Planla</button>
+                    <button id="btn-cancel-new-lesson" style="background: transparent; color: #8b8b9f; border: 1px solid #2d2d42; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">İptal</button>
+                  </div>
+                </div>
+
+                <!-- Schedule Card List -->
+                <div id="erp-lessons-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                  <!-- Rendered via Javascript -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
           <!-- SECTION 4: SITE SETTINGS -->
           <div id="sec-settings" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f1f2e; padding-bottom: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
@@ -512,27 +677,29 @@ if (isLoggedIn) {
 </Layout>
 
 <!-- CLIENT-SIDE TABS AND SVG GRAPH SCHEDULER -->
-<script is:inline define:vars={{ initialAnnouncements: duyurular }}>
+<script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData }}>
   const tabCourses = document.getElementById('tab-courses');
   const tabAnnouncements = document.getElementById('tab-announcements');
   const tabAnalytics = document.getElementById('tab-analytics');
+  const tabErp = document.getElementById('tab-erp');
   const tabSettings = document.getElementById('tab-settings');
   
   const secCourses = document.getElementById('sec-courses');
   const secAnnouncements = document.getElementById('sec-announcements');
   const secAnalytics = document.getElementById('sec-analytics');
+  const secErp = document.getElementById('sec-erp');
   const secSettings = document.getElementById('sec-settings');
 
   let activePeriod = 'day'; // Default period
 
-  if (tabCourses && tabAnnouncements && tabAnalytics && tabSettings && secCourses && secAnnouncements && secAnalytics && secSettings) {
+  if (tabCourses && tabAnnouncements && tabAnalytics && tabErp && tabSettings && secCourses && secAnnouncements && secAnalytics && secErp && secSettings) {
     function resetTabs() {
-      [tabCourses, tabAnnouncements, tabAnalytics, tabSettings].forEach(tab => {
+      [tabCourses, tabAnnouncements, tabAnalytics, tabErp, tabSettings].forEach(tab => {
         tab.style.background = '#101016';
         tab.style.color = '#b4b4c6';
         tab.style.borderColor = '#1f1f2e';
       });
-      [secCourses, secAnnouncements, secAnalytics, secSettings].forEach(sec => {
+      [secCourses, secAnnouncements, secAnalytics, secErp, secSettings].forEach(sec => {
         sec.style.display = 'none';
       });
     }
@@ -561,6 +728,15 @@ if (isLoggedIn) {
       tabAnalytics.style.borderColor = '#d4af37';
       secAnalytics.style.display = 'block';
       loadAnalytics(activePeriod);
+    });
+
+    tabErp.addEventListener('click', () => {
+      resetTabs();
+      tabErp.style.background = '#1c1c28';
+      tabErp.style.color = '#d4af37';
+      tabErp.style.borderColor = '#d4af37';
+      secErp.style.display = 'block';
+      renderErpDashboard();
     });
 
     tabSettings.addEventListener('click', () => {
@@ -841,6 +1017,226 @@ if (isLoggedIn) {
 
     } catch (e) {
       console.error('Error fetching analytics details:', e);
+    }
+  }
+
+  // ACADEMY ERP MANAGEMENT LOGIC
+  let erpDataObj = { ...initialErpData };
+
+  const tbodyStudents = document.getElementById('erp-student-tbody');
+  const listLessons = document.getElementById('erp-lessons-list');
+
+  const panelAddStudent = document.getElementById('panel-add-student');
+  const panelAddLesson = document.getElementById('panel-add-lesson');
+
+  // Toggle Forms
+  const btnAddStudent = document.getElementById('btn-add-student');
+  if (btnAddStudent && panelAddStudent) {
+    btnAddStudent.addEventListener('click', () => {
+      panelAddStudent.style.display = panelAddStudent.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
+  const btnCancelNewStudent = document.getElementById('btn-cancel-new-student');
+  if (btnCancelNewStudent && panelAddStudent) {
+    btnCancelNewStudent.addEventListener('click', (e) => {
+      e.preventDefault();
+      panelAddStudent.style.display = 'none';
+    });
+  }
+
+  const btnAddLesson = document.getElementById('btn-add-lesson');
+  if (btnAddLesson && panelAddLesson) {
+    btnAddLesson.addEventListener('click', () => {
+      panelAddLesson.style.display = panelAddLesson.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
+  const btnCancelNewLesson = document.getElementById('btn-cancel-new-lesson');
+  if (btnCancelNewLesson && panelAddLesson) {
+    btnCancelNewLesson.addEventListener('click', (e) => {
+      e.preventDefault();
+      panelAddLesson.style.display = 'none';
+    });
+  }
+
+  // Render Dashboard Summary Metrics & Tables
+  window.renderErpDashboard = function() {
+    if (!tbodyStudents || !listLessons) return;
+
+    const students = erpDataObj.students || [];
+    const lessons = erpDataObj.lessons || [];
+
+    const totalStudents = students.length;
+    const expectedRevenue = students.reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
+    const paidRevenue = students.filter(s => s.paymentStatus === 'Paid').reduce((sum, s) => sum + (s.monthlyFee || 0), 0);
+    const unpaidCount = students.filter(s => s.paymentStatus === 'Unpaid').length;
+
+    document.getElementById('erp-stat-students').innerText = `${totalStudents} Öğrenci`;
+    document.getElementById('erp-stat-revenue').innerText = `${expectedRevenue.toLocaleString()} ₺`;
+    document.getElementById('erp-stat-paid').innerText = `${paidRevenue.toLocaleString()} ₺`;
+    document.getElementById('erp-stat-unpaid').innerText = `${unpaidCount} Bekleyen`;
+
+    if (students.length === 0) {
+      tbodyStudents.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #8b8b9f;">Kayıtlı öğrenci bulunmuyor.</td></tr>`;
+    } else {
+      tbodyStudents.innerHTML = students.map((std, idx) => {
+        const statusLabel = std.paymentStatus === 'Paid' ? 'Ödendi' : 'Ödenmedi';
+        const statusBg = std.paymentStatus === 'Paid' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+        const statusColor = std.paymentStatus === 'Paid' ? '#10b981' : '#fca5a5';
+        
+        return `
+          <tr style="border-bottom: 1px solid #161622;">
+            <td style="padding: 1rem 0.5rem; color: #fff; font-weight: 600;">${std.name}</td>
+            <td style="padding: 1rem 0.5rem; font-family: monospace;">${std.phone}</td>
+            <td style="padding: 1rem 0.5rem;">
+              <span style="background: #161622; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; color: #d4af37; border: 1px solid #1f1f2e; display: inline-block; margin-bottom: 0.25rem;">${std.courseId.toUpperCase()}</span>
+              <div style="font-size: 0.75rem; color: #8b8b9f;">Eğitmen: ${std.teacherName}</div>
+            </td>
+            <td style="padding: 1rem 0.5rem; text-align: right; color: #fff; font-weight: 600;">${std.monthlyFee} ₺</td>
+            <td style="padding: 1rem 0.5rem; text-align: center;">
+              <button onclick="togglePaymentStatus(${idx})" style="background: ${statusBg}; color: ${statusColor}; border: 1px solid ${statusBg}; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">${statusLabel} ⇅</button>
+            </td>
+            <td style="padding: 1rem 0.5rem; text-align: center;">
+              <div style="font-weight: 600;">${std.attendance.attended} / ${std.attendance.total}</div>
+              <div style="font-size: 0.7rem; color: #8b8b9f;">Katılım: %${Math.round((std.attendance.attended / std.attendance.total) * 100)}</div>
+            </td>
+            <td style="padding: 1rem 0.5rem; text-align: center;">
+              <button onclick="deleteStudent(${idx})" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Kaldır</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    if (lessons.length === 0) {
+      listLessons.innerHTML = `<div style="text-align: center; padding: 2rem; color: #8b8b9f; background: #161622; border-radius: 8px;">Planlanmış ders bulunmuyor.</div>`;
+    } else {
+      listLessons.innerHTML = lessons.map((les, idx) => `
+        <div style="background: #161622; border: 1px solid #1f1f2e; border-radius: 10px; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: relative;">
+          <div>
+            <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem;">
+              <strong style="color: #fff; font-size: 0.95rem;">${les.studentName}</strong>
+              <span style="font-size: 0.75rem; background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); padding: 0.15rem 0.4rem; border-radius: 4px;">${les.courseName}</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #b4b4c6;">👨‍🏫 Eğitmen: <strong style="color: #fff;">${les.teacherName}</strong></div>
+            <div style="font-size: 0.8rem; color: #8b8b9f; margin-top: 0.25rem;">📍 Oda: ${les.studio}</div>
+          </div>
+          <div style="text-align: right; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+            <div style="background: rgba(212,175,55,0.08); color: #d4af37; border: 1px solid rgba(212,175,55,0.15); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-family: monospace; font-weight: 600;">
+              🗓️ ${les.day} - ${les.time}
+            </div>
+            <button onclick="deleteLesson(${idx})" style="background: transparent; color: #fca5a5; border: none; font-size: 0.75rem; cursor: pointer;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">İptal Et</button>
+          </div>
+        </div>
+      `).join('');
+    }
+  };
+
+  const btnSaveNewStudent = document.getElementById('btn-save-new-student');
+  if (btnSaveNewStudent) {
+    btnSaveNewStudent.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('erp-new-student-name').value.trim();
+      const phone = document.getElementById('erp-new-student-phone').value.trim();
+      const courseId = document.getElementById('erp-new-student-course').value;
+      const teacherName = document.getElementById('erp-new-student-teacher').value.trim();
+      const monthlyFee = parseInt(document.getElementById('erp-new-student-fee').value) || 1200;
+
+      if (!name || !phone || !teacherName) {
+        alert('Lütfen ad, telefon ve eğitmen alanlarını doldurunuz.');
+        return;
+      }
+
+      erpDataObj.students.push({
+        id: 'std_' + Date.now(),
+        name,
+        phone,
+        courseId,
+        teacherName,
+        monthlyFee,
+        paymentStatus: 'Unpaid',
+        attendance: { attended: 0, total: 4 }
+      });
+      panelAddStudent.style.display = 'none';
+      document.getElementById('erp-new-student-name').value = '';
+      document.getElementById('erp-new-student-phone').value = '';
+      document.getElementById('erp-new-student-teacher').value = '';
+
+      await saveErpData();
+    });
+  }
+
+  const btnSaveNewLesson = document.getElementById('btn-save-new-lesson');
+  if (btnSaveNewLesson) {
+    btnSaveNewLesson.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const studentName = document.getElementById('erp-new-lesson-student').value.trim();
+      const courseName = document.getElementById('erp-new-lesson-course').value.trim();
+      const teacherName = document.getElementById('erp-new-lesson-teacher').value.trim();
+      const studio = document.getElementById('erp-new-lesson-studio').value.trim();
+      const day = document.getElementById('erp-new-lesson-day').value;
+      const time = document.getElementById('erp-new-lesson-time').value.trim();
+
+      if (!studentName || !courseName || !teacherName || !studio || !time) {
+        alert('Lütfen tüm alanları doldurunuz.');
+        return;
+      }
+
+      erpDataObj.lessons.push({
+        id: 'les_' + Date.now(),
+        studentName,
+        courseName,
+        teacherName,
+        studio,
+        day,
+        time
+      });
+      panelAddLesson.style.display = 'none';
+      document.getElementById('erp-new-lesson-student').value = '';
+      document.getElementById('erp-new-lesson-course').value = '';
+      document.getElementById('erp-new-lesson-teacher').value = '';
+      document.getElementById('erp-new-lesson-studio').value = '';
+      document.getElementById('erp-new-lesson-time').value = '';
+
+      await saveErpData();
+    });
+  }
+
+  window.togglePaymentStatus = async function(idx) {
+    const student = erpDataObj.students[idx];
+    if (student) {
+      student.paymentStatus = student.paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+      await saveErpData();
+    }
+  };
+
+  window.deleteStudent = async function(idx) {
+    if (confirm('Bu öğrenciyi sistemden silmek istediğinize emin misiniz?')) {
+      erpDataObj.students.splice(idx, 1);
+      await saveErpData();
+    }
+  };
+
+  window.deleteLesson = async function(idx) {
+    if (confirm('Bu planlanmış dersi iptal etmek istediğinize emin misiniz?')) {
+      erpDataObj.lessons.splice(idx, 1);
+      await saveErpData();
+    }
+  };
+
+  async function saveErpData() {
+    renderErpDashboard();
+    try {
+      const response = await fetch('/api/save-erp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ erpData: erpDataObj })
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        console.error('ERP Save Error:', data.error);
+      }
+    } catch (err) {
+      console.error('ERP Save Network Error:', err);
     }
   }
 
