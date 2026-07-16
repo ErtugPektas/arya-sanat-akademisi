@@ -1,5 +1,29 @@
 {
-  "students": [],
+  "students": [
+    {
+      "id": "std_1784171236982",
+      "name": "aaa",
+      "phone": "aaa",
+      "courseId": "piyano",
+      "teacherName": "Mehmet KAYA",
+      "monthlyFee": 1200,
+      "payments": {
+        "2026-07": "Unpaid"
+      },
+      "attendance": {
+        "2026-07": {
+          "attended": 0,
+          "total": 4
+        }
+      },
+      "notes": {
+        "2026-07": ""
+      },
+      "progress": {
+        "2026-07": 0
+      }
+    }
+  ],
   "lessons": [],
   "archivedStudents": [
     {
