@@ -574,22 +574,31 @@ if (isLoggedIn) {
                       <input type="text" id="erp-new-lesson-studio" placeholder="Piyano Odası A" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
                     </div>
                   </div>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
-                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                      <label style="font-size: 0.75rem; color: #a4a4b6;">Gün</label>
-                      <select id="erp-new-lesson-day" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;">
-                        <option value="Pazartesi">Pazartesi</option>
-                        <option value="Salı">Salı</option>
-                        <option value="Çarşamba">Çarşamba</option>
-                        <option value="Perşembe">Perşembe</option>
-                        <option value="Cuma">Cuma</option>
-                        <option value="Cumartesi">Cumartesi</option>
-                        <option value="Pazar">Pazar</option>
-                      </select>
+                  <div style="margin-top: 1rem;">
+                    <label style="font-size: 0.75rem; color: #a4a4b6; font-weight: 600; display: block; margin-bottom: 0.5rem;">Ders Günü Seçin</label>
+                    <input type="hidden" id="erp-new-lesson-day" value="Pazartesi" />
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="erp-day-chips">
+                      {['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'].map((d, i) => (
+                        <button type="button" onclick={`selectLessonDay('${d}')`} id={`day-chip-${d}`} class={`day-chip-btn ${i===0?'selected':''}`} style="background: #1a1a2a; border: 1px solid #2d2d42; color: #b4b4c6; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                          {d}
+                        </button>
+                      ))}
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                      <label style="font-size: 0.75rem; color: #a4a4b6;">Saat (Örn: 14:00 - 15:00)</label>
-                      <input type="text" id="erp-new-lesson-time" placeholder="14:00 - 15:00" style="background: #1a1a2a; border: 1px solid #2d2d42; color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem;" />
+                  </div>
+
+                  <div style="margin-top: 1rem; margin-bottom: 1rem;">
+                    <label style="font-size: 0.75rem; color: #a4a4b6; font-weight: 600; display: block; margin-bottom: 0.5rem;">Ders Saati Seçin</label>
+                    <input type="hidden" id="erp-new-lesson-time" value="09:00 - 10:00" />
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.5rem;" id="erp-time-slots">
+                      {[
+                        '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00',
+                        '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00',
+                        '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00'
+                      ].map((t, i) => (
+                        <button type="button" onclick={`selectLessonTime('${t}')`} id={`time-slot-${t.replace(/\s+/g, '')}`} class={`time-slot-btn ${i===0?'selected':''}`} style="background: #1a1a2a; border: 1px solid #2d2d42; color: #b4b4c6; padding: 0.4rem; border-radius: 8px; font-size: 0.75rem; font-family: monospace; font-weight: 600; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+                          {t}
+                        </button>
+                      ))}
                     </div>
                   </div>
                   <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
@@ -787,6 +796,21 @@ if (isLoggedIn) {
     </div>
   </div>
 </Layout>
+
+<style is:global>
+  .day-chip-btn:hover, .time-slot-btn:hover {
+    border-color: #d4af37 !important;
+    color: #fff !important;
+    background: #232335 !important;
+    transform: translateY(-2px);
+  }
+  .day-chip-btn.selected, .time-slot-btn.selected {
+    background: #d4af37 !important;
+    color: #000 !important;
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 12px rgba(212,175,55,0.3) !important;
+  }
+</style>
 
 <!-- CLIENT-SIDE TABS AND SVG GRAPH SCHEDULER -->
 <script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData, userRole: role }}>
@@ -1166,9 +1190,19 @@ if (isLoggedIn) {
   let erpDataObj = { 
     students: [], 
     lessons: [], 
-    archivedStudents: [],
-    ...initialErpData 
+    archivedStudents: []
   };
+
+  try {
+    const cached = localStorage.getItem('arya_erp_data');
+    if (cached) {
+      erpDataObj = { ...erpDataObj, ...JSON.parse(cached) };
+    } else {
+      erpDataObj = { ...erpDataObj, ...initialErpData };
+    }
+  } catch (e) {
+    erpDataObj = { ...erpDataObj, ...initialErpData };
+  }
 
   const tbodyStudents = document.getElementById('erp-student-tbody');
   const listLessons = document.getElementById('erp-lessons-list');
@@ -1524,11 +1558,26 @@ if (isLoggedIn) {
       document.getElementById('erp-new-lesson-course').value = '';
       document.getElementById('erp-new-lesson-teacher').value = '';
       document.getElementById('erp-new-lesson-studio').value = '';
-      document.getElementById('erp-new-lesson-time').value = '';
+      
+      window.selectLessonDay('Pazartesi');
+      window.selectLessonTime('09:00 - 10:00');
 
       await saveErpData();
     });
   }
+
+  window.selectLessonDay = function(day) {
+    document.getElementById('erp-new-lesson-day').value = day;
+    document.querySelectorAll('.day-chip-btn').forEach(btn => btn.classList.remove('selected'));
+    document.getElementById(`day-chip-${day}`).classList.add('selected');
+  };
+
+  window.selectLessonTime = function(time) {
+    document.getElementById('erp-new-lesson-time').value = time;
+    document.querySelectorAll('.time-slot-btn').forEach(btn => btn.classList.remove('selected'));
+    const safeId = `time-slot-${time.replace(/\s+/g, '')}`;
+    document.getElementById(safeId).classList.add('selected');
+  };
 
   window.togglePaymentStatus = async function(idx) {
     const student = erpDataObj.students[idx];
@@ -1635,6 +1684,11 @@ if (isLoggedIn) {
 
   async function saveErpData() {
     renderErpDashboard();
+    try {
+      localStorage.setItem('arya_erp_data', JSON.stringify(erpDataObj));
+    } catch (e) {
+      console.error('Local cache save error:', e);
+    }
     try {
       const response = await fetch('/api/save-erp', {
         method: 'POST',

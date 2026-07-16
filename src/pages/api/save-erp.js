@@ -4,8 +4,8 @@ import path from 'path';
 export const prerender = false;
 
 export async function POST({ request, cookies }) {
-  // Check session cookie
-  const isLoggedIn = cookies.has('admin_session') && cookies.get('admin_session').value === 'true';
+  const sessionVal = cookies.has('admin_session') ? cookies.get('admin_session').value : null;
+  const isLoggedIn = sessionVal === 'admin' || sessionVal === 'teacher' || sessionVal === 'true';
 
   if (!isLoggedIn) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
