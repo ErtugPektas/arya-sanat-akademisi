@@ -111,7 +111,7 @@ if (isLoggedIn) {
             </div>
           )}
           
-          <form method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <form id="login-form" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
               <label for="password" style="font-size: 0.8rem; color: #a4a4b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Giriş Şifresi</label>
               <input 
@@ -133,6 +133,33 @@ if (isLoggedIn) {
               Giriş Yap
             </button>
           </form>
+
+          <script is:inline>
+            (function() {
+              const form = document.getElementById('login-form');
+              if (form) {
+                form.addEventListener('submit', function(e) {
+                  const passVal = document.getElementById('password').value.trim();
+                  try {
+                    const erpDataStr = localStorage.getItem('arya_erp_data');
+                    if (erpDataStr) {
+                      const dataObj = JSON.parse(erpDataStr);
+                      const teachers = dataObj.teachers || [];
+                      const matched = teachers.find(t => t.password === passVal);
+                      if (matched) {
+                        e.preventDefault();
+                        document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Strict";
+                        document.cookie = "teacher_name=" + encodeURIComponent(matched.name) + "; path=/; max-age=86400; SameSite=Strict";
+                        window.location.href = '/admin';
+                      }
+                    }
+                  } catch (err) {
+                    console.error('Client login intercept error:', err);
+                  }
+                });
+              }
+            })();
+          </script>
         </div>
       ) : (
         <div>
@@ -1720,8 +1747,8 @@ if (isLoggedIn) {
     document.getElementById(safeId).classList.add('selected');
   };
 
-  window.togglePaymentStatus = async function(idx) {
-    const student = erpDataObj.students[idx];
+  window.togglePaymentStatus = async function(id) {
+    const student = erpDataObj.students.find(s => s.id === id);
     if (student) {
       if (!student.payments) student.payments = {};
       const current = student.payments[erpActiveMonth] || 'Unpaid';
@@ -1730,8 +1757,8 @@ if (isLoggedIn) {
     }
   };
 
-  window.incrementAttendance = async function(idx) {
-    const student = erpDataObj.students[idx];
+  window.incrementAttendance = async function(id) {
+    const student = erpDataObj.students.find(s => s.id === id);
     if (student) {
       if (!student.attendance) student.attendance = {};
       if (!student.attendance[erpActiveMonth]) {
@@ -1745,8 +1772,8 @@ if (isLoggedIn) {
     }
   };
 
-  window.decrementAttendance = async function(idx) {
-    const student = erpDataObj.students[idx];
+  window.decrementAttendance = async function(id) {
+    const student = erpDataObj.students.find(s => s.id === id);
     if (student) {
       if (!student.attendance) student.attendance = {};
       if (!student.attendance[erpActiveMonth]) {
@@ -1764,23 +1791,33 @@ if (isLoggedIn) {
     const name = document.getElementById('erp-new-teacher-name').value.trim();
     const specialty = document.getElementById('erp-new-teacher-spec').value.trim();
     const hourlyRate = parseInt(document.getElementById('erp-new-teacher-rate').value) || 300;
+    const password = document.getElementById('erp-new-teacher-password').value.trim();
 
-    if (!name || !specialty) {
-      alert('Lütfen eğitmen adı ve branş bilgilerini doldurunuz.');
+    if (!name || !specialty || !password) {
+      alert('Lütfen eğitmen adı, branş ve giriş şifresi alanlarını doldurunuz.');
       return;
     }
 
     if (!erpDataObj.teachers) erpDataObj.teachers = [];
+    
+    // Check if passcode already exists
+    if (erpDataObj.teachers.some(t => t.password === password)) {
+      alert('Bu giriş şifresi başka bir eğitmen tarafından kullanılıyor. Lütfen benzersiz bir şifre seçin.');
+      return;
+    }
+
     erpDataObj.teachers.push({
       id: 't_' + Date.now(),
       name,
       specialty,
-      hourlyRate
+      hourlyRate,
+      password
     });
 
     document.getElementById('erp-new-teacher-name').value = '';
     document.getElementById('erp-new-teacher-spec').value = '';
     document.getElementById('erp-new-teacher-rate').value = '300';
+    document.getElementById('erp-new-teacher-password').value = '';
 
     await saveErpData();
   };
@@ -1795,18 +1832,18 @@ if (isLoggedIn) {
     }
   };
 
-  window.toggleStudentDetails = function(idx) {
-    const row = document.getElementById(`erp-details-row-${idx}`);
+  window.toggleStudentDetails = function(id) {
+    const row = document.getElementById(`erp-details-row-${id}`);
     if (row) {
       row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
     }
   };
 
-  window.saveStudentProgress = async function(idx) {
-    const student = erpDataObj.students[idx];
+  window.saveStudentProgress = async function(id) {
+    const student = erpDataObj.students.find(s => s.id === id);
     if (student) {
-      const notes = document.getElementById(`erp-student-notes-${idx}`).value;
-      const progress = parseInt(document.getElementById(`erp-student-progress-${idx}`).value) || 0;
+      const notes = document.getElementById(`erp-student-notes-${id}`).value;
+      const progress = parseInt(document.getElementById(`erp-student-progress-${id}`).value) || 0;
 
       if (!student.notes) student.notes = {};
       if (!student.progress) student.progress = {};
@@ -1818,9 +1855,10 @@ if (isLoggedIn) {
     }
   };
 
-  window.deleteStudent = async function(idx) {
-    const student = erpDataObj.students[idx];
-    if (student) {
+  window.deleteStudent = async function(id) {
+    const idx = erpDataObj.students.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      const student = erpDataObj.students[idx];
       if (confirm(`"${student.name}" isimli öğrenciyi arşive taşımak istiyor musunuz? Geçmiş ödeme ve katılım bilgileri saklanacaktır.`)) {
         if (!erpDataObj.archivedStudents) erpDataObj.archivedStudents = [];
         erpDataObj.archivedStudents.push(student);
@@ -1830,9 +1868,10 @@ if (isLoggedIn) {
     }
   };
 
-  window.restoreStudent = async function(idx) {
-    const student = erpDataObj.archivedStudents[idx];
-    if (student) {
+  window.restoreStudent = async function(id) {
+    const idx = erpDataObj.archivedStudents.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      const student = erpDataObj.archivedStudents[idx];
       if (confirm(`"${student.name}" isimli öğrenciyi aktif öğrenci listesine geri taşımak istiyor musunuz?`)) {
         erpDataObj.students.push(student);
         erpDataObj.archivedStudents.splice(idx, 1);
@@ -1841,9 +1880,10 @@ if (isLoggedIn) {
     }
   };
 
-  window.deleteArchivedStudent = async function(idx) {
-    const student = erpDataObj.archivedStudents[idx];
-    if (student) {
+  window.deleteArchivedStudent = async function(id) {
+    const idx = erpDataObj.archivedStudents.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      const student = erpDataObj.archivedStudents[idx];
       if (confirm(`"${student.name}" isimli öğrenciyi arşivden tamamen silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) {
         erpDataObj.archivedStudents.splice(idx, 1);
         await saveErpData();
@@ -1851,10 +1891,13 @@ if (isLoggedIn) {
     }
   };
 
-  window.deleteLesson = async function(idx) {
-    if (confirm('Bu planlanmış dersi iptal etmek istediğinize emin misiniz?')) {
-      erpDataObj.lessons.splice(idx, 1);
-      await saveErpData();
+  window.deleteLesson = async function(id) {
+    const idx = erpDataObj.lessons.findIndex(l => l.id === id);
+    if (idx !== -1) {
+      if (confirm('Bu dersi programdan kaldırmak istediğinize emin misiniz?')) {
+        erpDataObj.lessons.splice(idx, 1);
+        await saveErpData();
+      }
     }
   };
 
