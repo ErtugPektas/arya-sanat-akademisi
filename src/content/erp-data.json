@@ -18,6 +18,15 @@
       "studio": "a",
       "day": "Cumartesi",
       "time": "09:00 - 10:00"
+    },
+    {
+      "id": "les_1784171975079",
+      "studentName": "a",
+      "courseName": "a",
+      "teacherName": "Mehmet KAYA",
+      "studio": "a",
+      "day": "Pazartesi",
+      "time": "10:00 - 11:00"
     }
   ],
   "archivedStudents": [],
