@@ -5,7 +5,8 @@ import Layout from '../../layouts/Layout.astro';
 export const prerender = false;
 
 // Check session
-const isLoggedIn = Astro.cookies.has('admin_session') && Astro.cookies.get('admin_session').value === 'true';
+const sessionVal = Astro.cookies.has('admin_session') ? Astro.cookies.get('admin_session').value : '';
+const isLoggedIn = sessionVal === 'admin' || sessionVal === 'true';
 
 if (!isLoggedIn) {
   return Astro.redirect('/admin');
