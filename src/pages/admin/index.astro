@@ -906,26 +906,47 @@ if (isLoggedIn) {
                 </div>
 
                 <div style="border-top: 1px solid #1f1f2e; margin: 1rem 0; padding-top: 1rem;">
-                  <h4 style="color: #d4af37; margin: 0 0 1rem 0; font-size: 0.95rem;">Kart İçerikleri</h4>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: #d4af37; margin: 0; font-size: 0.95rem;">Kart İçerikleri</h4>
+                    <button 
+                      type="button" 
+                      onclick="window.addNewWhyUsCard()" 
+                      style="background: rgba(212,175,55,0.1); color: #d4af37; border: 1px solid rgba(212,175,55,0.25); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                      onmouseover="this.style.background='rgba(212,175,55,0.2)'"
+                      onmouseout="this.style.background='rgba(212,175,55,0.1)'"
+                    >
+                      + Yeni Kart Ekle ➕
+                    </button>
+                  </div>
                   
-                  {siteSettings.whyUs && siteSettings.whyUs.features ? siteSettings.whyUs.features.map((feat, index) => (
-                    <div style="background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem;">
-                      <strong style="color: #fff; font-size: 0.9rem;">Kart #{index + 1}</strong>
-                      <input type="hidden" name={`feat_id_${index}`} value={feat.id} />
-                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Başlığı</label>
-                        <input type="text" name={`feat_title_${index}`} value={feat.title} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                  <div id="whyus-cards-container">
+                    {siteSettings.whyUs && siteSettings.whyUs.features ? siteSettings.whyUs.features.map((feat, index) => (
+                      <div class="whyus-card-block" style="background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;">
+                        <button 
+                          type="button" 
+                          onclick="this.closest('.whyus-card-block').remove()" 
+                          style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                          onmouseover="this.style.background='rgba(239,68,68,0.2)'"
+                          onmouseout="this.style.background='rgba(239,68,68,0.1)'"
+                        >
+                          Kartı Kaldır 🗑️
+                        </button>
+                        <strong style="color: #fff; font-size: 0.9rem;">Özellik Kartı</strong>
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Başlığı</label>
+                          <input type="text" class="whyus-card-title" value={feat.title} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                        </div>
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Açıklaması</label>
+                          <textarea class="whyus-card-desc" rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;">{feat.desc}</textarea>
+                        </div>
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Özellikleri (Virgülle Ayırın)</label>
+                          <input type="text" class="whyus-card-items" value={feat.items} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                        </div>
                       </div>
-                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Açıklaması</label>
-                        <textarea name={`feat_desc_${index}`} rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;">{feat.desc}</textarea>
-                      </div>
-                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Özellikleri (Virgülle Ayırın)</label>
-                        <input type="text" name={`feat_items_${index}`} value={feat.items} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
-                      </div>
-                    </div>
-                  )) : null}
+                    )) : null}
+                  </div>
                 </div>
               </fieldset>
 
@@ -1990,6 +2011,41 @@ if (isLoggedIn) {
     window.location.href = `/admin/edit?course=${cleanSlug}`;
   };
 
+  window.addNewWhyUsCard = function() {
+    const container = document.getElementById('whyus-cards-container');
+    if (!container) return;
+    
+    const div = document.createElement('div');
+    div.className = 'whyus-card-block';
+    div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;';
+    
+    div.innerHTML = `
+      <button 
+        type="button" 
+        onclick="this.closest('.whyus-card-block').remove()" 
+        style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+        onmouseover="this.style.background='rgba(239,68,68,0.2)'"
+        onmouseout="this.style.background='rgba(239,68,68,0.1)'"
+      >
+        Kartı Kaldır 🗑️
+      </button>
+      <strong style="color: #fff; font-size: 0.9rem;">Özellik Kartı</strong>
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Başlığı</label>
+        <input type="text" class="whyus-card-title" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" placeholder="Örn: Bireysel Stüdyolar" />
+      </div>
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Açıklaması</label>
+        <textarea class="whyus-card-desc" rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;" placeholder="Kartın detaylı açıklaması..."></textarea>
+      </div>
+      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Özellikleri (Virgülle Ayırın)</label>
+        <input type="text" class="whyus-card-items" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" placeholder="Örn: Maddeleri virgülle ayırın" />
+      </div>
+    `;
+    container.appendChild(div);
+  };
+
   // SITE SETTINGS SAVE CONTROLLER
   const btnSaveSettings = document.getElementById('btn-save-settings');
   const formSettings = document.getElementById('settings-form');
@@ -2029,26 +2085,14 @@ if (isLoggedIn) {
           tag: formData.get('why_tag'),
           title: formData.get('why_title'),
           desc: formData.get('why_desc'),
-          features: [
-            {
-              id: formData.get('feat_id_0'),
-              title: formData.get('feat_title_0'),
-              desc: formData.get('feat_desc_0'),
-              items: formData.get('feat_items_0')
-            },
-            {
-              id: formData.get('feat_id_1'),
-              title: formData.get('feat_title_1'),
-              desc: formData.get('feat_desc_1'),
-              items: formData.get('feat_items_1')
-            },
-            {
-              id: formData.get('feat_id_2'),
-              title: formData.get('feat_title_2'),
-              desc: formData.get('feat_desc_2'),
-              items: formData.get('feat_items_2')
-            }
-          ]
+          features: Array.from(document.querySelectorAll('.whyus-card-block')).map((block, index) => {
+            return {
+              id: `feature-${index}`,
+              title: block.querySelector('.whyus-card-title').value,
+              desc: block.querySelector('.whyus-card-desc').value,
+              items: block.querySelector('.whyus-card-items').value
+            };
+          })
         }
       };
 
