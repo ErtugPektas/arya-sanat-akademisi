@@ -950,6 +950,79 @@ if (isLoggedIn) {
                 </div>
               </fieldset>
 
+              <!-- 6. Eğitmenlerimiz (Teachers Section) Bölümü -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.5rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">👨‍🏫 "Eğitmenlerimiz" Bölüm Başlığı & Detayları</legend>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Üst Rozeti</label>
+                    <input type="text" name="teachers_tag" value={siteSettings.teachersSection ? siteSettings.teachersSection.tag : "Uzman Kadromuz"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Ana Başlığı</label>
+                    <input type="text" name="teachers_title" value={siteSettings.teachersSection ? siteSettings.teachersSection.title : "Eğitmenlerimiz"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Açıklaması</label>
+                  <textarea name="teachers_desc" rows="2" required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{siteSettings.teachersSection ? siteSettings.teachersSection.desc : "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."}</textarea>
+                </div>
+              </fieldset>
+
+              <!-- 7. Navbar (Navigasyon Menüsü) Yöneticisi -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.5rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">🍔 Üst Navigasyon Menüsü & Linkleri</legend>
+                
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Navbar Sağ Buton Yazısı (CTA Button)</label>
+                  <input type="text" name="nav_cta_text" value={siteSettings.navbar ? siteSettings.navbar.ctaText : "Kayıt Ol"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%;" />
+                </div>
+
+                <div style="border-top: 1px solid #1f1f2e; margin: 1rem 0; padding-top: 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="color: #d4af37; margin: 0; font-size: 0.95rem;">Menü Linkleri</h4>
+                    <button 
+                      type="button" 
+                      onclick="window.addNewNavbarLink()" 
+                      style="background: rgba(212,175,55,0.1); color: #d4af37; border: 1px solid rgba(212,175,55,0.25); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                      onmouseover="this.style.background='rgba(212,175,55,0.2)'"
+                      onmouseout="this.style.background='rgba(212,175,55,0.1)'"
+                    >
+                      + Yeni Link Ekle ➕
+                    </button>
+                  </div>
+                  
+                  <div id="navbar-links-container">
+                    {siteSettings.navbar && siteSettings.navbar.links ? siteSettings.navbar.links.map((link, index) => (
+                      <div class="navbar-link-block" style="background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;">
+                        <button 
+                          type="button" 
+                          onclick="this.closest('.navbar-link-block').remove()" 
+                          style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                          onmouseover="this.style.background='rgba(239,68,68,0.2)'"
+                          onmouseout="this.style.background='rgba(239,68,68,0.1)'"
+                        >
+                          Linki Kaldır 🗑️
+                        </button>
+                        <strong style="color: #fff; font-size: 0.9rem;">Navigasyon Linki</strong>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görünen Metin</label>
+                            <input type="text" class="navbar-link-text" value={link.text} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                          </div>
+                          <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">URL / Yönlendirme Adresi</label>
+                            <input type="text" class="navbar-link-url" value={link.url} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                          </div>
+                        </div>
+                      </div>
+                    )) : null}
+                  </div>
+                </div>
+              </fieldset>
+
             </form>
           </div>
 
@@ -2046,6 +2119,39 @@ if (isLoggedIn) {
     container.appendChild(div);
   };
 
+  window.addNewNavbarLink = function() {
+    const container = document.getElementById('navbar-links-container');
+    if (!container) return;
+    
+    const div = document.createElement('div');
+    div.className = 'navbar-link-block';
+    div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;';
+    
+    div.innerHTML = `
+      <button 
+        type="button" 
+        onclick="this.closest('.navbar-link-block').remove()" 
+        style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+        onmouseover="this.style.background='rgba(239,68,68,0.2)'"
+        onmouseout="this.style.background='rgba(239,68,68,0.1)'"
+      >
+        Linki Kaldır 🗑️
+      </button>
+      <strong style="color: #fff; font-size: 0.9rem;">Navigasyon Linki</strong>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görünen Metin</label>
+          <input type="text" class="navbar-link-text" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" placeholder="Örn: Galeri" />
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">URL / Yönlendirme Adresi</label>
+          <input type="text" class="navbar-link-url" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" placeholder="Örn: /#gallery veya https://..." />
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  };
+
   // SITE SETTINGS SAVE CONTROLLER
   const btnSaveSettings = document.getElementById('btn-save-settings');
   const formSettings = document.getElementById('settings-form');
@@ -2091,6 +2197,20 @@ if (isLoggedIn) {
               title: block.querySelector('.whyus-card-title').value,
               desc: block.querySelector('.whyus-card-desc').value,
               items: block.querySelector('.whyus-card-items').value
+            };
+          })
+        },
+        teachersSection: {
+          tag: formData.get('teachers_tag'),
+          title: formData.get('teachers_title'),
+          desc: formData.get('teachers_desc')
+        },
+        navbar: {
+          ctaText: formData.get('nav_cta_text'),
+          links: Array.from(document.querySelectorAll('.navbar-link-block')).map(block => {
+            return {
+              text: block.querySelector('.navbar-link-text').value,
+              url: block.querySelector('.navbar-link-url').value
             };
           })
         }

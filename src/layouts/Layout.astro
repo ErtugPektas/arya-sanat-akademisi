@@ -90,13 +90,21 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
           </a>
 
           <!-- Desktop Nav Links -->
-          <ul class="nav-links" role="list">
-            <li><a href="/#courses" class="nav-link">Eğitimler</a></li>
-            <li><a href="/#announcements" class="nav-link">Duyurular</a></li>
-            <li><a href="/#why-arya" class="nav-link">Neden Biz?</a></li>
-            <li><a href="/#teachers" class="nav-link">Eğitmenler</a></li>
-            <li><a href="/#contact" class="nav-link">İletişim</a></li>
-          </ul>
+          {siteSettings.navbar && siteSettings.navbar.links ? (
+            <ul class="nav-links" role="list">
+              {siteSettings.navbar.links.map(link => (
+                <li><a href={link.url} class="nav-link">{link.text}</a></li>
+              ))}
+            </ul>
+          ) : (
+            <ul class="nav-links" role="list">
+              <li><a href="/#courses" class="nav-link">Eğitimler</a></li>
+              <li><a href="/#announcements" class="nav-link">Duyurular</a></li>
+              <li><a href="/#why-arya" class="nav-link">Neden Biz?</a></li>
+              <li><a href="/#teachers" class="nav-link">Eğitmenler</a></li>
+              <li><a href="/#contact" class="nav-link">İletişim</a></li>
+            </ul>
+          )}
 
           <!-- Nav Right -->
           <div class="nav-right">
@@ -113,7 +121,7 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
                 <line x1="17" y1="9" x2="23" y2="15"></line>
               </svg>
             </button>
-            <a href="/#contact" class="btn btn-primary nav-cta" id="navCta">Kayıt Ol</a>
+            <a href="/#contact" class="btn btn-primary nav-cta" id="navCta">{siteSettings.navbar ? siteSettings.navbar.ctaText : "Kayıt Ol"}</a>
             <!-- Hamburger -->
             <button class="hamburger" id="hamburger" aria-label="Menüyü aç veya kapat" aria-expanded="false" aria-controls="mobileMenu">
               <span class="hamburger-line"></span>
@@ -127,12 +135,20 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Mobil Menü" aria-hidden="true">
           <ul class="mobile-nav-links" role="list">
-            <li><a href="/#courses" class="mobile-nav-link">Eğitimler</a></li>
-            <li><a href="/#announcements" class="mobile-nav-link">Duyurular</a></li>
-            <li><a href="/#why-arya" class="mobile-nav-link">Neden Biz?</a></li>
-            <li><a href="/#teachers" class="mobile-nav-link">Eğitmenler</a></li>
-            <li><a href="/#contact" class="mobile-nav-link">İletişim</a></li>
-            <li><a href="/#contact" class="btn btn-primary mobile-cta">Kayıt Ol</a></li>
+            {siteSettings.navbar && siteSettings.navbar.links ? (
+              siteSettings.navbar.links.map(link => (
+                <li><a href={link.url} class="mobile-nav-link">{link.text}</a></li>
+              ))
+            ) : (
+              <>
+                <li><a href="/#courses" class="mobile-nav-link">Eğitimler</a></li>
+                <li><a href="/#announcements" class="mobile-nav-link">Duyurular</a></li>
+                <li><a href="/#why-arya" class="mobile-nav-link">Neden Biz?</a></li>
+                <li><a href="/#teachers" class="mobile-nav-link">Eğitmenler</a></li>
+                <li><a href="/#contact" class="mobile-nav-link">İletişim</a></li>
+              </>
+            )}
+            <li><a href="/#contact" class="btn btn-primary mobile-cta">{siteSettings.navbar ? siteSettings.navbar.ctaText : "Kayıt Ol"}</a></li>
           </ul>
         </div>
       </nav>

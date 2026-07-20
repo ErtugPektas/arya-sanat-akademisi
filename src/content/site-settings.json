@@ -21,7 +21,7 @@
     "tag": "✦ MEB Onaylı Sertifikalı Eğitim",
     "title": "Arya Sanat Akademisi",
     "titleHighlight": "Profesyonel Müzik Eğitimi",
-    "desc": "Merhabalar\n\nArya Akademi’ye hoş geldiniz.\nArya Akademi’de müzik ve resim eğitimleri,\nalanında profesyonel eğitmenlerimizle, birebir özel ders şeklinde yapılmaktadır."
+    "desc": "Müziğin büyülü dünyasına adım atın. Uzman eğitmenlerimizle Gitar, Piyano, Bateri ve Keman derslerinde sınırlarınızı keşfedin."
   },
   "whyUs": {
     "tag": "Fark Yaratan Eğitim",
@@ -29,11 +29,38 @@
     "desc": "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz.",
     "features": [
       {
-        "id": "feature-0",
-        "title": "asdasd",
-        "desc": "asdasd",
-        "items": "asdad"
+        "id": "feature-teachers",
+        "title": "Deneyimli Eğitmenler",
+        "desc": "Konservatuvar mezunu, sahne deneyimi yüksek eğitmenlerimiz her öğrencinin potansiyelini ortaya çıkarmak için kişiselleştirilmiş eğitim sağlar.",
+        "items": "Konservatuvar mezunu kadro, Aktif müzisyen-eğitmenler, Bireysel öğrenme planı"
+      },
+      {
+        "id": "feature-equipment",
+        "title": "Profesyonel Ekipmanlar",
+        "desc": "Steinway kuyruklu piyanodan, Roland elektronik bateri setlerine kadar en kaliteli enstrümanlarla eğitim aldığınız, konser salonlarını andıran stüdyo ortamı.",
+        "items": "Ses yalıtımlı stüdyolar, Kayıt ekipmanları, Konser salonu"
+      },
+      {
+        "id": "feature-certificate",
+        "title": "MEB Onaylı Sertifika",
+        "desc": "Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav hazırlık programlarımız da mevcuttur.",
+        "items": "MEB onaylı belgeler, ABRSM sınav hazırlığı, Dijital sertifika sistemi"
       }
+    ]
+  },
+  "teachersSection": {
+    "tag": "Uzman Kadromuz",
+    "title": "Eğitmenlerimiz",
+    "desc": "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."
+  },
+  "navbar": {
+    "ctaText": "Kayıt Ol",
+    "links": [
+      { "text": "Eğitimler", "url": "/#courses" },
+      { "text": "Duyurular", "url": "/#announcements" },
+      { "text": "Neden Biz?", "url": "/#why-arya" },
+      { "text": "Eğitmenler", "url": "/#teachers" },
+      { "text": "İletişim", "url": "/#contact" }
     ]
   }
 }

@@ -337,11 +337,10 @@ const schema = {
     <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
       <div class="container">
         <header class="section-header">
-          <p class="section-tag">Uzman Kadromuz</p>
-          <h2 id="teachersHeading" class="section-title">Eğitmenlerimiz</h2>
+          <p class="section-tag">{siteSettings.teachersSection ? siteSettings.teachersSection.tag : "Uzman Kadromuz"}</p>
+          <h2 id="teachersHeading" class="section-title">{siteSettings.teachersSection ? siteSettings.teachersSection.title : "Eğitmenlerimiz"}</h2>
           <p class="section-desc">
-            Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu
-            güvenle sürdürün.
+            {siteSettings.teachersSection ? siteSettings.teachersSection.desc : "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."}
           </p>
         </header>
 
