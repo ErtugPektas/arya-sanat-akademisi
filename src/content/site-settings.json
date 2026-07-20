@@ -21,6 +21,19 @@
     "tag": "✦ MEB Onaylı Sertifikalı Eğitim",
     "title": "Arya Sanat Akademisi",
     "titleHighlight": "Profesyonel Müzik Eğitimi",
-    "desc": "Merhabalar🌸\n\nArya Akademi’ye hoş geldiniz.\nArya Akademi’de müzik ve resim eğitimleri,\nalanında profesyonel eğitmenlerimizle, birebir özel ders şeklinde yapılmaktadır."
+    "desc": "Merhabalar\n\nArya Akademi’ye hoş geldiniz.\nArya Akademi’de müzik ve resim eğitimleri,\nalanında profesyonel eğitmenlerimizle, birebir özel ders şeklinde yapılmaktadır."
+  },
+  "whyUs": {
+    "tag": "Fark Yaratan Eğitim",
+    "title": "Neden Arya Sanat?",
+    "desc": "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz.",
+    "features": [
+      {
+        "id": "feature-0",
+        "title": "asdasd",
+        "desc": "asdasd",
+        "items": "asdad"
+      }
+    ]
   }
 }
