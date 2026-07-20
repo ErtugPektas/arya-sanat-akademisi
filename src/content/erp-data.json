@@ -74,13 +74,6 @@
   "archivedStudents": [],
   "teachers": [
     {
-      "id": "t_1784201272394",
-      "name": "ertu",
-      "specialty": "aaa",
-      "hourlyRate": 300,
-      "password": "1115480.Pa"
-    },
-    {
       "id": "t_1784204415849",
       "name": "burak",
       "specialty": "gitar",
