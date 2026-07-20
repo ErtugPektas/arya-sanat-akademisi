@@ -26,25 +26,47 @@
   "whyUs": {
     "tag": "Fark Yaratan Eğitim",
     "title": "Neden Arya Sanat?",
-    "desc": "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz.",
+    "desc": "Sanat, sadece bir hobi ya da öğrenilen bir teknik değil; insanın kendini keşfetme yolculuğudur. Arya Sanat Akademi olarak biz, bu yolculukta sadece bir kurs değil, potansiyelinizi özgürce açığa çıkarabileceğiniz güvenli bir liman sunuyoruz.\n​İşte bizi tercih etmeniz için en önemli nedenler;",
     "features": [
       {
         "id": "feature-0",
-        "title": "Deneyimli Eğitmenler",
-        "desc": "Konservatuvar mezunu, sahne deneyimi yüksek eğitmenlerimiz her öğrencinin potansiyelini ortaya çıkarmak için kişiselleştirilmiş eğitim sağlar.",
-        "items": "Konservatuvar mezunu kadro, Aktif müzisyen-eğitmenler, Bireysel öğrenme planı"
+        "title": "Uzman ve İlham Veren Eğitmen Kadrosu",
+        "desc": " Eğitmenlerimiz sadece alanlarında akademik başarıya sahip profesyoneller değil; aynı zamanda sanatı sevdirmeyi misyon edinmiş, pedagojik formasyona ve güçlü bir iletişim diline sahip mentorlardır.",
+        "items": "Konservatuvar mezunu kadro, Aktif müzisyen-eğitmenler, Bireysel öğrenme planı",
+        "image": "",
+        "videoPreview": ""
       },
       {
         "id": "feature-1",
-        "title": "Profesyonel Ekipmanlar",
-        "desc": "Steinway kuyruklu piyanodan, Roland elektronik bateri setlerine kadar en kaliteli enstrümanlarla eğitim aldığınız, konser salonlarını andıran stüdyo ortamı.",
-        "items": "Ses yalıtımlı stüdyolar, Kayıt ekipmanları, Konser salonu"
+        "title": "Modern ve İlham Verici Atölyeler",
+        "desc": "Sanat, doğru atmosferde filizlenir. Arya Sanat bünyesindeki tüm sınıflar ve atölyeler, öğrencilerimizin yaratıcılığını tetikleyecek, konforlu ve en güncel ekipmanlarla donatılmış bir yapıda tasarlanmıştır.",
+        "items": "Ses yalıtımlı stüdyolar, Kayıt ekipmanları, Konser salonu",
+        "image": "",
+        "videoPreview": ""
       },
       {
         "id": "feature-2",
         "title": "MEB Onaylı Sertifika",
         "desc": "Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav hazırlık programlarımız da mevcuttur.",
-        "items": "MEB onaylı belgeler, ABRSM sınav hazırlığı, Dijital sertifika sistemi"
+        "items": "MEB onaylı belgeler, ABRSM sınav hazırlığı, Dijital sertifika sistemi",
+        "image": "",
+        "videoPreview": ""
+      },
+      {
+        "id": "feature-3",
+        "title": "",
+        "desc": "",
+        "items": "",
+        "image": "",
+        "videoPreview": ""
+      },
+      {
+        "id": "feature-4",
+        "title": "",
+        "desc": "",
+        "items": "",
+        "image": "",
+        "videoPreview": ""
       }
     ]
   },
