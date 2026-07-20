@@ -1074,6 +1074,55 @@ if (isLoggedIn) {
                 </div>
               </fieldset>
 
+              <!-- 6.5. Galeri Yönetimi -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.5rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">📸 Akademimizden Kareler (Galeri)</legend>
+                
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Galeri Bölüm Başlığı</label>
+                  <input type="text" name="gallery_title" value={siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%;" />
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Galeri Bölüm Açıklaması</label>
+                  <textarea name="gallery_desc" rows="2" required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}</textarea>
+                </div>
+
+                <div style="border-top: 1px solid #1f1f2e; margin: 1rem 0; padding-top: 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h4 style="color: #d4af37; margin: 0; font-size: 0.95rem;">Galeri Görselleri</h4>
+                    <button 
+                      type="button" 
+                      id="btn-add-gallery-img"
+                      style="background: rgba(212,175,55,0.1); color: #d4af37; border: 1px solid rgba(212,175,55,0.2); padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+                      onmouseover="this.style.background='rgba(212,175,55,0.2)'"
+                      onmouseout="this.style.background='rgba(212,175,55,0.1)'"
+                    >
+                      + Yeni Görsel Ekle
+                    </button>
+                  </div>
+
+                  <div id="gallery-images-container">
+                    {siteSettings.gallery && siteSettings.gallery.images ? siteSettings.gallery.images.map((img, index) => (
+                      <div class="gallery-image-block" style="background: #161622; border: 1px solid #1f1f2e; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; position: relative;">
+                        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+                          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görsel Yolu</label>
+                          <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id={`gallery-img-path-${index}`} class="gallery-image-path" value={img} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('gallery-img-prev-${index}').src = this.value`} />
+                            <button type="button" onclick={`document.getElementById('gallery-img-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+                            <input type="file" id={`gallery-img-file-${index}`} style="display: none;" accept="image/*" onchange={`uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')`} />
+                          </div>
+                        </div>
+                        <div style="width: 70px; height: 50px; border-radius: 6px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                          <img id={`gallery-img-prev-${index}`} src={img} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/teachers/default.jpg'" />
+                        </div>
+                        <button type="button" onclick="this.closest('.gallery-image-block').remove()" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-left: 0.5rem;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">🗑️</button>
+                      </div>
+                    )) : null}
+                  </div>
+                </div>
+              </fieldset>
+
               <!-- 7. Navbar (Navigasyon Menüsü) Yöneticisi -->
               <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.5rem;">
                 <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">🍔 Üst Navigasyon Menüsü & Linkleri</legend>
@@ -1408,6 +1457,41 @@ if (isLoggedIn) {
             `;
             container.appendChild(div);
           });
+        }
+      }
+      
+      // Populate Gallery Header & List
+      if (settings.gallery) {
+        const titleEl = document.querySelector('input[name="gallery_title"]');
+        if (titleEl) titleEl.value = settings.gallery.title || '';
+        const descEl = document.querySelector('textarea[name="gallery_desc"]');
+        if (descEl) descEl.value = settings.gallery.desc || '';
+        
+        if (settings.gallery.images && settings.gallery.images.length > 0) {
+          const container = document.getElementById('gallery-images-container');
+          if (container) {
+            container.innerHTML = '';
+            settings.gallery.images.forEach((img, index) => {
+              const div = document.createElement('div');
+              div.className = 'gallery-image-block';
+              div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; position: relative;';
+              div.innerHTML = `
+                <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görsel Yolu</label>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="gallery-img-path-${index}" class="gallery-image-path" value="${img}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('gallery-img-prev-${index}').src = this.value" />
+                    <button type="button" onclick="document.getElementById('gallery-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+                    <input type="file" id="gallery-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')" />
+                  </div>
+                </div>
+                <div style="width: 70px; height: 50px; border-radius: 6px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <img id="gallery-img-prev-${index}" src="${img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/teachers/default.jpg'" />
+                </div>
+                <button type="button" onclick="this.closest('.gallery-image-block').remove()" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-left: 0.5rem;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">🗑️</button>
+              `;
+              container.appendChild(div);
+            });
+          }
         }
       }
     } catch (e) {
@@ -2615,6 +2699,35 @@ if (isLoggedIn) {
     container.appendChild(div);
   };
 
+  const btnAddGalleryImg = document.getElementById('btn-add-gallery-img');
+  if (btnAddGalleryImg) {
+    btnAddGalleryImg.addEventListener('click', () => {
+      const container = document.getElementById('gallery-images-container');
+      if (!container) return;
+      
+      const index = container.children.length + 100;
+      const div = document.createElement('div');
+      div.className = 'gallery-image-block';
+      div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; position: relative;';
+      
+      div.innerHTML = `
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+          <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görsel Yolu</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="gallery-img-path-${index}" class="gallery-image-path" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('gallery-img-prev-${index}').src = this.value" placeholder="/assets/gallery/resim.jpg" />
+            <button type="button" onclick="document.getElementById('gallery-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+            <input type="file" id="gallery-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')" />
+          </div>
+        </div>
+        <div style="width: 70px; height: 50px; border-radius: 6px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <img id="gallery-img-prev-${index}" src="/assets/teachers/default.jpg" style="width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+        <button type="button" onclick="this.closest('.gallery-image-block').remove()" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; margin-left: 0.5rem;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">🗑️</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
   // SITE SETTINGS SAVE CONTROLLER
   const btnSaveSettings = document.getElementById('btn-save-settings');
   const formSettings = document.getElementById('settings-form');
@@ -2679,6 +2792,11 @@ if (isLoggedIn) {
               tags: block.querySelector('.teacher-block-tags').value.split(',').map(t => t.trim()).filter(Boolean)
             };
           })
+        },
+        gallery: {
+          title: formData.get('gallery_title'),
+          desc: formData.get('gallery_desc'),
+          images: Array.from(document.querySelectorAll('.gallery-image-path')).map(input => input.value).filter(Boolean)
         },
         navbar: {
           ctaText: formData.get('nav_cta_text'),

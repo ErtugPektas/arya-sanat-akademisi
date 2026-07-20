@@ -350,6 +350,36 @@ const schema = {
       </div>
     </section>
 
+    <!-- ===== GALLERY SECTION ===== -->
+    <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
+      <div class="container">
+        <header class="section-header">
+          <p class="section-tag">Sanat Atölyelerimiz</p>
+          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+          <p class="section-desc">
+            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+          </p>
+        </header>
+
+        <div class="gallery-grid" role="list">
+          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+            siteSettings.gallery.images.map((img, idx) => (
+              <div class="gallery-item" role="listitem" tabindex="0">
+                <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                <div class="gallery-overlay">
+                  <span class="zoom-icon">🔎</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
+              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
     <!-- ===== TEACHERS SECTION ===== -->
     <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
       <div class="container">
@@ -779,6 +809,31 @@ const schema = {
           closeActivePopup();
         }
       }
+
+      // Lightbox logic
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const imgUrl = item.querySelector('img').src;
+          const modal = document.createElement('div');
+          modal.className = 'lightbox-modal';
+          modal.innerHTML = `
+            <div class="lightbox-content">
+              <img src="${imgUrl}" alt="Galeri Büyütülmüş Görsel" />
+              <button class="lightbox-close" aria-label="Kapat">&times;</button>
+            </div>
+          `;
+          document.body.appendChild(modal);
+          setTimeout(() => modal.classList.add('open'), 10);
+          
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('lightbox-close')) {
+              modal.classList.remove('open');
+              setTimeout(() => modal.remove(), 300);
+            }
+          });
+        });
+      });
     });
   </script>
 </Layout>
