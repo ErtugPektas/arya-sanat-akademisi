@@ -695,8 +695,17 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   pointer-events: none;
 }
 
-.course-card:hover .card-video-preview, .course-card.touch-active .card-video-preview {
+.course-card:hover .card-video-preview, .course-card.touch-active .card-video-preview,
+.teacher-card:hover .card-video-preview, .teacher-card.touch-active .card-video-preview {
   opacity: 1;
+}
+
+.feature-card:hover .card-video-preview, .feature-card.touch-active .card-video-preview {
+  opacity: 0.18;
+}
+
+.feature-card:hover .card-image-hover, .feature-card.touch-active .card-image-hover {
+  opacity: 0.15;
 }
 
 .card-img-overlay {
