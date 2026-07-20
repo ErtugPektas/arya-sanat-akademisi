@@ -345,43 +345,81 @@ const schema = {
     <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
       <div class="container">
         <header class="section-header">
-          <p class="section-tag">Uzman Kadromuz</p>
-          <h2 id="teachersHeading" class="section-title">Eğitmenlerimiz</h2>
+          <p class="section-tag">{siteSettings.teachersSection ? siteSettings.teachersSection.tag : "Uzman Kadromuz"}</p>
+          <h2 id="teachersHeading" class="section-title">{siteSettings.teachersSection ? siteSettings.teachersSection.title : "Eğitmenlerimiz"}</h2>
           <p class="section-desc">
-            Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu
-            güvenle sürdürün.
+            {siteSettings.teachersSection ? siteSettings.teachersSection.desc : "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."}
           </p>
         </header>
 
         <div class="teachers-grid" role="list">
-
-          <article class="teacher-card" role="listitem" id="teacher-can">
-            <div class="teacher-img-wrapper">
-              <img
-                src="/assets/teacher_drums.png"
-                alt="Mehmet KAYA — Bateri Eğitmeni, Arya Sanat Akademisi"
-                class="teacher-img"
-                loading="lazy"
-                width="320"
-                height="320"
-              />
-              <div class="teacher-overlay" aria-hidden="true">
-                <p class="teacher-bio">
-                  Mehmet Kaya'nın biyografisi gelecek
-                </p>
+          {siteSettings.teachersSection && siteSettings.teachersSection.list && siteSettings.teachersSection.list.length > 0 ? (
+            siteSettings.teachersSection.list.map((teacher, index) => (
+              <article class="teacher-card" role="listitem" id={`teacher-${index}`}>
+                <div class="teacher-img-wrapper" style="position: relative; overflow: hidden;">
+                  <img
+                    src={teacher.image || '/assets/teachers/default.jpg'}
+                    alt={`${teacher.name} — ${teacher.specialty}, Arya Sanat Akademisi`}
+                    class="teacher-img"
+                    loading="lazy"
+                    width="320"
+                    height="320"
+                  />
+                  
+                  {/* Background Hover Video */}
+                  {teacher.videoPreview && (
+                    <video 
+                      src={teacher.videoPreview} 
+                      loop 
+                      muted 
+                      playsinline 
+                      class="card-video-preview" 
+                      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 1;"
+                    ></video>
+                  )}
+                  
+                  <div class="teacher-overlay" aria-hidden="true" style="z-index: 2;">
+                    <p class="teacher-bio">
+                      {teacher.bio1}
+                    </p>
+                  </div>
+                </div>
+                <div class="teacher-info">
+                  <h3 class="teacher-name">{teacher.name}</h3>
+                  <p class="teacher-specialty">{teacher.specialty}</p>
+                  {teacher.tags && (
+                    <div class="teacher-tags" aria-label="Uzmanlık alanları">
+                      {teacher.tags.map(tag => (
+                        <span class="tag">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))
+          ) : (
+            <article class="teacher-card" role="listitem" id="teacher-can">
+              <div class="teacher-img-wrapper">
+                <img
+                  src="/assets/teacher_drums.png"
+                  alt="Mehmet KAYA — Bateri Eğitmeni, Arya Sanat Akademisi"
+                  class="teacher-img"
+                  loading="lazy"
+                  width="320"
+                  height="320"
+                />
               </div>
-            </div>
-            <div class="teacher-info">
-              <h3 class="teacher-name">Mehmet KAYA</h3>
-              <p class="teacher-specialty">Bateri Eğitmeni</p>
-              <div class="teacher-tags" aria-label="Uzmanlık alanları">
-                <span class="tag">Rock</span>
-                <span class="tag">Jazz</span>
-                <span class="tag">Latin</span>
+              <div class="teacher-info">
+                <h3 class="teacher-name">Mehmet KAYA</h3>
+                <p class="teacher-specialty">Bateri Eğitmeni</p>
+                <div class="teacher-tags" aria-label="Uzmanlık alanları">
+                  <span class="tag">Rock</span>
+                  <span class="tag">Jazz</span>
+                  <span class="tag">Latin</span>
+                </div>
               </div>
-            </div>
-          </article>
-
+            </article>
+          )}
         </div>
       </div>
     </section>

@@ -1201,6 +1201,222 @@ if (isLoggedIn) {
   
   window.uploadFile = uploadFile;
 
+  function syncInputsFromCache() {
+    try {
+      const cached = localStorage.getItem('admin_site_settings_cache');
+      if (!cached) return;
+      
+      const settings = JSON.parse(cached);
+      
+      // Populate SEO
+      if (settings.seo) {
+        const titleEl = document.querySelector('input[name="seo_title"]');
+        if (titleEl) titleEl.value = settings.seo.title || '';
+        const descEl = document.querySelector('textarea[name="seo_desc"]');
+        if (descEl) descEl.value = settings.seo.description || '';
+      }
+      
+      // Populate Contact
+      if (settings.contact) {
+        document.querySelectorAll('[name^="contact_"]').forEach(el => {
+          const key = el.name.replace('contact_', '');
+          if (settings.contact[key] !== undefined) {
+            el.value = settings.contact[key];
+          }
+        });
+      }
+      
+      // Populate Stats
+      if (settings.stats) {
+        document.querySelectorAll('[name^="stats_"]').forEach(el => {
+          const key = el.name.replace('stats_', '');
+          const mappedKey = key === 'cert' ? 'certification' :
+                            key === 'loc' ? 'location' :
+                            key === 'students' ? 'studentsCount' :
+                            key === 'teachers' ? 'teachersCount' :
+                            key === 'exp' ? 'experienceYears' : key;
+          if (settings.stats[mappedKey] !== undefined) {
+            el.value = settings.stats[mappedKey];
+          }
+        });
+      }
+      
+      // Populate Hero
+      if (settings.hero) {
+        document.querySelectorAll('[name^="hero_"]').forEach(el => {
+          const key = el.name.replace('hero_', '');
+          const mappedKey = key === 'highlight' ? 'titleHighlight' : key;
+          if (settings.hero[mappedKey] !== undefined) {
+            el.value = settings.hero[mappedKey];
+          }
+        });
+      }
+      
+      // Populate Why Us Header
+      if (settings.whyUs) {
+        const tagEl = document.querySelector('input[name="why_tag"]');
+        if (tagEl) tagEl.value = settings.whyUs.tag || '';
+        const titleEl = document.querySelector('input[name="why_title"]');
+        if (titleEl) titleEl.value = settings.whyUs.title || '';
+        const descEl = document.querySelector('textarea[name="why_desc"]');
+        if (descEl) descEl.value = settings.whyUs.desc || '';
+        
+        // Re-render features card blocks dynamically from cache!
+        if (settings.whyUs.features && settings.whyUs.features.length > 0) {
+          const container = document.getElementById('whyus-cards-container');
+          if (container) {
+            container.innerHTML = '';
+            settings.whyUs.features.forEach((feat, index) => {
+              const div = document.createElement('div');
+              div.className = 'whyus-card-block';
+              div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;';
+              div.innerHTML = `
+                <button type="button" onclick="this.closest('.whyus-card-block').remove()" style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Kartı Kaldır 🗑️</button>
+                <strong style="color: #fff; font-size: 0.9rem;">Özellik Kartı</strong>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Başlığı</label>
+                  <input type="text" class="whyus-card-title" value="${feat.title || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Açıklaması</label>
+                  <textarea class="whyus-card-desc" rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;">${feat.desc || ''}</textarea>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Özellikleri (Virgülle Ayırın)</label>
+                  <input type="text" class="whyus-card-items" value="${feat.items || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Görseli (Opsiyonel)</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <input type="text" id="whyus-card-img-path-${index}" class="whyus-card-image" value="${feat.image || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-img-prev-${index}').src = this.value" />
+                      <button type="button" onclick="document.getElementById('whyus-card-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                      <input type="file" id="whyus-card-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'whyus-card-img-path-${index}', 'whyus-card-img-prev-${index}')" />
+                    </div>
+                    <img id="whyus-card-img-prev-${index}" src="${feat.image || ''}" style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: ${feat.image ? 'block' : 'none'};" onerror="this.style.display='none'" onload="this.style.display='block'" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Video Önizlemesi (MP4 - Opsiyonel)</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <input type="text" id="whyus-card-video-path-${index}" class="whyus-card-video" value="${feat.videoPreview || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-video-prev-${index}').src = this.value" />
+                      <button type="button" onclick="document.getElementById('whyus-card-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                      <input type="file" id="whyus-card-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'whyus-card-video-path-${index}', 'whyus-card-video-prev-${index}')" />
+                    </div>
+                    <video id="whyus-card-video-prev-${index}" src="${feat.videoPreview || ''}" loop muted autoplay style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: ${feat.videoPreview ? 'block' : 'none'};" onerror="this.style.display='none'" onloadeddata="this.style.display='block'"></video>
+                  </div>
+                </div>
+              `;
+              container.appendChild(div);
+            });
+          }
+        }
+      }
+      
+      // Populate Teachers Header & List
+      if (settings.teachersSection) {
+        const tagEl = document.querySelector('input[name="teachers_tag"]');
+        if (tagEl) tagEl.value = settings.teachersSection.tag || '';
+        const titleEl = document.querySelector('input[name="teachers_title"]');
+        if (titleEl) titleEl.value = settings.teachersSection.title || '';
+        const descEl = document.querySelector('textarea[name="teachers_desc"]');
+        if (descEl) descEl.value = settings.teachersSection.desc || '';
+        
+        if (settings.teachersSection.list && settings.teachersSection.list.length > 0) {
+          const container = document.getElementById('teachers-list-container');
+          if (container) {
+            container.innerHTML = '';
+            settings.teachersSection.list.forEach((teacher, index) => {
+              const div = document.createElement('div');
+              div.className = 'teacher-block-item';
+              div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;';
+              div.innerHTML = `
+                <button type="button" onclick="this.closest('.teacher-block-item').remove()" style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Eğitmeni Kaldır 🗑️</button>
+                <strong style="color: #fff; font-size: 0.9rem;">Eğitmen Kartı</strong>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Adı Soyadı</label>
+                    <input type="text" class="teacher-block-name" value="${teacher.name || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Branşı / Uzmanlığı</label>
+                    <input type="text" class="teacher-block-specialty" value="${teacher.specialty || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                  </div>
+                </div>
+                <div style="display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; min-width: 250px;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Eğitmen Görsel Yolu</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <input type="text" id="teacher-img-path-${index}" class="teacher-block-image" value="${teacher.image || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-img-prev-${index}').src = this.value" />
+                      <button type="button" onclick="document.getElementById('teacher-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+                      <input type="file" id="teacher-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'teacher-img-path-${index}', 'teacher-img-prev-${index}')" />
+                    </div>
+                  </div>
+                  <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img id="teacher-img-prev-${index}" src="${teacher.image || '/assets/teachers/default.jpg'}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/teachers/default.jpg'" />
+                  </div>
+                </div>
+                <div style="display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; min-width: 250px;">
+                    <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Video Önizlemesi (MP4 - Opsiyonel)</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <input type="text" id="teacher-video-path-${index}" class="teacher-block-video" value="${teacher.videoPreview || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-video-prev-${index}').src = this.value" />
+                      <button type="button" onclick="document.getElementById('teacher-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
+                      <input type="file" id="teacher-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'teacher-video-path-${index}', 'teacher-video-prev-${index}')" />
+                    </div>
+                  </div>
+                  <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <video id="teacher-video-prev-${index}" src="${teacher.videoPreview || ''}" loop muted autoplay style="width: 100%; height: 100%; object-fit: cover; display: ${teacher.videoPreview ? 'block' : 'none'};" onerror="this.style.display='none'" onloadeddata="this.style.display='block'"></video>
+                  </div>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kısa Özgeçmiş / Biyografi</label>
+                  <textarea class="teacher-block-bio1" rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;">${teacher.bio1 || ''}</textarea>
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Uzmanlık Etiketleri (Virgülle Ayırın)</label>
+                  <input type="text" class="teacher-block-tags" value="${teacher.tags ? teacher.tags.join(', ') : ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                </div>
+              `;
+              container.appendChild(div);
+            });
+          }
+        }
+      }
+      
+      // Populate Navbar links
+      if (settings.navbar && settings.navbar.links && settings.navbar.links.length > 0) {
+        const container = document.getElementById('navbar-links-container');
+        if (container) {
+          container.innerHTML = '';
+          settings.navbar.links.forEach(link => {
+            const div = document.createElement('div');
+            div.className = 'navbar-link-block';
+            div.style.cssText = 'background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem; position: relative;';
+            div.innerHTML = `
+              <button type="button" onclick="this.closest('.navbar-link-block').remove()" style="position: absolute; top: 12px; right: 12px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.2)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">Linki Kaldır 🗑️</button>
+              <strong style="color: #fff; font-size: 0.9rem;">Navigasyon Linki</strong>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Görünen Metin</label>
+                  <input type="text" class="navbar-link-text" value="${link.text}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                </div>
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">URL / Yönlendirme Adresi</label>
+                  <input type="text" class="navbar-link-url" value="${link.url}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                </div>
+              </div>
+            `;
+            container.appendChild(div);
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error syncing inputs from cache:', e);
+    }
+  }
+
+  syncInputsFromCache();
+
   const tabCourses = document.getElementById('tab-courses');
   const tabAnnouncements = document.getElementById('tab-announcements');
   const tabAnalytics = document.getElementById('tab-analytics');
@@ -2490,6 +2706,7 @@ if (isLoggedIn) {
         const result = await response.json();
         
         if (response.ok && result.success) {
+          localStorage.setItem('admin_site_settings_cache', JSON.stringify(settings));
           alert(result.local 
             ? '✓ Ayarlar yerel diske başarıyla kaydedildi!' 
             : '✓ Ayarlar başarıyla kaydedildi! Vercel derlemesi başlatıldı, güncellenmesi ~1 dakika sürecektir.'
