@@ -29,19 +29,19 @@
     "desc": "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz.",
     "features": [
       {
-        "id": "feature-teachers",
+        "id": "feature-0",
         "title": "Deneyimli Eğitmenler",
         "desc": "Konservatuvar mezunu, sahne deneyimi yüksek eğitmenlerimiz her öğrencinin potansiyelini ortaya çıkarmak için kişiselleştirilmiş eğitim sağlar.",
         "items": "Konservatuvar mezunu kadro, Aktif müzisyen-eğitmenler, Bireysel öğrenme planı"
       },
       {
-        "id": "feature-equipment",
+        "id": "feature-1",
         "title": "Profesyonel Ekipmanlar",
         "desc": "Steinway kuyruklu piyanodan, Roland elektronik bateri setlerine kadar en kaliteli enstrümanlarla eğitim aldığınız, konser salonlarını andıran stüdyo ortamı.",
         "items": "Ses yalıtımlı stüdyolar, Kayıt ekipmanları, Konser salonu"
       },
       {
-        "id": "feature-certificate",
+        "id": "feature-2",
         "title": "MEB Onaylı Sertifika",
         "desc": "Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav hazırlık programlarımız da mevcuttur.",
         "items": "MEB onaylı belgeler, ABRSM sınav hazırlığı, Dijital sertifika sistemi"
@@ -51,37 +51,8 @@
   "teachersSection": {
     "tag": "Uzman Kadromuz",
     "title": "Eğitmenlerimiz",
-    "desc": "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün.",
-    "list": [
-      {
-        "name": "Ayşe Kaya",
-        "specialty": "Piyano & Şan Eğitmeni",
-        "image": "/assets/teacher_piano.png",
-        "bio1": "Hacettepe Üniversitesi Devlet Konservatuvarı mezunu olan Ayşe Kaya, 12 yılı aşkın süredir her yaş grubuna piyano ve şan dersleri vermektedir. Klasik piyano tekniği ve pedagoji üzerine çok sayıda uluslararası eğitime katılmıştır.",
-        "tags": ["Klasik Piyano", "Şan Eğitimi", "ABRSM Hazırlık", "Çocuk Pedagojisi"]
-      },
-      {
-        "name": "Mehmet Kaya",
-        "specialty": "Bateri Eğitmeni",
-        "image": "/assets/teacher_drums.png",
-        "bio1": "Mimar Sinan Güzel Sanatlar Üniversitesi Konservatuvarı mezunu olan Mehmet Kaya, çeşitli Türk rock gruplarında aktif olarak bateri icra etmektedir. 8 yılı aşkın öğretmenlik deneyimiyle rock, jazz, blues, latin ve funk stillerinde öğrencilere rehberlik etmektedir.",
-        "tags": ["Rock", "Jazz", "Latin", "Funk", "Sahne Deneyimi"]
-      },
-      {
-        "name": "Mehmet Yılmaz",
-        "specialty": "Gitar Eğitmeni",
-        "image": "/assets/teacher_guitar.png",
-        "bio1": "Berklee Online sertifikasına sahip olan Mehmet Yılmaz, 8 yıllık sahne ve stüdyo deneyimiyle rock, blues ve fingerstyle alanlarında uzmanlaşmıştır. Öğrencilerin kendi müzikal sesini bulmasına yardımcı olmayı temel hedef olarak belirlemektedir.",
-        "tags": ["Akustik", "Elektro", "Klasik", "Fingerstyle", "Blues"]
-      },
-      {
-        "name": "Zeynep Arslan",
-        "specialty": "Keman & Telli Çalgılar Eğitmeni",
-        "image": "/assets/teacher_violin.png",
-        "bio1": "Ankara Devlet Konservatuvarı mezunu olan Zeynep Arslan, Ankara Devlet Senfoni Orkestrası'nda uzun yıllar solistlik yapmıştır. 15 yılı aşkın süredir keman, viyola ve yaylı çalgılar eğitimi vermektedir.",
-        "tags": ["Keman", "Viyola", "Oda Müziği", "ABRSM Mentor", "Senfoni Tecrübesi"]
-      }
-    ]
+    "desc": "Alanlarında deneyimli ve sizinle özel ilgilenebilecek eğitmen kadromuzla yanınızdayız.",
+    "list": []
   },
   "navbar": {
     "ctaText": "Kayıt Ol",
