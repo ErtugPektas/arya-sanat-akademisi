@@ -603,11 +603,17 @@ const schema = {
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
       const interactiveCards = document.querySelectorAll('.course-card, .teacher-card, .feature-card');
+      let activePopup = null;
+      let activeCard = null;
+      let activeVideo = null;
+      
       interactiveCards.forEach(card => {
         const video = card.querySelector('.card-video-preview');
         const imgHover = card.querySelector('.card-image-hover');
         if (!video && !imgHover) return;
         
+        let hoverTimeout = null;
+
         const showPreview = () => {
           card.classList.add('touch-active');
           if (video) {
@@ -618,6 +624,8 @@ const schema = {
         };
         
         const hidePreview = () => {
+          if (activeCard === card) return;
+          
           card.classList.remove('touch-active');
           if (video) {
             video.pause();
@@ -625,16 +633,152 @@ const schema = {
           }
         };
 
-        card.addEventListener('mouseenter', showPreview);
-        card.addEventListener('mouseleave', hidePreview);
+        card.addEventListener('mouseenter', () => {
+          showPreview();
+          if (video) {
+            hoverTimeout = setTimeout(() => {
+              showControlsPopup(card, video);
+            }, 850);
+          }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          if (hoverTimeout) clearTimeout(hoverTimeout);
+          hidePreview();
+        });
 
         card.addEventListener('touchstart', () => {
           showPreview();
+          if (video) {
+            hoverTimeout = setTimeout(() => {
+              showControlsPopup(card, video);
+            }, 850);
+          }
         }, { passive: true });
         
-        card.addEventListener('touchend', hidePreview, { passive: true });
-        card.addEventListener('touchcancel', hidePreview, { passive: true });
+        card.addEventListener('touchend', () => {
+          if (hoverTimeout) clearTimeout(hoverTimeout);
+          hidePreview();
+        }, { passive: true });
+
+        card.addEventListener('touchcancel', () => {
+          if (hoverTimeout) clearTimeout(hoverTimeout);
+          hidePreview();
+        }, { passive: true });
       });
+
+      function showControlsPopup(card, video) {
+        if (activePopup) {
+          if (activeCard !== card) {
+            closeActivePopup();
+          } else {
+            return;
+          }
+        }
+
+        activeCard = card;
+        activeVideo = video;
+
+        const popup = document.createElement('div');
+        popup.className = 'video-control-popup';
+        
+        popup.innerHTML = `
+          <button class="popup-ctrl-btn btn-play-pause" title="Oynat / Durdur">
+            <svg class="icon-play" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:${video.paused ? 'block' : 'none'};"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg class="icon-pause" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:${video.paused ? 'none' : 'block'};"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button class="popup-ctrl-btn btn-mute" title="Sesi Aç / Kapat">
+            <svg class="icon-unmute" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:${video.muted ? 'none' : 'block'};"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <svg class="icon-mute" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:${video.muted ? 'block' : 'none'};"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+          </button>
+          <button class="popup-ctrl-btn btn-fullscreen" title="Tam Ekran">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        `;
+
+        card.appendChild(popup);
+        
+        setTimeout(() => popup.classList.add('visible'), 10);
+        activePopup = popup;
+
+        const btnPlayPause = popup.querySelector('.btn-play-pause');
+        const iconPlay = popup.querySelector('.icon-play');
+        const iconPause = popup.querySelector('.icon-pause');
+        btnPlayPause.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (video.paused) {
+            video.play();
+            iconPlay.style.display = 'none';
+            iconPause.style.display = 'block';
+          } else {
+            video.pause();
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+          }
+        });
+
+        const btnMute = popup.querySelector('.btn-mute');
+        const iconUnmute = popup.querySelector('.icon-unmute');
+        const iconMute = popup.querySelector('.icon-mute');
+        btnMute.addEventListener('click', (e) => {
+          e.stopPropagation();
+          video.muted = !video.muted;
+          if (video.muted) {
+            iconUnmute.style.display = 'none';
+            iconMute.style.display = 'block';
+          } else {
+            iconUnmute.style.display = 'block';
+            iconMute.style.display = 'none';
+          }
+        });
+
+        const btnFullscreen = popup.querySelector('.btn-fullscreen');
+        btnFullscreen.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (video.requestFullscreen) {
+            video.requestFullscreen();
+          } else if (video.webkitRequestFullscreen) {
+            video.webkitRequestFullscreen();
+          } else if (video.msRequestFullscreen) {
+            video.msRequestFullscreen();
+          }
+        });
+
+        document.addEventListener('click', handleOutsideClick);
+      }
+
+      function closeActivePopup() {
+        if (!activePopup) return;
+        
+        const popup = activePopup;
+        const video = activeVideo;
+        const card = activeCard;
+
+        popup.classList.remove('visible');
+        
+        activePopup = null;
+        activeCard = null;
+        activeVideo = null;
+
+        setTimeout(() => {
+          popup.remove();
+          if (card && !card.matches(':hover')) {
+            card.classList.remove('touch-active');
+            if (video) {
+              video.pause();
+              video.currentTime = 0;
+            }
+          }
+        }, 300);
+
+        document.removeEventListener('click', handleOutsideClick);
+      }
+
+      function handleOutsideClick(e) {
+        if (activePopup && !activePopup.contains(e.target) && !activeCard.contains(e.target)) {
+          closeActivePopup();
+        }
+      }
     });
   </script>
 </Layout>
