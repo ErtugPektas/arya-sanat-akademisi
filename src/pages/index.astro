@@ -6,13 +6,9 @@ import siteSettings from '../content/site-settings.json';
 
 const courses = await getCollection('kurslar');
 
-const teachersMap = new Map();
-courses.forEach(course => {
-  if (course.data.teacher && course.data.teacher.name) {
-    teachersMap.set(course.data.teacher.name, course.data.teacher);
-  }
-});
-const uniqueTeachers = Array.from(teachersMap.values());
+const uniqueTeachers = siteSettings.teachersSection && siteSettings.teachersSection.list
+  ? siteSettings.teachersSection.list
+  : [];
 
 const cleanPhone = siteSettings.contact.phone.replace(/[^\d+]/g, '');
 
