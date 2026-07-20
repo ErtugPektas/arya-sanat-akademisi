@@ -701,11 +701,26 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 }
 
 .feature-card:hover .card-video-preview, .feature-card.touch-active .card-video-preview {
-  opacity: 0.18;
+  opacity: 1;
 }
 
 .feature-card:hover .card-image-hover, .feature-card.touch-active .card-image-hover {
-  opacity: 0.15;
+  opacity: 1;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.55);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.feature-card:hover::before, .feature-card.touch-active::before {
+  opacity: 1;
 }
 
 .card-img-overlay {
