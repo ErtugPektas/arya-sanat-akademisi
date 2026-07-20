@@ -1153,6 +1153,54 @@ if (isLoggedIn) {
 
 <!-- CLIENT-SIDE TABS AND SVG GRAPH SCHEDULER -->
 <script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData, userRole: role, activeTeacher: activeTeacherName }}>
+  async function uploadFile(inputEl, textInputId, previewImgId) {
+    if (!inputEl.files || !inputEl.files[0]) return;
+    
+    const file = inputEl.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    const btn = inputEl.previousElementSibling;
+    const originalText = btn.innerText;
+    btn.disabled = true;
+    btn.innerText = 'Yükleniyor... ⏳';
+    
+    try {
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        document.getElementById(textInputId).value = result.url;
+        const previewEl = document.getElementById(previewImgId);
+        if (previewEl) {
+          previewEl.src = result.url;
+          if (previewEl.tagName === 'VIDEO') {
+            previewEl.style.display = 'block';
+            previewEl.load();
+            previewEl.play().catch(e => console.log('Autoplay check:', e));
+          } else {
+            previewEl.style.display = 'block';
+          }
+        }
+        alert('✓ Dosya başarıyla yüklendi!');
+      } else {
+        alert('❌ Yükleme hatası: ' + (result.error || 'Bilinmeyen hata'));
+      }
+    } catch (err) {
+      alert('❌ Sunucu bağlantı hatası: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = originalText;
+      inputEl.value = ''; // Reset file input
+    }
+  }
+  
+  window.uploadFile = uploadFile;
+
   const tabCourses = document.getElementById('tab-courses');
   const tabAnnouncements = document.getElementById('tab-announcements');
   const tabAnalytics = document.getElementById('tab-analytics');
