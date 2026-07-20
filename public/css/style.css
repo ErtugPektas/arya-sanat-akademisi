@@ -704,43 +704,49 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   opacity: 1;
 }
 
-.feature-card.has-media:hover .card-image-hover, .feature-card.has-media.touch-active .card-image-hover {
+/* If card has media, show the image/photo by default */
+.feature-card.has-media .card-image-hover {
   opacity: 1;
 }
 
+/* On hover, if there is a video, show the video preview */
+.feature-card.has-media:hover .card-video-preview,
+.feature-card.has-media.touch-active .card-video-preview {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Always show the dark readable overlay on cards with media to ensure white text is legible */
 .feature-card.has-media::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(10, 10, 15, 0.55);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 1;
+  background: rgba(10, 10, 15, 0.6);
+  opacity: 1;
+  transition: background 0.4s ease;
+  z-index: 2;
   pointer-events: none;
 }
 
-.feature-card.has-media:hover::before, .feature-card.has-media.touch-active::before {
-  opacity: 1;
+.feature-card.has-media:hover::before,
+.feature-card.has-media.touch-active::before {
+  background: rgba(10, 10, 15, 0.7);
 }
 
-/* If card has media, change text colors on hover/touch-active to high-contrast white */
-.feature-card.has-media:hover .feature-title,
-.feature-card.has-media.touch-active .feature-title {
+/* Text colors always white on cards with media */
+.feature-card.has-media .feature-title {
   color: #ffffff !important;
 }
 
-.feature-card.has-media:hover .feature-desc,
-.feature-card.has-media.touch-active .feature-desc {
+.feature-card.has-media .feature-desc {
   color: rgba(255, 255, 255, 0.9) !important;
 }
 
-.feature-card.has-media:hover .feature-list li,
-.feature-card.has-media.touch-active .feature-list li {
+.feature-card.has-media .feature-list li {
   color: rgba(255, 255, 255, 0.85) !important;
 }
 
-.feature-card.has-media:hover .feature-svg-icon,
-.feature-card.has-media.touch-active .feature-svg-icon {
+.feature-card.has-media .feature-svg-icon {
   color: var(--color-primary) !important;
 }
 
