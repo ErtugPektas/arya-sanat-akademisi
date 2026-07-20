@@ -885,6 +885,50 @@ if (isLoggedIn) {
                 </div>
               </fieldset>
 
+              <!-- 5. Neden Biz (Why Us) Bölümü -->
+              <fieldset style="border: 1px solid #1f1f2e; border-radius: 12px; padding: 1.75rem; background: #101016; display: flex; flex-direction: column; gap: 1.5rem;">
+                <legend style="color: #d4af37; padding: 0 0.5rem; font-weight: 600; font-size: 1rem;">❔ "Neden Biz" Bölüm Başlığı & Kartları</legend>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Üst Rozeti</label>
+                    <input type="text" name="why_tag" value={siteSettings.whyUs ? siteSettings.whyUs.tag : "Fark Yaratan Eğitim"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                  <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Ana Başlığı</label>
+                    <input type="text" name="why_title" value={siteSettings.whyUs ? siteSettings.whyUs.title : "Neden Arya Sanat?"} required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none;" />
+                  </div>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <label style="font-weight: 500; font-size: 0.85rem; color: #b4b4c6;">Bölüm Açıklaması</label>
+                  <textarea name="why_desc" rows="2" required style="background: #161622; border: 1px solid #1f1f2e; color: #fff; padding: 0.65rem 0.85rem; border-radius: 6px; font-size: 0.9rem; outline: none; width: 100%; resize: vertical; font-family: sans-serif;">{siteSettings.whyUs ? siteSettings.whyUs.desc : "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz."}</textarea>
+                </div>
+
+                <div style="border-top: 1px solid #1f1f2e; margin: 1rem 0; padding-top: 1rem;">
+                  <h4 style="color: #d4af37; margin: 0 0 1rem 0; font-size: 0.95rem;">Kart İçerikleri</h4>
+                  
+                  {siteSettings.whyUs && siteSettings.whyUs.features ? siteSettings.whyUs.features.map((feat, index) => (
+                    <div style="background: #161622; border: 1px solid #1f1f2e; padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                      <strong style="color: #fff; font-size: 0.9rem;">Kart #{index + 1}</strong>
+                      <input type="hidden" name={`feat_id_${index}`} value={feat.id} />
+                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Başlığı</label>
+                        <input type="text" name={`feat_title_${index}`} value={feat.title} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                      </div>
+                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Açıklaması</label>
+                        <textarea name={`feat_desc_${index}`} rows="2" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; resize: vertical; font-family: sans-serif;">{feat.desc}</textarea>
+                      </div>
+                      <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Kart Özellikleri (Virgülle Ayırın)</label>
+                        <input type="text" name={`feat_items_${index}`} value={feat.items} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                      </div>
+                    </div>
+                  )) : null}
+                </div>
+              </fieldset>
+
             </form>
           </div>
 
@@ -1980,6 +2024,31 @@ if (isLoggedIn) {
           title: formData.get('hero_title'),
           titleHighlight: formData.get('hero_highlight'),
           desc: formData.get('hero_desc')
+        },
+        whyUs: {
+          tag: formData.get('why_tag'),
+          title: formData.get('why_title'),
+          desc: formData.get('why_desc'),
+          features: [
+            {
+              id: formData.get('feat_id_0'),
+              title: formData.get('feat_title_0'),
+              desc: formData.get('feat_desc_0'),
+              items: formData.get('feat_items_0')
+            },
+            {
+              id: formData.get('feat_id_1'),
+              title: formData.get('feat_title_1'),
+              desc: formData.get('feat_desc_1'),
+              items: formData.get('feat_items_1')
+            },
+            {
+              id: formData.get('feat_id_2'),
+              title: formData.get('feat_title_2'),
+              desc: formData.get('feat_desc_2'),
+              items: formData.get('feat_items_2')
+            }
+          ]
         }
       };
 
