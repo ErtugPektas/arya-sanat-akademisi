@@ -70,17 +70,7 @@
       }
     }
   ],
-  "lessons": [
-    {
-      "id": "les_1784201438470",
-      "studentName": "şş",
-      "courseName": "ğpoğpo",
-      "teacherName": "ertu",
-      "studio": "5",
-      "day": "Pazar",
-      "time": "16:00 - 17:00"
-    }
-  ],
+  "lessons": [],
   "archivedStudents": [],
   "teachers": [
     {
