@@ -173,7 +173,7 @@ const { data, body } = course;
               <div style="display: flex; gap: 0.5rem;">
                 <input type="text" id="input-video-preview" name="videoPreview" value={data.videoPreview || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-video').src = this.value" />
                 <button type="button" onclick="document.getElementById('file-course-video').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
-                <input type="file" id="file-course-video" style="display: none;" accept="video/mp4" onchange="uploadFile(this, 'input-video-preview', 'preview-video')" />
+                <input type="file" id="file-course-video" style="display: none;" accept="video/*" onchange="uploadFile(this, 'input-video-preview', 'preview-video')" />
               </div>
             </div>
             <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">

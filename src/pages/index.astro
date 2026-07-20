@@ -6,10 +6,6 @@ import siteSettings from '../content/site-settings.json';
 
 const courses = await getCollection('kurslar');
 
-const uniqueTeachers = siteSettings.teachersSection && siteSettings.teachersSection.list
-  ? siteSettings.teachersSection.list
-  : [];
-
 const cleanPhone = siteSettings.contact.phone.replace(/[^\d+]/g, '');
 
 const schema = {
@@ -75,7 +71,7 @@ const schema = {
 ---
 
 <Layout
-  title="Arya Sanat Akademisi — Profesyonel Müzik Eğitimi | Kayseri Kocasinan"
+  title="Arya Sanat Akademisi — Profesyonel Müzik Eğitimi | Kayseri "
   description="Kayseri Kocasinan'ın en iyi müzik akademisi. Bateri, Gitar, Piyano, Keman eğitimleri. MEB onaylı sertifika. Ücretsiz deneme dersi!"
   keywords="müzik kursu kayseri, gitar dersi kocasinan, piyano dersi kayseri, bateri dersi, keman dersi kayseri, müzik okulu kocasinan, Arya Sanat Akademisi, MEB onaylı müzik sertifikası, çocuk müzik kursu"
   schemaJson={JSON.stringify(schema)}
@@ -193,15 +189,6 @@ const schema = {
                     width="420"
                     height="240"
                   />
-                  {course.data.videoPreview && (
-                    <video
-                      src={course.data.videoPreview}
-                      class="card-video-preview"
-                      loop
-                      muted
-                      playsinline
-                    ></video>
-                  )}
                   <div class="card-img-overlay" aria-hidden="true"></div>
                 </div>
               </a>
@@ -270,80 +257,80 @@ const schema = {
     <section class="section why-section" id="why-arya" aria-labelledby="whyHeading">
       <div class="container">
         <header class="section-header">
-          <p class="section-tag">{siteSettings.whyUs ? siteSettings.whyUs.tag : "Fark Yaratan Eğitim"}</p>
-          <h2 id="whyHeading" class="section-title">{siteSettings.whyUs ? siteSettings.whyUs.title : "Neden Arya Sanat?"}</h2>
+          <p class="section-tag">Fark Yaratan Eğitim</p>
+          <h2 id="whyHeading" class="section-title">Neden Arya Sanat?</h2>
           <p class="section-desc">
-            {siteSettings.whyUs ? siteSettings.whyUs.desc : "On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde standartları yeniden belirliyoruz."}
+            On yılı aşkın deneyimimiz ve yüzlerce mezun öğrencimizle müzik eğitiminde
+            standartları yeniden belirliyoruz.
           </p>
         </header>
 
         <div class="features-grid" role="list">
-          {siteSettings.whyUs && siteSettings.whyUs.features ? (
-            siteSettings.whyUs.features.map((feat, index) => (
-              <article class={`feature-card ${index === 1 ? 'feature-card--accent' : ''}`} role="listitem" id={feat.id} style="position: relative; overflow: hidden;">
-                {feat.videoPreview && (
-                  <video
-                    src={feat.videoPreview}
-                    class="card-video-preview"
-                    loop
-                    muted
-                    playsinline
-                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 1;"
-                  ></video>
-                )}
-                {feat.image && (
-                  <img
-                    src={feat.image}
-                    class="card-image-hover"
-                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 1;"
-                  />
-                )}
-                <div style="position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;">
-                  <div class="feature-icon-wrapper" aria-hidden="true">
-                    {index === 0 && (
-                      <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/>
-                        <path d="M6 18.8v-4L2 13"/>
-                        <path d="M12 22a7 7 0 0 0 7-7v-3.5"/>
-                      </svg>
-                    )}
-                    {index === 1 && (
-                      <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                        <line x1="12" y1="19" x2="12" y2="22"/>
-                      </svg>
-                    )}
-                    {index === 2 && (
-                      <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <line x1="10" y1="9" x2="8" y2="9"/>
-                      </svg>
-                    )}
-                    {index >= 3 && (
-                      <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18V5l12-2v13"/>
-                        <circle cx="6" cy="18" r="3"/>
-                        <circle cx="18" cy="16" r="3"/>
-                      </svg>
-                    )}
-                  </div>
-                  <h3 class="feature-title">{feat.title}</h3>
-                  <p class="feature-desc">{feat.desc}</p>
-                  {feat.items && (
-                    <ul class="feature-list" aria-label={`${feat.title} özellikleri`}>
-                      {feat.items.split(',').map(item => (
-                        <li>{item.trim()}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </article>
-            ))
-          ) : null}
+
+          <article class="feature-card" role="listitem" id="feature-teachers">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/>
+                <path d="M6 18.8v-4L2 13"/>
+                <path d="M12 22a7 7 0 0 0 7-7v-3.5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Deneyimli Eğitmenler</h3>
+            <p class="feature-desc">
+              Konservatuvar mezunu, sahne deneyimi yüksek eğitmenlerimiz her öğrencinin
+              potansiyelini ortaya çıkarmak için kişiselleştirilmiş eğitim sağlar.
+            </p>
+            <ul class="feature-list" aria-label="Eğitmen özellikleri">
+              <li>Konservatuvar mezunu kadro</li>
+              <li>Aktif müzisyen-eğitmenler</li>
+              <li>Bireysel öğrenme planı</li>
+            </ul>
+          </article>
+
+          <article class="feature-card feature-card--accent" role="listitem" id="feature-equipment">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Profesyonel Ekipmanlar</h3>
+            <p class="feature-desc">
+              Steinway kuyruklu piyanodan, Roland elektronik bateri setlerine kadar
+              en kaliteli enstrümanlarla eğitim aldığınız, konser salonlarını andıran
+              stüdyo ortamı.
+            </p>
+            <ul class="feature-list" aria-label="Ekipman özellikleri">
+              <li>Ses yalıtımlı stüdyolar</li>
+              <li>Kayıt ekipmanları</li>
+              <li>Konser salonu</li>
+            </ul>
+          </article>
+
+          <article class="feature-card" role="listitem" id="feature-certificate">
+            <div class="feature-icon-wrapper" aria-hidden="true">
+              <svg class="feature-svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <line x1="10" y1="9" x2="8" y2="9"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">MEB Onaylı Sertifika</h3>
+            <p class="feature-desc">
+              Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi
+              bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav
+              hazırlık programlarımız da mevcuttur.
+            </p>
+            <ul class="feature-list" aria-label="Sertifika özellikleri">
+              <li>MEB onaylı belgeler</li>
+              <li>ABRSM sınav hazırlığı</li>
+              <li>Dijital sertifika sistemi</li>
+            </ul>
+          </article>
+
         </div>
       </div>
     </section>
@@ -352,53 +339,43 @@ const schema = {
     <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
       <div class="container">
         <header class="section-header">
-          <p class="section-tag">{siteSettings.teachersSection ? siteSettings.teachersSection.tag : "Uzman Kadromuz"}</p>
-          <h2 id="teachersHeading" class="section-title">{siteSettings.teachersSection ? siteSettings.teachersSection.title : "Eğitmenlerimiz"}</h2>
+          <p class="section-tag">Uzman Kadromuz</p>
+          <h2 id="teachersHeading" class="section-title">Eğitmenlerimiz</h2>
           <p class="section-desc">
-            {siteSettings.teachersSection ? siteSettings.teachersSection.desc : "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."}
+            Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu
+            güvenle sürdürün.
           </p>
         </header>
 
         <div class="teachers-grid" role="list">
-          {uniqueTeachers.map((teacher) => (
-            <article class="teacher-card" role="listitem" id={`teacher-${teacher.name.toLowerCase().replace(/\s+/g, '-')}`}>
-              <div class="teacher-img-wrapper">
-                <img
-                  src={teacher.image || '/assets/teachers/default.jpg'}
-                  alt={`${teacher.name} — ${teacher.specialty}, Arya Sanat Akademisi`}
-                  class="teacher-img"
-                  loading="lazy"
-                  width="320"
-                  height="320"
-                />
-                {teacher.videoPreview && (
-                  <video
-                    src={teacher.videoPreview}
-                    class="card-video-preview"
-                    loop
-                    muted
-                    playsinline
-                  ></video>
-                )}
-                <div class="teacher-overlay" aria-hidden="true">
-                  <p class="teacher-bio">
-                    {teacher.bio1 || 'Alanında uzman eğitmenimiz.'}
-                  </p>
-                </div>
+
+          <article class="teacher-card" role="listitem" id="teacher-can">
+            <div class="teacher-img-wrapper">
+              <img
+                src="/assets/teacher_drums.png"
+                alt="Mehmet KAYA — Bateri Eğitmeni, Arya Sanat Akademisi"
+                class="teacher-img"
+                loading="lazy"
+                width="320"
+                height="320"
+              />
+              <div class="teacher-overlay" aria-hidden="true">
+                <p class="teacher-bio">
+                  Mehmet Kaya'nın biyografisi gelecek
+                </p>
               </div>
-              <div class="teacher-info">
-                <h3 class="teacher-name">{teacher.name}</h3>
-                <p class="teacher-specialty">{teacher.specialty}</p>
-                {teacher.tags && (
-                  <div class="teacher-tags" aria-label="Uzmanlık alanları">
-                    {teacher.tags.map(tag => (
-                      <span class="tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
+            </div>
+            <div class="teacher-info">
+              <h3 class="teacher-name">Mehmet KAYA</h3>
+              <p class="teacher-specialty">Bateri Eğitmeni</p>
+              <div class="teacher-tags" aria-label="Uzmanlık alanları">
+                <span class="tag">Rock</span>
+                <span class="tag">Jazz</span>
+                <span class="tag">Latin</span>
               </div>
-            </article>
-          ))}
+            </div>
+          </article>
+
         </div>
       </div>
     </section>
@@ -570,41 +547,4 @@ const schema = {
     </section>
 
   </main>
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
-      const interactiveCards = document.querySelectorAll('.course-card, .teacher-card, .feature-card');
-      interactiveCards.forEach(card => {
-        const video = card.querySelector('.card-video-preview');
-        const imgHover = card.querySelector('.card-image-hover');
-        if (!video && !imgHover) return;
-        
-        const showPreview = () => {
-          card.classList.add('touch-active');
-          if (video) {
-            video.play().catch(err => {
-              console.log('Autoplay check:', err);
-            });
-          }
-        };
-        
-        const hidePreview = () => {
-          card.classList.remove('touch-active');
-          if (video) {
-            video.pause();
-            video.currentTime = 0;
-          }
-        };
-
-        card.addEventListener('mouseenter', showPreview);
-        card.addEventListener('mouseleave', hidePreview);
-
-        card.addEventListener('touchstart', () => {
-          showPreview();
-        }, { passive: true });
-        
-        card.addEventListener('touchend', hidePreview, { passive: true });
-        card.addEventListener('touchcancel', hidePreview, { passive: true });
-      });
-    });
-  </script>
 </Layout>
