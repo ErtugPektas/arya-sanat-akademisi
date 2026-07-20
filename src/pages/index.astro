@@ -277,7 +277,7 @@ const schema = {
           {siteSettings.whyUs && siteSettings.whyUs.features ? (
             siteSettings.whyUs.features.filter(feat => feat.title || feat.desc).map((feat, index) => (
               <article 
-                class={`feature-card ${index === 1 ? 'feature-card--accent' : ''}`} 
+                class={`feature-card ${index === 1 ? 'feature-card--accent' : ''} ${(feat.image || feat.videoPreview) ? 'has-media' : ''}`} 
                 role="listitem" 
                 id={feat.id || `feature-${index}`} 
                 style="position: relative; overflow: hidden;"
