@@ -72,13 +72,5 @@
   ],
   "lessons": [],
   "archivedStudents": [],
-  "teachers": [
-    {
-      "id": "t_1784204415849",
-      "name": "burak",
-      "specialty": "gitar",
-      "hourlyRate": 300,
-      "password": "burak3131"
-    }
-  ]
+  "teachers": []
 }
