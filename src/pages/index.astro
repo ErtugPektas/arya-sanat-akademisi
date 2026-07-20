@@ -600,4 +600,41 @@ const schema = {
     </section>
 
   </main>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const interactiveCards = document.querySelectorAll('.course-card, .teacher-card, .feature-card');
+      interactiveCards.forEach(card => {
+        const video = card.querySelector('.card-video-preview');
+        const imgHover = card.querySelector('.card-image-hover');
+        if (!video && !imgHover) return;
+        
+        const showPreview = () => {
+          card.classList.add('touch-active');
+          if (video) {
+            video.play().catch(err => {
+              console.log('Autoplay check:', err);
+            });
+          }
+        };
+        
+        const hidePreview = () => {
+          card.classList.remove('touch-active');
+          if (video) {
+            video.pause();
+            video.currentTime = 0;
+          }
+        };
+
+        card.addEventListener('mouseenter', showPreview);
+        card.addEventListener('mouseleave', hidePreview);
+
+        card.addEventListener('touchstart', () => {
+          showPreview();
+        }, { passive: true });
+        
+        card.addEventListener('touchend', hidePreview, { passive: true });
+        card.addEventListener('touchcancel', hidePreview, { passive: true });
+      });
+    });
+  </script>
 </Layout>
