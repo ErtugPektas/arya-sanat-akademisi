@@ -1,29 +1,6 @@
 {
   "students": [
     {
-      "id": "std_1784172020125",
-      "name": "aaaaaaaaaaaA",
-      "phone": "asadads",
-      "courseId": "piyano",
-      "teacherName": "aaa",
-      "monthlyFee": 1200,
-      "payments": {
-        "2026-07": "Paid"
-      },
-      "attendance": {
-        "2026-07": {
-          "attended": 4,
-          "total": 4
-        }
-      },
-      "notes": {
-        "2026-07": ""
-      },
-      "progress": {
-        "2026-07": 69
-      }
-    },
-    {
       "id": "std_1784201294268",
       "name": "ssss",
       "phone": "dadssd",
@@ -71,6 +48,30 @@
     }
   ],
   "lessons": [],
-  "archivedStudents": [],
+  "archivedStudents": [
+    {
+      "id": "std_1784172020125",
+      "name": "aaaaaaaaaaaA",
+      "phone": "asadads",
+      "courseId": "piyano",
+      "teacherName": "aaa",
+      "monthlyFee": 1200,
+      "payments": {
+        "2026-07": "Paid"
+      },
+      "attendance": {
+        "2026-07": {
+          "attended": 4,
+          "total": 4
+        }
+      },
+      "notes": {
+        "2026-07": ""
+      },
+      "progress": {
+        "2026-07": 69
+      }
+    }
+  ],
   "teachers": []
 }
