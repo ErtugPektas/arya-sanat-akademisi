@@ -197,6 +197,15 @@ const schema = {
                     width="420"
                     height="240"
                   />
+                  {course.data.videoPreview && (
+                    <video
+                      src={course.data.videoPreview}
+                      class="card-video-preview"
+                      loop
+                      muted
+                      playsinline
+                    ></video>
+                  )}
                   <div class="card-img-overlay" aria-hidden="true"></div>
                 </div>
               </a>
@@ -538,4 +547,24 @@ const schema = {
     </section>
 
   </main>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const courseCards = document.querySelectorAll('.course-card');
+      courseCards.forEach(card => {
+        const video = card.querySelector('.card-video-preview');
+        if (!video) return;
+        
+        card.addEventListener('mouseenter', () => {
+          video.play().catch(err => {
+            console.log('Autoplay check:', err);
+          });
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      });
+    });
+  </script>
 </Layout>

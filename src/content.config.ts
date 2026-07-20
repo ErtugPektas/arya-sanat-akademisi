@@ -13,6 +13,7 @@ const kurslarCollection = defineCollection({
     heroTitleHighlight: z.string(),
     heroDesc: z.string(),
     image: z.string(),
+    videoPreview: z.string().optional(),
     
     // Info Cards
     duration: z.string(),

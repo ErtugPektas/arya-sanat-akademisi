@@ -26,6 +26,7 @@ export async function POST({ request, cookies }) {
       heroTitleHighlight,
       heroDesc,
       image,
+      videoPreview,
       duration,
       frequency,
       level,
@@ -153,6 +154,7 @@ Yeni kurs detay metni.`;
     frontmatter = setYamlString(frontmatter, 'heroTitleHighlight', heroTitleHighlight);
     frontmatter = setYamlString(frontmatter, 'heroDesc', heroDesc);
     frontmatter = setYamlString(frontmatter, 'image', image);
+    frontmatter = setYamlString(frontmatter, 'videoPreview', videoPreview || '');
     frontmatter = setYamlString(frontmatter, 'duration', duration);
     frontmatter = setYamlString(frontmatter, 'frequency', frequency);
     frontmatter = setYamlString(frontmatter, 'level', level);
