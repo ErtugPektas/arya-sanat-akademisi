@@ -66,17 +66,61 @@ export async function POST({ request, cookies }) {
       'User-Agent': 'Astro-Admin-Panel'
     };
 
+    let sha = undefined;
+    let currentContent = '';
+
     const getRes = await fetch(getUrl, { headers });
-    if (!getRes.ok) {
+    if (getRes.status === 404) {
+      currentContent = `---
+title: "Yeni Kurs"
+description: "Yeni kurs açıklaması"
+keywords: ""
+badge: "⭐ Yeni Kurs"
+heroTitle: "Yeni Kurs"
+heroTitleHighlight: ""
+heroDesc: "Yeni kurs açıklaması."
+image: "/assets/kurslar/piyano-kurs.jpg"
+duration: "45 dk"
+frequency: "Haftada 1 ders"
+level: "Başlangıç"
+certificate: "Katılım Belgesi"
+leadText: "Yeni Kurs leadText"
+levels:
+  beginner:
+    title: "Başlangıç"
+    desc: "Giriş"
+  intermediate:
+    title: "Orta"
+    desc: "Gelişme"
+  advanced:
+    title: "İleri"
+    desc: "Uzmanlık"
+gallery:
+  - "/assets/kurslar/piyano-kurs.jpg"
+curriculum:
+  - period: "1. Ay"
+    title: "Giriş"
+    items:
+      - "Giriş konuları"
+teacher:
+  name: "Eğitmen Adı"
+  specialty: "Branş"
+  image: "/assets/teachers/default.jpg"
+  bio1: "Eğitmen biyografisi."
+  tags:
+    - "Eğitmen"
+---
+Yeni kurs detay metni.`;
+    } else if (!getRes.ok) {
       return new Response(JSON.stringify({ error: `Failed to fetch file from GitHub: ${getRes.statusText}` }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
+    } else {
+      const fileData = await getRes.json();
+      sha = fileData.sha;
+      currentContent = Buffer.from(fileData.content, 'base64').toString('utf8');
     }
-
-    const fileData = await getRes.json();
-    const sha = fileData.sha;
-    const currentContent = Buffer.from(fileData.content, 'base64').toString('utf8');
 
     // 2. Parse frontmatter and update values
     const parts = currentContent.split('---');

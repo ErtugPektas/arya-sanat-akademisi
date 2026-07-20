@@ -251,11 +251,21 @@ if (isLoggedIn) {
             </div>
 
             <!-- Section Title -->
-            <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 2rem; color: #d4af37; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid #1f1f2e; padding-bottom: 0.75rem;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              <span>Kurs Detay Sayfaları</span>
-              <span style="font-size: 0.85rem; font-weight: 500; color: #8b8b9f; background: #1c1c28; padding: 0.2rem 0.6rem; border-radius: 12px; margin-left: auto;">{courses.length} Toplam</span>
-            </h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #1f1f2e; padding-bottom: 0.75rem;">
+              <h2 style="font-size: 1.4rem; font-weight: 700; color: #d4af37; display: flex; align-items: center; gap: 0.75rem; margin: 0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Kurs Detay Sayfaları</span>
+                <span style="font-size: 0.85rem; font-weight: 500; color: #8b8b9f; background: #1c1c28; padding: 0.2rem 0.6rem; border-radius: 12px; margin-left: 0.5rem;">{courses.length} Toplam</span>
+              </h2>
+              <button 
+                onclick="window.createNewCourse()" 
+                style="background: rgba(212,175,55,0.1); color: #d4af37; border: 1px solid rgba(212,175,55,0.25); padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='rgba(212,175,55,0.2)'" 
+                onmouseout="this.style.background='rgba(212,175,55,0.1)'"
+              >
+                + Yeni Kurs Ekle ✏️
+              </button>
+            </div>
 
             <!-- Course Cards Grid -->
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
@@ -1922,6 +1932,19 @@ if (isLoggedIn) {
       console.error('ERP Save Network Error:', err);
     }
   }
+
+  window.createNewCourse = function() {
+    const slug = prompt('Lütfen eklenecek yeni kurs için bir URL uzantısı (slug) giriniz:\n(Yalnızca küçük İngilizce harfler, rakamlar ve tire kullanın. Örn: keman-egitimi, saksafon)');
+    if (!slug) return;
+    
+    const cleanSlug = slug.toLowerCase().trim().replace(/[^a-z0-9\-]/g, '');
+    if (!cleanSlug) {
+      alert('Geçersiz URL uzantısı! Yalnızca İngilizce harfler, rakamlar ve tire kullanabilirsiniz.');
+      return;
+    }
+    
+    window.location.href = `/admin/edit?course=${cleanSlug}`;
+  };
 
   // SITE SETTINGS SAVE CONTROLLER
   const btnSaveSettings = document.getElementById('btn-save-settings');

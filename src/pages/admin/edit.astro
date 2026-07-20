@@ -20,10 +20,36 @@ if (!courseId) {
   return Astro.redirect('/admin');
 }
 
-const course = await getEntry('kurslar', courseId);
+let course = await getEntry('kurslar', courseId);
 
 if (!course) {
-  return Astro.redirect('/admin');
+  course = {
+    id: courseId,
+    data: {
+      title: "Yeni Kurs Dersi Kayseri | Arya Sanat Akademisi",
+      description: "Kayseri Kocasinan yeni kurs dersi — Arya Sanat Akademisi.",
+      keywords: "yeni kurs dersi kayseri",
+      badge: "⭐ Yeni Kurs",
+      heroTitle: "Yeni Kurs Dersi",
+      heroTitleHighlight: "Kayseri Kocasinan",
+      heroDesc: "Yeni kurs tanıtım açıklaması.",
+      image: "/assets/kurslar/piyano-kurs.jpg",
+      duration: "45 dk / ders",
+      frequency: "Haftada 1 ders",
+      level: "Başlangıç",
+      certificate: "Katılım Belgesi",
+      leadText: "Yeni Kurs leadText",
+      teacher: {
+        name: "Eğitmen Adı",
+        specialty: "Uzmanlık Alanı",
+        image: "/assets/teachers/default.jpg",
+        tags: ["Eğitmen"],
+        bio1: "Eğitmen biyografisi paragrafı.",
+        bio2: ""
+      }
+    },
+    body: "Yeni kurs detay markdown açıklaması buraya yazılacaktır."
+  };
 }
 
 const { data, body } = course;
@@ -126,12 +152,16 @@ const { data, body } = course;
             <textarea name="heroDesc" rows="2" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.heroDesc}</textarea>
           </div>
 
-          <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
-            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
+          <div style="display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; min-width: 250px;">
               <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Kurs Görsel Yolu (URL veya Assets Yolu)</label>
-              <input type="text" id="input-image" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-image').src = this.value" />
+              <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="input-image" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-image').src = this.value" />
+                <button type="button" onclick="document.getElementById('file-course-image').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+                <input type="file" id="file-course-image" style="display: none;" accept="image/*" onchange="uploadFile(this, 'input-image', 'preview-image')" />
+              </div>
             </div>
-            <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem;">
+            <div style="width: 120px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
               <img id="preview-image" src={data.image} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
             </div>
           </div>
@@ -188,12 +218,16 @@ const { data, body } = course;
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
-            <div style="display: flex; gap: 1.25rem; align-items: center;">
+            <div style="display: flex; gap: 1.25rem; align-items: flex-end; width: 100%;">
               <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
                 <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Görsel Yolu (URL veya Assets Yolu)</label>
-                <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
+                <div style="display: flex; gap: 0.5rem;">
+                  <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
+                  <button type="button" onclick="document.getElementById('file-teacher-image').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+                  <input type="file" id="file-teacher-image" style="display: none;" accept="image/*" onchange="uploadFile(this, 'input-teacher-image', 'preview-teacher-image')" />
+                </div>
               </div>
-              <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; margin-top: 1.5rem; flex-shrink: 0;">
+              <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <img id="preview-teacher-image" src={data.teacher.image} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
               </div>
             </div>
@@ -230,6 +264,44 @@ const { data, body } = course;
 
   <!-- SAVING LOGIC -->
   <script is:inline>
+    async function uploadFile(inputEl, textInputId, previewImgId) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      
+      const file = inputEl.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const btn = inputEl.previousElementSibling;
+      const originalText = btn.innerText;
+      btn.disabled = true;
+      btn.innerText = 'Yükleniyor... ⏳';
+      
+      try {
+        const response = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          document.getElementById(textInputId).value = result.url;
+          document.getElementById(previewImgId).src = result.url;
+          alert('✓ Görsel başarıyla yüklendi!');
+        } else {
+          alert('❌ Yükleme hatası: ' + (result.error || 'Bilinmeyen hata'));
+        }
+      } catch (err) {
+        alert('❌ Sunucu bağlantı hatası: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = originalText;
+        inputEl.value = ''; // Reset file input
+      }
+    }
+    
+    window.uploadFile = uploadFile;
+
     const saveBtn = document.getElementById('btn-save');
     const form = document.getElementById('course-form');
 
