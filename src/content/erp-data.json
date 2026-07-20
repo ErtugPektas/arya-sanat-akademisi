@@ -74,12 +74,6 @@
   "archivedStudents": [],
   "teachers": [
     {
-      "id": "t_default_2",
-      "name": "Mehmet KAYA",
-      "specialty": "Bateri",
-      "hourlyRate": 300
-    },
-    {
       "id": "t_1784171917182",
       "name": "aaa",
       "specialty": "aaa",
