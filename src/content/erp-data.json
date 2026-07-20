@@ -35,7 +35,7 @@
       },
       "attendance": {
         "2026-07": {
-          "attended": 2,
+          "attended": 3,
           "total": 4
         }
       },
@@ -71,15 +71,6 @@
     }
   ],
   "lessons": [
-    {
-      "id": "les_1784171935502",
-      "studentName": "a",
-      "courseName": "a",
-      "teacherName": "aaa",
-      "studio": "a",
-      "day": "Pazartesi",
-      "time": "09:00 - 10:00"
-    },
     {
       "id": "les_1784171953253",
       "studentName": "a",
