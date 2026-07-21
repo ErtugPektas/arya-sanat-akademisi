@@ -80,9 +80,9 @@
     "title": "Akademimizden Kareler",
     "desc": "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar.",
     "images": [
-      "/assets/hero_bg.png",
-      "/assets/teacher_piano.png",
-      "/assets/teacher_guitar.png",
+      "/assets/uploads/1784653462369_WhatsApp_Image_2026-07-19_at_8.52.39_PM.jpeg",
+      "/assets/uploads/1784653474765_WhatsApp_Image_2026-07-19_at_8.52.38_PM.jpeg",
+      "/assets/uploads/1784653485522_WhatsApp_Image_2026-07-19_at_8.52.40_PM__1_.jpeg",
       "/assets/uploads/1784559027245_WhatsApp_Image_2026-07-19_at_8.52.36_PM.jpeg",
       "/assets/teacher_drums.png",
       "/assets/teacher_violin.png"
@@ -104,8 +104,8 @@
         "url": "/#why-arya"
       },
       {
-        "text": "Galerimiz",
-        "url": "/#gallery"
+        "text": "Eğitmenler",
+        "url": "/#teachers"
       },
       {
         "text": "İletişim",
