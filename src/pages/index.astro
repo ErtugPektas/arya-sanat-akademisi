@@ -351,9 +351,9 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-section-pin" id="gallery" aria-labelledby="galleryHeading">
-      <div class="gallery-sticky-wrapper">
-        <div class="container gallery-header-container">
+    <section class="gallery-section-gsap" id="gallery" aria-labelledby="galleryHeading">
+      <div class="gallery-sticky-box">
+        <div class="container gallery-header-wrap">
           <header class="section-header text-center-header">
             <p class="section-tag">Sanat Atölyelerimiz</p>
             <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
@@ -363,24 +363,24 @@ const schema = {
           </header>
         </div>
 
-        <div class="gallery-track-overflow">
-          <div class="gallery-track" id="galleryTrack" role="list">
-            {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-              siteSettings.gallery.images.map((img, idx) => (
-                <div class="gallery-item" role="listitem" tabindex="0">
+        <div class="gallery-panels-container">
+          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+            siteSettings.gallery.images.map((img, idx) => (
+              <div class="gallery-panel-item" role="listitem" tabindex="0">
+                <div class="gallery-card-inner">
                   <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
                   <div class="gallery-overlay">
                     <span class="zoom-icon">🔎</span>
                     <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
-                <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
               </div>
-            )}
-          </div>
+            ))
+          ) : (
+            <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
+              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -733,10 +733,12 @@ const schema = {
       }
 
       // Lightbox logic
-      const galleryItems = document.querySelectorAll('.gallery-item');
+      const galleryItems = document.querySelectorAll('.gallery-panel-item, .gallery-item');
       galleryItems.forEach(item => {
         item.addEventListener('click', () => {
-          const imgUrl = item.querySelector('img').src;
+          const img = item.querySelector('img');
+          if (!img) return;
+          const imgUrl = img.src;
           const modal = document.createElement('div');
           modal.className = 'lightbox-modal';
           modal.innerHTML = `
@@ -757,45 +759,40 @@ const schema = {
         });
       });
 
-      // GSAP ScrollTrigger Horizontal Pin Scroll (CodePen dydpJzY Pin & Slide Animation)
+      // Official GreenSock Pen dydpJzY Horizontal ScrollTrigger Pinning
       if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        const section = document.querySelector('.gallery-section-pin');
-        const track = document.querySelector('#galleryTrack');
+        const container = document.querySelector('.gallery-panels-container');
+        const section = document.querySelector('.gallery-section-gsap');
 
-        if (section && track) {
-          const initHorizontalPin = () => {
-            const getScrollAmount = () => {
-              const trackWidth = track.scrollWidth;
-              const viewportWidth = window.innerWidth;
-              return -(trackWidth - viewportWidth + 60);
+        if (container && section) {
+          const initGsapHorizontal = () => {
+            const getScrollWidth = () => {
+              return container.scrollWidth - window.innerWidth + 80;
             };
 
-            if (track.scrollWidth > window.innerWidth) {
-              const tween = gsap.to(track, {
-                x: getScrollAmount,
-                ease: "none"
-              });
-
-              ScrollTrigger.create({
-                trigger: section,
-                start: "top top",
-                end: () => `+=${Math.abs(getScrollAmount())}`,
-                pin: true,
-                animation: tween,
-                scrub: 1,
-                invalidateOnRefresh: true,
-                anticipatePin: 1
+            if (container.scrollWidth > window.innerWidth) {
+              gsap.to(container, {
+                x: () => -getScrollWidth(),
+                ease: "none",
+                scrollTrigger: {
+                  trigger: section,
+                  pin: true,
+                  scrub: 1,
+                  start: "center center",
+                  end: () => "+=" + getScrollWidth(),
+                  invalidateOnRefresh: true
+                }
               });
             }
           };
 
           if (document.readyState === 'complete') {
-            initHorizontalPin();
+            initGsapHorizontal();
           } else {
             window.addEventListener('load', () => {
-              initHorizontalPin();
+              initGsapHorizontal();
               ScrollTrigger.refresh();
             });
           }
