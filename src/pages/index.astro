@@ -133,28 +133,28 @@ const schema = {
     </section>
 
     <!-- ===== ANNOUNCEMENTS SECTION ===== -->
-    <section class="section announcements-section" id="announcements" aria-labelledby="announcementsHeading" style="background: #0b0b0e; border-top: 1px solid #1c1c28; border-bottom: 1px solid #1c1c28; padding: 5rem 0;">
+    <section class="section announcements-section" id="announcements" aria-labelledby="announcementsHeading">
       <div class="container">
-        <header class="section-header" style="margin-bottom: 3.5rem; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto;">
-          <p class="section-tag" style="color: #d4af37; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 0.5rem;">Duyuru &amp; Fırsatlar</p>
-          <h2 id="announcementsHeading" class="section-title" style="font-size: 2.5rem; font-family: 'Playfair Display', serif; font-weight: 700; color: #fff; margin: 0; line-height: 1.2;">Duyurular &amp; Kampanyalar</h2>
-          <p class="section-desc" style="color: #8b8b9f; font-size: 1rem; margin-top: 0.75rem; line-height: 1.6;">Akademimizden güncel duyurular, etkinlik haberleri ve avantajlı kayıt dönemleri.</p>
+        <header class="section-header text-center-header">
+          <p class="section-tag">Duyuru &amp; Fırsatlar</p>
+          <h2 id="announcementsHeading" class="section-title">Duyurular &amp; Kampanyalar</h2>
+          <p class="section-desc">Akademimizden güncel duyurular, etkinlik haberleri ve avantajlı kayıt dönemleri.</p>
         </header>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="announcements-grid">
           {duyurular.map((duyuru) => (
-            <article style="background: #101016; border: 1px solid #1f1f2e; border-radius: 16px; padding: 2.25rem 2rem; position: relative; transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+            <article class="announcement-card">
               <div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                  <span style={`background: ${duyuru.badge === 'Kampanya' ? 'rgba(212,175,55,0.08)' : 'rgba(30,144,255,0.08)'}; color: ${duyuru.badge === 'Kampanya' ? '#d4af37' : '#1e90ff'}; border: 1px solid ${duyuru.badge === 'Kampanya' ? 'rgba(212,175,55,0.15)' : 'rgba(30,144,255,0.15)'}; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600;`}>
+                <div class="announcement-header">
+                  <span class={`announcement-badge ${duyuru.badge === 'Kampanya' ? 'badge-campaign' : 'badge-notice'}`}>
                     {duyuru.badge}
                   </span>
-                  <span style="color: #8b8b9f; font-size: 0.8rem; font-family: monospace;">{duyuru.date}</span>
+                  <span class="announcement-date">{duyuru.date}</span>
                 </div>
-                <h3 style="font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0 0 1rem 0; font-family: 'Playfair Display', serif; line-height: 1.3;">{duyuru.title}</h3>
-                <p style="color: #b4b4c6; font-size: 0.925rem; line-height: 1.65; margin: 0 0 2rem 0;">{duyuru.content}</p>
+                <h3 class="announcement-title">{duyuru.title}</h3>
+                <p class="announcement-content">{duyuru.content}</p>
               </div>
-              <a href="#contact" style="color: #d4af37; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#d4af37'">
+              <a href="#contact" class="announcement-link">
                 Detaylı Bilgi &amp; İletişim
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
@@ -375,89 +375,6 @@ const schema = {
             <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
               <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
             </div>
-          )}
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== TEACHERS SECTION ===== -->
-    <section class="section teachers-section" id="teachers" aria-labelledby="teachersHeading">
-      <div class="container">
-        <header class="section-header">
-          <p class="section-tag">{siteSettings.teachersSection ? siteSettings.teachersSection.tag : "Uzman Kadromuz"}</p>
-          <h2 id="teachersHeading" class="section-title">{siteSettings.teachersSection ? siteSettings.teachersSection.title : "Eğitmenlerimiz"}</h2>
-          <p class="section-desc">
-            {siteSettings.teachersSection ? siteSettings.teachersSection.desc : "Alanında uzman, sahne deneyimine sahip eğitmenlerimizle müzik yolculuğunuzu güvenle sürdürün."}
-          </p>
-        </header>
-
-        <div class="teachers-grid" role="list">
-          {siteSettings.teachersSection && siteSettings.teachersSection.list && siteSettings.teachersSection.list.length > 0 ? (
-            siteSettings.teachersSection.list.map((teacher, index) => (
-              <article class="teacher-card" role="listitem" id={`teacher-${index}`}>
-                <div class="teacher-img-wrapper" style="position: relative; overflow: hidden;">
-                  <img
-                    src={teacher.image || '/assets/teachers/default.jpg'}
-                    alt={`${teacher.name} — ${teacher.specialty}, Arya Sanat Akademisi`}
-                    class="teacher-img"
-                    loading="lazy"
-                    width="320"
-                    height="320"
-                  />
-                  
-                  {/* Background Hover Video */}
-                  {teacher.videoPreview && (
-                    <video 
-                      src={teacher.videoPreview} 
-                      loop 
-                      muted 
-                      playsinline 
-                      class="card-video-preview" 
-                      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 1;"
-                    ></video>
-                  )}
-                  
-                  <div class="teacher-overlay" aria-hidden="true" style="z-index: 2;">
-                    <p class="teacher-bio">
-                      {teacher.bio1}
-                    </p>
-                  </div>
-                </div>
-                <div class="teacher-info">
-                  <h3 class="teacher-name">{teacher.name}</h3>
-                  <p class="teacher-specialty">{teacher.specialty}</p>
-                  {teacher.tags && (
-                    <div class="teacher-tags" aria-label="Uzmanlık alanları">
-                      {teacher.tags.map(tag => (
-                        <span class="tag">{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </article>
-            ))
-          ) : (
-            <article class="teacher-card" role="listitem" id="teacher-can">
-              <div class="teacher-img-wrapper">
-                <img
-                  src="/assets/teacher_drums.png"
-                  alt="Mehmet KAYA — Bateri Eğitmeni, Arya Sanat Akademisi"
-                  class="teacher-img"
-                  loading="lazy"
-                  width="320"
-                  height="320"
-                />
-              </div>
-              <div class="teacher-info">
-                <h3 class="teacher-name">Mehmet KAYA</h3>
-                <p class="teacher-specialty">Bateri Eğitmeni</p>
-                <div class="teacher-tags" aria-label="Uzmanlık alanları">
-                  <span class="tag">Rock</span>
-                  <span class="tag">Jazz</span>
-                  <span class="tag">Latin</span>
-                </div>
-              </div>
-            </article>
           )}
         </div>
       </div>
