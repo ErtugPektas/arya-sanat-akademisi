@@ -465,11 +465,11 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   padding-top: calc(var(--nav-height) + 2rem);
   padding-bottom: 4rem;
-  padding-inline: clamp(1.5rem, 6vw, 6rem);
+  padding-inline: clamp(1.5rem, 4vw, 4rem);
   overflow: hidden;
 }
 
@@ -497,7 +497,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at 20% 40%,
+    circle at 50% 50%,
     rgba(9, 9, 14, 0.4) 0%,
     rgba(9, 9, 14, 0.85) 65%,
     rgba(9, 9, 14, 0.98) 100%
@@ -507,8 +507,11 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 900px;
+  max-width: 920px;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hero-tag {
@@ -537,6 +540,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   color: #ffffff;
   letter-spacing: -0.02em;
   margin-bottom: 1.75rem;
+  text-align: center;
   animation: fadeInUp 0.9s 0.1s var(--ease-lux) both;
 }
 
@@ -558,9 +562,10 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   font-weight: 300;
   max-width: 58ch;
-  margin-inline: 0;
+  margin-inline: auto;
   margin-bottom: 2.5rem;
   line-height: 1.75;
+  text-align: center;
   animation: fadeInUp 0.9s 0.2s var(--ease-lux) both;
 }
 
@@ -568,7 +573,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: 3.5rem;
   animation: fadeInUp 0.9s 0.3s var(--ease-lux) both;
 }
@@ -577,9 +582,9 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2rem 3rem;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 2.5rem;
   background: rgba(18, 18, 26, 0.55);
   border: 1px solid rgba(212, 175, 55, 0.2);
   border-radius: var(--radius-md);
@@ -592,7 +597,7 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 .hero-stat {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .hero-stat strong {
