@@ -352,35 +352,40 @@ const schema = {
 
     <!-- ===== GALLERY SECTION ===== -->
     <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
-      <div class="gallery-pin-container">
-        <div class="container gallery-header-container">
-          <header class="section-header text-center-header">
-            <p class="section-tag">Sanat Atölyelerimiz</p>
-            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-            <p class="section-desc">
-              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-            </p>
-          </header>
-        </div>
+      <div class="container">
+        <header class="section-header text-center-header">
+          <p class="section-tag">Sanat Atölyelerimiz</p>
+          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+          <p class="section-desc">
+            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+          </p>
+        </header>
+      </div>
 
-        <div class="gallery-track-wrapper">
-          <div class="gallery-track" role="list">
-            {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-              siteSettings.gallery.images.map((img, idx) => (
-                <div class="gallery-item" role="listitem" tabindex="0">
-                  <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
-                  <div class="gallery-overlay">
-                    <span class="zoom-icon">🔎</span>
-                    <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
-                  </div>
+      <div class="gallery-slider-wrapper">
+        <button class="gallery-nav-btn gallery-prev" id="galleryPrevBtn" aria-label="Önceki Görseller">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button class="gallery-nav-btn gallery-next" id="galleryNextBtn" aria-label="Sonraki Görseller">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+
+        <div class="gallery-track" id="galleryTrack" role="list">
+          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+            siteSettings.gallery.images.map((img, idx) => (
+              <div class="gallery-item" role="listitem" tabindex="0">
+                <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                <div class="gallery-overlay">
+                  <span class="zoom-icon">🔎</span>
+                  <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
                 </div>
-              ))
-            ) : (
-              <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
-                <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
               </div>
-            )}
-          </div>
+            ))
+          ) : (
+            <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
+              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -757,47 +762,49 @@ const schema = {
         });
       });
 
-      // GSAP ScrollTrigger Horizontal Pin Scroll (CodePen dydpJzY Style)
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
+      // Smooth Drag & Button Navigation for Gallery
+      const galleryTrackEl = document.getElementById('galleryTrack');
+      const prevBtn = document.getElementById('galleryPrevBtn');
+      const nextBtn = document.getElementById('galleryNextBtn');
 
-        const gallerySec = document.querySelector('.gallery-section');
-        const galleryTrack = document.querySelector('.gallery-track');
-        const items = document.querySelectorAll('.gallery-item');
+      if (galleryTrackEl) {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
-        if (gallerySec && galleryTrack && items.length > 0) {
-          const initHorizontalPin = () => {
-            const getScrollAmount = () => {
-              const trackWidth = galleryTrack.scrollWidth;
-              const viewportWidth = window.innerWidth;
-              return -(trackWidth - viewportWidth + 40);
-            };
+        galleryTrackEl.addEventListener('mousedown', (e) => {
+          isDown = true;
+          galleryTrackEl.classList.add('active');
+          startX = e.pageX - galleryTrackEl.offsetLeft;
+          scrollLeft = galleryTrackEl.scrollLeft;
+        });
 
-            if (galleryTrack.scrollWidth > window.innerWidth) {
-              gsap.to(galleryTrack, {
-                x: getScrollAmount,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: gallerySec,
-                  start: "top top+=76",
-                  end: () => `+=${Math.abs(getScrollAmount())}`,
-                  pin: true,
-                  scrub: 1,
-                  invalidateOnRefresh: true,
-                  anticipatePin: 1
-                }
-              });
-            }
-          };
+        galleryTrackEl.addEventListener('mouseleave', () => {
+          isDown = false;
+          galleryTrackEl.classList.remove('active');
+        });
 
-          if (document.readyState === 'complete') {
-            initHorizontalPin();
-          } else {
-            window.addEventListener('load', () => {
-              initHorizontalPin();
-              ScrollTrigger.refresh();
-            });
-          }
+        galleryTrackEl.addEventListener('mouseup', () => {
+          isDown = false;
+          galleryTrackEl.classList.remove('active');
+        });
+
+        galleryTrackEl.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - galleryTrackEl.offsetLeft;
+          const walk = (x - startX) * 2;
+          galleryTrackEl.scrollLeft = scrollLeft - walk;
+        });
+
+        if (prevBtn && nextBtn) {
+          prevBtn.addEventListener('click', () => {
+            galleryTrackEl.scrollBy({ left: -420, behavior: 'smooth' });
+          });
+
+          nextBtn.addEventListener('click', () => {
+            galleryTrackEl.scrollBy({ left: 420, behavior: 'smooth' });
+          });
         }
       }
     });
