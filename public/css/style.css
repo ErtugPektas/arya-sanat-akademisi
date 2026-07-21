@@ -1,61 +1,61 @@
 /* ==========================================================================
-   Arya Sanat Akademisi — Main Stylesheet
-   Mobil öncelikli, modern, sanatsal tasarım
+   Arya Sanat Akademisi — Luxury Master Stylesheet (Awwwards Edition)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. CSS Custom Properties (Design Tokens)
+   1. CSS Custom Properties (Design Tokens & Easing Curves)
    -------------------------------------------------------------------------- */
 :root {
-  /* Renk Paleti */
-  --color-bg:            #faf8f5;
-  --color-bg-alt:        #f2ede6;
-  --color-surface:       #ffffff;
-  --color-surface-dark:  #1a1a2e;
+  /* Renk Paleti (Dark Luxury Palette) */
+  --color-bg:            #09090e;
+  --color-bg-alt:        #101018;
+  --color-surface:       #14141f;
+  --color-surface-dark:  #0a0a0f;
 
-  --color-primary:       #f5a623;   /* Sıcak altın-turuncu */
-  --color-primary-dark:  #d4891a;
-  --color-primary-light: #ffd180;
+  --color-primary:       #d4af37;   /* Şampanya Altını */
+  --color-primary-dark:  #aa841c;
+  --color-primary-light: #f3e5ab;
 
-  --color-secondary:     #1a1a2e;   /* Koyu lacivert */
-  --color-secondary-mid: #2d3561;
+  --color-secondary:     #12131c;   /* Derin Gece Mavisi */
+  --color-secondary-mid: #1d1e2e;
 
-  --color-accent:        #2d5a8e;   /* Derin mavi */
+  --color-accent:        #2d5a8e;   /* Safir Mavi */
   --color-accent-light:  #4a7fc1;
 
-  --color-cream:         #e8d5b7;
-  --color-text:          #1a1a2e;
-  --color-text-muted:    #6b7280;
-  --color-text-light:    #9ca3af;
-  --color-border:        #e5e0d8;
+  --color-cream:         #f4ebd9;
+  --color-text:          #f4f4f8;
+  --color-text-muted:    #9494a8;
+  --color-text-light:    #6b6b80;
+  --color-border:        rgba(212, 175, 55, 0.15);
 
   /* Tipografi */
-  --font-heading:   'Playfair Display', Georgia, serif;
-  --font-body:      'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading:   'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-body:      'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
 
   /* Boyutlar */
-  --nav-height:     76px;
-  --container-max:  1200px;
-  --radius-sm:      8px;
-  --radius-md:      16px;
-  --radius-lg:      24px;
-  --radius-xl:      32px;
+  --nav-height:     84px;
+  --container-max:  1280px;
+  --radius-sm:      6px;
+  --radius-md:      12px;
+  --radius-lg:      20px;
+  --radius-xl:      28px;
   --radius-full:    9999px;
 
-  /* Gölgeler */
-  --shadow-sm:   0 2px 8px rgba(26, 26, 46, 0.08);
-  --shadow-md:   0 8px 24px rgba(26, 26, 46, 0.12);
-  --shadow-lg:   0 20px 48px rgba(26, 26, 46, 0.16);
-  --shadow-glow: 0 0 32px rgba(245, 166, 35, 0.3);
+  /* Lüks Gölgeler & Işıma */
+  --shadow-sm:   0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-md:   0 12px 36px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 24px 64px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 40px rgba(212, 175, 55, 0.25);
 
-  /* Geçişler */
-  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow:   600ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Bespoke Animasyon Fiziği */
+  --ease-lux:          cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast:   250ms var(--ease-lux);
+  --transition-normal: 500ms var(--ease-lux);
+  --transition-slow:   800ms var(--ease-lux);
 }
 
 /* --------------------------------------------------------------------------
-   2. Reset & Base
+   2. Reset & Base (SVG Grain & Antialiasing)
    -------------------------------------------------------------------------- */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -67,12 +67,32 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
   font-family: var(--font-body);
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.65;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Atmospheric Noise Grain Texture Filter Overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
   color: var(--color-text);
   background-color: var(--color-bg);
   /* overflow-x:hidden yerine clip — iOS Safari scroll bug’unu engeller */
@@ -173,57 +193,46 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: 0.65rem;
+  padding: 0.85rem 1.85rem;
   border-radius: var(--radius-full);
   font-family: var(--font-body);
   font-size: 0.9375rem;
   font-weight: 600;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  transition:
-    transform var(--transition-normal),
-    box-shadow var(--transition-normal),
-    background-color var(--transition-normal),
-    color var(--transition-normal);
+  transition: transform 0.5s var(--ease-lux), box-shadow 0.5s var(--ease-lux), background-color 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   position: relative;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.15);
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  border-radius: inherit;
-}
-
-.btn:hover::after { opacity: 1; }
-.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.btn:active { transform: translateY(0); }
-
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(245, 166, 35, 0.35);
+  background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%);
+  color: #08080c;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+  font-weight: 700;
 }
 .btn-primary:hover {
-  box-shadow: 0 8px 28px rgba(245, 166, 35, 0.5);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(212, 175, 55, 0.45);
+  background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
 }
 
 .btn-outline {
-  background: transparent;
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
+  background: rgba(18, 18, 26, 0.4);
+  color: #f4f4f8;
+  border-color: rgba(212, 175, 55, 0.3);
+  backdrop-filter: blur(12px);
 }
 .btn-outline:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: #fff;
+  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .btn-card {
@@ -452,13 +461,15 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
    -------------------------------------------------------------------------- */
 .hero {
   position: relative;
-  min-height: 100vh;  /* svh iOS'ta layout jump yapabiliyor, vh daha güvenli */
+  min-height: 92vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding-top: var(--nav-height);
+  align-items: flex-start;
+  text-align: left;
+  padding-top: calc(var(--nav-height) + 2rem);
+  padding-bottom: 4rem;
+  padding-inline: clamp(1.5rem, 6vw, 6rem);
   overflow: hidden;
 }
 
@@ -466,6 +477,12 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   position: absolute;
   inset: 0;
   z-index: 0;
+  transform: scale(1.05);
+  transition: transform 1.2s var(--ease-lux);
+}
+
+.hero:hover .hero-bg {
+  transform: scale(1);
 }
 
 .hero-img {
@@ -473,111 +490,132 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   height: 100%;
   object-fit: cover;
   object-position: center;
+  filter: brightness(0.65) contrast(1.1);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(26, 26, 46, 0.85) 0%,
-    rgba(26, 26, 46, 0.65) 50%,
-    rgba(45, 90, 142, 0.5) 100%
+  background: radial-gradient(
+    circle at 20% 40%,
+    rgba(9, 9, 14, 0.4) 0%,
+    rgba(9, 9, 14, 0.85) 65%,
+    rgba(9, 9, 14, 0.98) 100%
   );
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
-  max-width: 800px;
-  padding-inline: clamp(1rem, 4vw, 2rem);
-  padding-block: 2rem;
+  z-index: 2;
+  max-width: 900px;
+  padding: 0;
 }
 
 .hero-tag {
-  display: inline-block;
-  background: rgba(245, 166, 35, 0.2);
-  border: 1px solid rgba(245, 166, 35, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   color: var(--color-primary-light);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  padding: 0.375rem 1rem;
+  padding: 0.45rem 1.25rem;
   border-radius: var(--radius-full);
-  margin-bottom: 1.25rem;
-  animation: fadeInDown 0.8s ease both;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
+  animation: fadeInDown 0.8s var(--ease-lux) both;
 }
 
 .hero-title {
-  color: #fff;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.3);
-  animation: fadeInUp 0.9s 0.1s ease both;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+  line-height: 0.98;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.75rem;
+  animation: fadeInUp 0.9s 0.1s var(--ease-lux) both;
 }
 
 .hero-title-highlight {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(135deg, #ffffff 30%, var(--color-primary-light) 70%, var(--color-primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: block;
+  margin-top: 0.25rem;
 }
 
 .hero-desc {
-  color: rgba(255, 255, 255, 0.82);
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  max-width: 55ch;
-  margin-inline: auto;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-  animation: fadeInUp 0.9s 0.2s ease both;
+  color: rgba(244, 244, 248, 0.85);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  font-weight: 300;
+  max-width: 58ch;
+  margin-inline: 0;
+  margin-bottom: 2.5rem;
+  line-height: 1.75;
+  animation: fadeInUp 0.9s 0.2s var(--ease-lux) both;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 3rem;
-  animation: fadeInUp 0.9s 0.3s ease both;
+  gap: 1.25rem;
+  justify-content: flex-start;
+  margin-bottom: 3.5rem;
+  animation: fadeInUp 0.9s 0.3s var(--ease-lux) both;
 }
 
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 1rem 2rem;
-  animation: fadeInUp 0.9s 0.4s ease both;
+  justify-content: flex-start;
+  gap: 2rem 3rem;
+  padding: 1.5rem 2rem;
+  background: rgba(18, 18, 26, 0.55);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: fit-content;
+  animation: fadeInUp 0.9s 0.4s var(--ease-lux) both;
 }
 
 .hero-stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .hero-stat strong {
-  font-family: var(--font-heading);
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: 900;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 600;
   color: var(--color-primary);
   line-height: 1;
 }
 
 .hero-stat span {
-  font-size: 0.8125rem;
-  color: rgba(255,255,255,0.65);
+  font-size: 0.75rem;
+  color: rgba(244, 244, 248, 0.7);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 0.25rem;
+  letter-spacing: 0.1em;
+  margin-top: 0.35rem;
+  font-weight: 500;
 }
 
 .hero-stat-divider {
   width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.2);
+  height: 36px;
+  background: rgba(212, 175, 55, 0.25);
 }
 
 /* Scroll Indicator */
