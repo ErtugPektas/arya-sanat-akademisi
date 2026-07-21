@@ -765,12 +765,12 @@ const schema = {
         const galleryTrack = document.querySelector('.gallery-track');
         const items = document.querySelectorAll('.gallery-item');
 
-        if (gallerySec && galleryTrack && items.length > 1) {
+        if (gallerySec && galleryTrack && items.length > 0) {
           const initHorizontalPin = () => {
             const getScrollAmount = () => {
               const trackWidth = galleryTrack.scrollWidth;
               const viewportWidth = window.innerWidth;
-              return -(trackWidth - viewportWidth + 60);
+              return -(trackWidth - viewportWidth + 40);
             };
 
             if (galleryTrack.scrollWidth > window.innerWidth) {
@@ -779,7 +779,7 @@ const schema = {
                 ease: "none",
                 scrollTrigger: {
                   trigger: gallerySec,
-                  start: "center center",
+                  start: "top top+=76",
                   end: () => `+=${Math.abs(getScrollAmount())}`,
                   pin: true,
                   scrub: 1,
@@ -790,7 +790,14 @@ const schema = {
             }
           };
 
-          setTimeout(initHorizontalPin, 200);
+          if (document.readyState === 'complete') {
+            initHorizontalPin();
+          } else {
+            window.addEventListener('load', () => {
+              initHorizontalPin();
+              ScrollTrigger.refresh();
+            });
+          }
         }
       }
     });

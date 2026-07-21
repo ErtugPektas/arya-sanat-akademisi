@@ -1571,13 +1571,21 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 
 .gallery-track-wrapper {
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
-  padding-block: 1rem;
+  padding-block: 1.5rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.gallery-track-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 .gallery-track {
   display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 2rem;
   width: max-content;
   padding-inline: max(5vw, calc((100vw - 1280px) / 2 + 1.5rem));
