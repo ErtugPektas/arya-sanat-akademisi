@@ -352,30 +352,35 @@ const schema = {
 
     <!-- ===== GALLERY SECTION ===== -->
     <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
-      <div class="container">
-        <header class="section-header">
-          <p class="section-tag">Sanat Atölyelerimiz</p>
-          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-          <p class="section-desc">
-            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-          </p>
-        </header>
+      <div class="gallery-pin-container">
+        <div class="container gallery-header-container">
+          <header class="section-header text-center-header">
+            <p class="section-tag">Sanat Atölyelerimiz</p>
+            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+            <p class="section-desc">
+              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+            </p>
+          </header>
+        </div>
 
-        <div class="gallery-grid" role="list">
-          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-            siteSettings.gallery.images.map((img, idx) => (
-              <div class="gallery-item" role="listitem" tabindex="0">
-                <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
-                <div class="gallery-overlay">
-                  <span class="zoom-icon">🔎</span>
+        <div class="gallery-track-wrapper">
+          <div class="gallery-track" role="list">
+            {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+              siteSettings.gallery.images.map((img, idx) => (
+                <div class="gallery-item" role="listitem" tabindex="0">
+                  <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                  <div class="gallery-overlay">
+                    <span class="zoom-icon">🔎</span>
+                    <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
+                <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
               </div>
-            ))
-          ) : (
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
-              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -751,6 +756,43 @@ const schema = {
           });
         });
       });
+
+      // GSAP ScrollTrigger Horizontal Pin Scroll (CodePen dydpJzY Style)
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        const gallerySec = document.querySelector('.gallery-section');
+        const galleryTrack = document.querySelector('.gallery-track');
+        const items = document.querySelectorAll('.gallery-item');
+
+        if (gallerySec && galleryTrack && items.length > 1) {
+          const initHorizontalPin = () => {
+            const getScrollAmount = () => {
+              const trackWidth = galleryTrack.scrollWidth;
+              const viewportWidth = window.innerWidth;
+              return -(trackWidth - viewportWidth + 60);
+            };
+
+            if (galleryTrack.scrollWidth > window.innerWidth) {
+              gsap.to(galleryTrack, {
+                x: getScrollAmount,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: gallerySec,
+                  start: "center center",
+                  end: () => `+=${Math.abs(getScrollAmount())}`,
+                  pin: true,
+                  scrub: 1,
+                  invalidateOnRefresh: true,
+                  anticipatePin: 1
+                }
+              });
+            }
+          };
+
+          setTimeout(initHorizontalPin, 200);
+        }
+      }
     });
   </script>
 </Layout>
