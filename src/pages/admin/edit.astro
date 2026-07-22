@@ -5,9 +5,10 @@ import path from 'path';
 
 export const prerender = false;
 
-// Check session
-const sessionVal = Astro.cookies.has('admin_session') ? Astro.cookies.get('admin_session').value : '';
-const isLoggedIn = sessionVal === 'admin' || sessionVal === 'true';
+// Check session safely
+const sessionCookie = Astro.cookies.get('admin_session');
+const sessionVal = sessionCookie ? sessionCookie.value : '';
+const isLoggedIn = sessionVal === 'admin' || sessionVal === 'teacher' || sessionVal === 'true';
 
 if (!isLoggedIn) {
   return Astro.redirect('/admin');

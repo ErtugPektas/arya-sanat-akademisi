@@ -4,7 +4,8 @@ import path from 'path';
 export const prerender = false;
 
 export async function POST({ request, cookies }) {
-  const sessionVal = cookies.has('admin_session') ? cookies.get('admin_session').value : null;
+  const sessionCookie = cookies.get('admin_session');
+  const sessionVal = sessionCookie ? sessionCookie.value : null;
   const isLoggedIn = sessionVal === 'admin' || sessionVal === 'teacher' || sessionVal === 'true';
 
   if (!isLoggedIn) {
