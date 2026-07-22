@@ -1551,21 +1551,21 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 }
 
 /* Gallery Section Styles (GreenSock CodePen dydpJzY Horizontal Pinning) */
-.gallery-section-gsap {
+.gallery-section {
   position: relative;
   background: var(--color-bg);
   width: 100%;
-  padding-block: 5rem;
-  overflow: hidden;
+  padding-block: 5rem 4rem;
 }
 
-.gallery-sticky-box {
+.gallery-header-container {
+  margin-bottom: 2.5rem;
+}
+
+.gallery-pin-track-area {
   width: 100%;
   position: relative;
-}
-
-.gallery-header-wrap {
-  margin-bottom: 2.5rem;
+  overflow: hidden;
 }
 
 .gallery-panels-container {

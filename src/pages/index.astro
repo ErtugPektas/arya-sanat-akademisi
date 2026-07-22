@@ -351,18 +351,18 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-section-gsap" id="gallery" aria-labelledby="galleryHeading">
-      <div class="gallery-sticky-box">
-        <div class="container gallery-header-wrap">
-          <header class="section-header text-center-header">
-            <p class="section-tag">Sanat Atölyelerimiz</p>
-            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-            <p class="section-desc">
-              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-            </p>
-          </header>
-        </div>
+    <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
+      <div class="container gallery-header-container">
+        <header class="section-header text-center-header">
+          <p class="section-tag">Sanat Atölyelerimiz</p>
+          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+          <p class="section-desc">
+            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+          </p>
+        </header>
+      </div>
 
+      <div class="gallery-pin-track-area">
         <div class="gallery-panels-container">
           {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
             siteSettings.gallery.images.map((img, idx) => (
@@ -764,9 +764,9 @@ const schema = {
         gsap.registerPlugin(ScrollTrigger);
 
         const container = document.querySelector('.gallery-panels-container');
-        const section = document.querySelector('.gallery-section-gsap');
+        const pinArea = document.querySelector('.gallery-pin-track-area');
 
-        if (container && section) {
+        if (container && pinArea) {
           const initGsapHorizontal = () => {
             const getScrollWidth = () => {
               return container.scrollWidth - window.innerWidth + 80;
@@ -777,12 +777,13 @@ const schema = {
                 x: () => -getScrollWidth(),
                 ease: "none",
                 scrollTrigger: {
-                  trigger: section,
+                  trigger: pinArea,
                   pin: true,
                   scrub: 1,
-                  start: "center center",
+                  start: "top top+=100",
                   end: () => "+=" + getScrollWidth(),
-                  invalidateOnRefresh: true
+                  invalidateOnRefresh: true,
+                  anticipatePin: 1
                 }
               });
             }
