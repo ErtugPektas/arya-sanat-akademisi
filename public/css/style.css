@@ -1550,42 +1550,36 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   display: block;
 }
 
-/* Gallery Section Styles (GreenSock CodePen dydpJzY Horizontal Pinning) */
-.gallery-section-pin {
-  position: relative;
+/* ===== Gallery Section ===== */
+.gallery-section {
   background: var(--color-bg);
-  width: 100%;
-  overflow: hidden;
+  padding-block: 5rem 4rem;
 }
 
-.gallery-pin-inner {
-  width: 100%;
-  min-height: 82vh;
+.gallery-scroller {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: 2.5rem 3.5rem;
-  box-sizing: border-box;
-}
-
-.gallery-header-container {
-  margin-bottom: 2rem;
-  flex-shrink: 0;
-}
-
-.gallery-track-overflow {
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.gallery-panels-container {
-  display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
   gap: 2rem;
-  width: max-content;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding-inline: max(2rem, calc((100vw - 1280px) / 2 + 1.5rem));
-  will-change: transform;
+  padding-block: 2rem;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gallery-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-scroller:active {
+  cursor: grabbing;
 }
 
 .gallery-panel-item {

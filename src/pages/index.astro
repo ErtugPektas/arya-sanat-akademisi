@@ -351,39 +351,35 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-section-pin" id="gallery" aria-labelledby="galleryHeading">
-      <div class="gallery-pin-inner">
-        <div class="container gallery-header-container">
-          <header class="section-header text-center-header">
-            <p class="section-tag">Sanat Atölyelerimiz</p>
-            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-            <p class="section-desc">
-              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-            </p>
-          </header>
-        </div>
+    <section class="gallery-section" id="gallery" aria-labelledby="galleryHeading">
+      <div class="container">
+        <header class="section-header text-center-header">
+          <p class="section-tag">Sanat Atölyelerimiz</p>
+          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+          <p class="section-desc">
+            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+          </p>
+        </header>
+      </div>
 
-        <div class="gallery-track-overflow">
-          <div class="gallery-panels-container">
-            {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-              siteSettings.gallery.images.map((img, idx) => (
-                <div class="gallery-panel-item" role="listitem" tabindex="0">
-                  <div class="gallery-card-inner">
-                    <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
-                    <div class="gallery-overlay">
-                      <span class="zoom-icon">🔎</span>
-                      <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
-                    </div>
-                  </div>
+      <div class="gallery-scroller">
+        {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+          siteSettings.gallery.images.map((img, idx) => (
+            <div class="gallery-panel-item" role="listitem" tabindex="0">
+              <div class="gallery-card-inner">
+                <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                <div class="gallery-overlay">
+                  <span class="zoom-icon">🔎</span>
+                  <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
                 </div>
-              ))
-            ) : (
-              <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
-                <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
               </div>
-            )}
+            </div>
+          ))
+        ) : (
+          <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; min-width: 300px;">
+            <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
           </div>
-        </div>
+        )}
       </div>
     </section>
 
@@ -761,48 +757,28 @@ const schema = {
         });
       });
 
-      // Official GreenSock Pen dydpJzY Horizontal ScrollTrigger Pinning
-      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
+      // Gallery Smooth Drag Scroll
+      const scroller = document.querySelector('.gallery-scroller');
+      if (scroller) {
+        let isDown = false;
+        let startX;
+        let scrollLeftStart;
 
-        const container = document.querySelector('.gallery-panels-container');
-        const section = document.querySelector('.gallery-section-pin');
-
-        if (container && section) {
-          const initGsapHorizontal = () => {
-            const getScrollDistance = () => {
-              const trackWidth = container.scrollWidth;
-              const viewportWidth = window.innerWidth;
-              return Math.max(0, trackWidth - viewportWidth + 140);
-            };
-
-            if (container.scrollWidth > window.innerWidth) {
-              const dist = getScrollDistance();
-              gsap.to(container, {
-                x: () => -dist,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: section,
-                  pin: true,
-                  scrub: 1.8,
-                  start: "top top+=76",
-                  end: () => "+=" + Math.round(dist * 1.6),
-                  invalidateOnRefresh: true,
-                  anticipatePin: 1
-                }
-              });
-            }
-          };
-
-          if (document.readyState === 'complete') {
-            initGsapHorizontal();
-          } else {
-            window.addEventListener('load', () => {
-              initGsapHorizontal();
-              ScrollTrigger.refresh();
-            });
-          }
-        }
+        scroller.addEventListener('mousedown', (e) => {
+          isDown = true;
+          scroller.style.cursor = 'grabbing';
+          startX = e.pageX - scroller.offsetLeft;
+          scrollLeftStart = scroller.scrollLeft;
+        });
+        scroller.addEventListener('mouseleave', () => { isDown = false; scroller.style.cursor = 'grab'; });
+        scroller.addEventListener('mouseup', () => { isDown = false; scroller.style.cursor = 'grab'; });
+        scroller.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - scroller.offsetLeft;
+          const walk = (x - startX) * 1.5;
+          scroller.scrollLeft = scrollLeftStart - walk;
+        });
       }
     });
   </script>
