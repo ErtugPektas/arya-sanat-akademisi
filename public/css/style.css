@@ -461,14 +461,14 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
    -------------------------------------------------------------------------- */
 .hero {
   position: relative;
-  min-height: 92vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding-top: calc(var(--nav-height) + 2rem);
-  padding-bottom: 4rem;
+  padding-top: calc(var(--nav-height) + 3.5rem);
+  padding-bottom: 5rem;
   padding-inline: clamp(1.5rem, 4vw, 4rem);
   overflow: hidden;
 }
