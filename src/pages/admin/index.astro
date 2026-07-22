@@ -95,12 +95,20 @@ if (isLoggedIn) {
 
 <Layout title="Yönetim Paneli | Arya Sanat Akademisi" description="Arya Sanat Akademisi Yönetim Paneli">
   <link rel="stylesheet" href="/css/style.css" slot="head" />
+  <style slot="head">
+    @media (max-width: 640px) {
+      .admin-topbar { padding: 0.85rem 1rem !important; flex-wrap: wrap; gap: 0.75rem !important; }
+      .admin-topbar-actions { width: 100%; justify-content: space-between; gap: 0.5rem !important; }
+      .admin-main-wrapper { padding: 1.5rem 0.875rem !important; }
+      .admin-login-box { margin: 1.5rem auto !important; padding: 2rem 1.25rem !important; }
+    }
+  </style>
   
   <div class="admin-container" style="min-height: 100vh; padding: 0 0 4rem 0; background: #07070a; color: #fff; font-family: sans-serif;">
     
     <!-- CUSTOM ADMIN TOPBAR -->
     {isLoggedIn && (
-      <div style="background: #101016; border-bottom: 1px solid #1f1f2e; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+      <div class="admin-topbar" style="background: #101016; border-bottom: 1px solid #1f1f2e; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <span style="font-size: 1.5rem; color: #d4af37;">♩</span>
           <div>
@@ -108,7 +116,7 @@ if (isLoggedIn) {
             <span style="color: #d4af37; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Yönetim Paneli</span>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <div class="admin-topbar-actions" style="display: flex; align-items: center; gap: 1.5rem;">
           <a href="/" target="_blank" style="color: #b4b4c6; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#b4b4c6'"> Canlı Siteyi Gör 🌐</a>
           <a 
             href="/admin?action=logout" 
