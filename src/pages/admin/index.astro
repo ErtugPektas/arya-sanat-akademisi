@@ -1265,16 +1265,80 @@ if (!courses || courses.length === 0) {
 
 <!-- CLIENT-SIDE TABS AND SVG GRAPH SCHEDULER -->
 <script is:inline define:vars={{ initialAnnouncements: duyurular, initialErpData: erpData, userRole: role, activeTeacher: activeTeacherName }}>
+  async function compressImageIfNeeded(file) {
+    if (!file || !file.type || !file.type.startsWith('image/') || file.size < 800000) {
+      return file;
+    }
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 1200;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: 'image/jpeg' }));
+            } else {
+              resolve(file);
+            }
+          }, 'image/jpeg', 0.8);
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function safeFetchJson(url, options) {
+    try {
+      const response = await fetch(url, options);
+      const text = await response.text();
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        if (response.status === 413 || text.includes('Request Entity Too Large') || text.includes('Too Large')) {
+          return { ok: false, error: 'Yüklenen içerik/görsel boyutu Vercel sınırını aşıyor (Max 4.5MB). Lütfen daha küçük görseller kullanınız.' };
+        }
+        return { ok: false, error: `Sunucu Yanıt Hatası (${response.status}): ${text.substring(0, 100)}` };
+      }
+      return { ok: response.ok, status: response.status, ...data };
+    } catch (err) {
+      return { ok: false, error: err.message || 'Ağ bağlantı hatası' };
+    }
+  }
+
   async function uploadFile(inputEl, textInputId, previewImgId) {
     if (!inputEl.files || !inputEl.files[0]) return;
     
-    const file = inputEl.files[0];
+    const originalFile = inputEl.files[0];
     const btn = inputEl.previousElementSibling;
     const originalText = btn ? btn.innerText : 'Yükle';
     if (btn) {
       btn.disabled = true;
-      btn.innerText = 'Yükleniyor... ⏳';
+      btn.innerText = 'Sıkıştırılıyor... ⏳';
     }
+    
+    const file = await compressImageIfNeeded(originalFile);
+    if (btn) btn.innerText = 'Yükleniyor... ⏳';
     
     const setUploadedUrl = (url) => {
       const inputTarget = document.getElementById(textInputId);
@@ -1302,7 +1366,16 @@ if (!courses || courses.length === 0) {
         body: formData
       });
       
-      const result = await response.json();
+      const responseText = await response.text();
+      let result = {};
+      try {
+        result = JSON.parse(responseText);
+      } catch(e) {
+        if (response.status === 413 || responseText.includes('Too Large')) {
+          alert('❌ Yüklenen görsel boyutu çok büyük (Max 4.5MB). Lütfen daha küçük bir resim seçiniz.');
+          return;
+        }
+      }
       
       if (response.ok && result.success && result.url) {
         setUploadedUrl(result.url);
@@ -2889,17 +2962,15 @@ if (!courses || courses.length === 0) {
       btnSaveSettings.innerText = 'Kaydediliyor... ⏳';
 
       try {
-        const response = await fetch('/api/save-settings', {
+        const result = await safeFetchJson('/api/save-settings', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ settings })
         });
-
-        const result = await response.json();
         
-        if (response.ok && result.success) {
+        if (result.ok && result.success) {
           localStorage.setItem('admin_site_settings_cache', JSON.stringify(settings));
           alert(result.local 
             ? '✓ Ayarlar yerel diske başarıyla kaydedildi!' 
@@ -2910,7 +2981,7 @@ if (!courses || courses.length === 0) {
           alert('❌ Hata oluştu: ' + (result.error || 'Bilinmeyen hata'));
         }
       } catch (err) {
-        alert('❌ Bağlantı hatası: ' + err.message);
+        alert('❌ Kaydetme hatası: ' + err.message);
       } finally {
         btnSaveSettings.disabled = false;
         btnSaveSettings.innerText = 'Ayarları Kaydet 💾';
