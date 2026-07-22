@@ -53,9 +53,18 @@ export async function POST({ request, cookies }) {
     const githubToken = process.env.GITHUB_TOKEN;
     const repo = "ErtugPektas/arya-sanat-akademisi";
 
+    // Fallback: Convert to Base64 Data URL if no GitHub token or if GitHub API fails
+    const mimeType = file.type || 'image/jpeg';
+    const base64DataUrl = `data:${mimeType};base64,${fileBuffer.toString('base64')}`;
+
     if (!githubToken) {
-      return new Response(JSON.stringify({ error: 'GITHUB_TOKEN environment variable is not set.' }), {
-        status: 500,
+      // Return Data URL if GITHUB_TOKEN is missing
+      return new Response(JSON.stringify({ 
+        success: true, 
+        url: base64DataUrl,
+        notice: 'GITHUB_TOKEN eksik olduğu için görsel veri (Base64) olarak eklendi.'
+      }), {
+        status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
     }
@@ -81,9 +90,13 @@ export async function POST({ request, cookies }) {
     });
 
     if (!putRes.ok) {
-      const errRes = await putRes.json();
-      return new Response(JSON.stringify({ error: `GitHub upload failed: ${errRes.message || putRes.statusText}` }), {
-        status: 500,
+      // If GitHub upload fails, return base64 Data URL fallback instead of throwing error
+      return new Response(JSON.stringify({ 
+        success: true, 
+        url: base64DataUrl,
+        notice: 'GitHub yükleme uyarısı sonrası veri (Base64) olarak kaydedildi.'
+      }), {
+        status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
     }

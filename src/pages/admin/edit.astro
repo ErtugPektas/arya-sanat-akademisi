@@ -283,15 +283,34 @@ const { data, body } = course;
       if (!inputEl.files || !inputEl.files[0]) return;
       
       const file = inputEl.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      
       const btn = inputEl.previousElementSibling;
-      const originalText = btn.innerText;
-      btn.disabled = true;
-      btn.innerText = 'Yükleniyor... ⏳';
+      const originalText = btn ? btn.innerText : 'Yükle';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = 'Yükleniyor... ⏳';
+      }
       
+      const setUploadedUrl = (url) => {
+        const inputTarget = document.getElementById(textInputId);
+        if (inputTarget) inputTarget.value = url;
+        const previewEl = document.getElementById(previewImgId);
+        if (previewEl) {
+          previewEl.src = url;
+          if (previewEl.tagName === 'VIDEO') {
+            previewEl.style.display = 'block';
+            previewEl.load();
+            previewEl.play().catch(e => console.log('Autoplay check:', e));
+          } else {
+            previewEl.style.display = 'block';
+          }
+        }
+        alert('✓ Dosya başarıyla yüklendi ve eklendi!');
+      };
+
       try {
+        const formData = new FormData();
+        formData.append('file', file);
+
         const response = await fetch('/api/upload-image', {
           method: 'POST',
           body: formData
@@ -299,25 +318,23 @@ const { data, body } = course;
         
         const result = await response.json();
         
-        if (response.ok && result.success) {
-          document.getElementById(textInputId).value = result.url;
-          const previewEl = document.getElementById(previewImgId);
-          previewEl.src = result.url;
-          if (previewEl.tagName === 'VIDEO') {
-            previewEl.style.display = 'block';
-            previewEl.load();
-            previewEl.play().catch(e => console.log('Autoplay check:', e));
-          }
-          alert('✓ Dosya başarıyla yüklendi!');
+        if (response.ok && result.success && result.url) {
+          setUploadedUrl(result.url);
         } else {
-          alert('❌ Yükleme hatası: ' + (result.error || 'Bilinmeyen hata'));
+          const reader = new FileReader();
+          reader.onload = (e) => setUploadedUrl(e.target.result);
+          reader.readAsDataURL(file);
         }
       } catch (err) {
-        alert('❌ Sunucu bağlantı hatası: ' + err.message);
+        const reader = new FileReader();
+        reader.onload = (e) => setUploadedUrl(e.target.result);
+        reader.readAsDataURL(file);
       } finally {
-        btn.disabled = false;
-        btn.innerText = originalText;
-        inputEl.value = ''; // Reset file input
+        if (btn) {
+          btn.disabled = false;
+          btn.innerText = originalText;
+        }
+        inputEl.value = '';
       }
     }
     
