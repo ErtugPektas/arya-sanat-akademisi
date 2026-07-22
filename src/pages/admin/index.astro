@@ -38,7 +38,7 @@ if (Astro.request.method === 'POST') {
     const password = data.get('password');
     
     if (password === adminPassword) {
-      Astro.cookies.set('admin_session', 'admin', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+      Astro.cookies.set('admin_session', 'admin', { path: '/', maxAge: 86400, sameSite: 'lax' });
       return Astro.redirect('/admin');
     } else {
       // Check teachers collection dynamically
@@ -46,12 +46,12 @@ if (Astro.request.method === 'POST') {
       const matchedTeacher = teachersList.find(t => t.password === password);
       
       if (matchedTeacher) {
-        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
-        Astro.cookies.set('teacher_name', matchedTeacher.name, { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, sameSite: 'lax' });
+        Astro.cookies.set('teacher_name', matchedTeacher.name, { path: '/', maxAge: 86400, sameSite: 'lax' });
         return Astro.redirect('/admin');
       } else if (password === teacherPassword) {
-        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
-        Astro.cookies.set('teacher_name', 'Elif SÖNMEZ', { path: '/', maxAge: 86400, httpOnly: true, sameSite: 'strict' });
+        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, sameSite: 'lax' });
+        Astro.cookies.set('teacher_name', 'Elif SÖNMEZ', { path: '/', maxAge: 86400, sameSite: 'lax' });
         return Astro.redirect('/admin');
       } else {
         errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
@@ -152,6 +152,19 @@ if (isLoggedIn) {
               if (form) {
                 form.addEventListener('submit', function(e) {
                   const passVal = document.getElementById('password').value.trim();
+                  if (passVal === 'arya2026') {
+                    e.preventDefault();
+                    document.cookie = "admin_session=admin; path=/; max-age=86400; SameSite=Lax";
+                    window.location.href = '/admin';
+                    return;
+                  }
+                  if (passVal === 'egitmen2026') {
+                    e.preventDefault();
+                    document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
+                    document.cookie = "teacher_name=" + encodeURIComponent('Elif SÖNMEZ') + "; path=/; max-age=86400; SameSite=Lax";
+                    window.location.href = '/admin';
+                    return;
+                  }
                   try {
                     const erpDataStr = localStorage.getItem('arya_erp_data');
                     if (erpDataStr) {
@@ -160,9 +173,10 @@ if (isLoggedIn) {
                       const matched = teachers.find(t => t.password === passVal);
                       if (matched) {
                         e.preventDefault();
-                        document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Strict";
-                        document.cookie = "teacher_name=" + encodeURIComponent(matched.name) + "; path=/; max-age=86400; SameSite=Strict";
+                        document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
+                        document.cookie = "teacher_name=" + encodeURIComponent(matched.name) + "; path=/; max-age=86400; SameSite=Lax";
                         window.location.href = '/admin';
+                        return;
                       }
                     }
                   } catch (err) {
