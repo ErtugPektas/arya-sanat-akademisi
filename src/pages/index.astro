@@ -773,19 +773,20 @@ const schema = {
             const getScrollDistance = () => {
               const trackWidth = container.scrollWidth;
               const viewportWidth = window.innerWidth;
-              return Math.max(0, trackWidth - viewportWidth + 120);
+              return Math.max(0, trackWidth - viewportWidth + 140);
             };
 
             if (container.scrollWidth > window.innerWidth) {
+              const dist = getScrollDistance();
               gsap.to(container, {
-                x: () => -getScrollDistance(),
+                x: () => -dist,
                 ease: "none",
                 scrollTrigger: {
                   trigger: section,
                   pin: true,
-                  scrub: 1,
-                  start: "top top+=84",
-                  end: () => "+=" + (getScrollDistance() + 200),
+                  scrub: 1.8,
+                  start: "top top+=76",
+                  end: () => "+=" + Math.round(dist * 1.6),
                   invalidateOnRefresh: true,
                   anticipatePin: 1
                 }
