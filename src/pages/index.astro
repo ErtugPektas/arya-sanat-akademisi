@@ -320,9 +320,9 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-section gallery-hidden" id="gallery" aria-labelledby="galleryHeading">
+    <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
       <div class="container">
-        <header class="section-header text-center-header gallery-header-reveal">
+        <header class="section-header text-center-header">
           <p class="section-tag">Sanat Atölyelerimiz</p>
           <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
           <p class="section-desc">
@@ -331,24 +331,34 @@ const schema = {
         </header>
       </div>
 
-      <div class="gallery-scroller">
-        {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-          siteSettings.gallery.images.map((img, idx) => (
-            <div class="gallery-panel-item gallery-item-hidden" role="listitem" tabindex="0" style={`--item-index: ${idx}`}>
-              <div class="gallery-card-inner">
-                <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
-                <div class="gallery-overlay">
-                  <span class="zoom-icon">🔎</span>
-                  <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
+      <div class="gallery-container-wrapper">
+        <button class="gallery-nav-btn prev" id="galleryPrevBtn" aria-label="Önceki Fotoğraflar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+
+        <div class="gallery-scroller" id="galleryScroller">
+          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+            siteSettings.gallery.images.map((img, idx) => (
+              <div class="gallery-panel-item" role="listitem" tabindex="0">
+                <div class="gallery-card-inner">
+                  <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                  <div class="gallery-overlay">
+                    <span class="zoom-icon">🔎</span>
+                    <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; min-width: 300px;">
+              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
             </div>
-          ))
-        ) : (
-          <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; min-width: 300px;">
-            <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
-          </div>
-        )}
+          )}
+        </div>
+
+        <button class="gallery-nav-btn next" id="galleryNextBtn" aria-label="Sonraki Fotoğraflar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </section>
 
@@ -741,21 +751,43 @@ const schema = {
         });
       });
 
-      // Gallery Smooth Drag Scroll
-      const scroller = document.querySelector('.gallery-scroller');
+      // Gallery Navigation Buttons & Smooth Drag Scroll
+      const scroller = document.getElementById('galleryScroller');
+      const prevBtn = document.getElementById('galleryPrevBtn');
+      const nextBtn = document.getElementById('galleryNextBtn');
+
       if (scroller) {
+        // Arrow Buttons
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            scroller.scrollBy({ left: -360, behavior: 'smooth' });
+          });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            scroller.scrollBy({ left: 360, behavior: 'smooth' });
+          });
+        }
+
+        // Mouse Drag Scroll
         let isDown = false;
         let startX;
         let scrollLeftStart;
 
         scroller.addEventListener('mousedown', (e) => {
           isDown = true;
-          scroller.style.cursor = 'grabbing';
+          scroller.classList.add('dragging');
           startX = e.pageX - scroller.offsetLeft;
           scrollLeftStart = scroller.scrollLeft;
         });
-        scroller.addEventListener('mouseleave', () => { isDown = false; scroller.style.cursor = 'grab'; });
-        scroller.addEventListener('mouseup', () => { isDown = false; scroller.style.cursor = 'grab'; });
+
+        window.addEventListener('mouseup', () => {
+          if (isDown) {
+            isDown = false;
+            scroller.classList.remove('dragging');
+          }
+        });
+
         scroller.addEventListener('mousemove', (e) => {
           if (!isDown) return;
           e.preventDefault();
@@ -763,24 +795,6 @@ const schema = {
           const walk = (x - startX) * 1.5;
           scroller.scrollLeft = scrollLeftStart - walk;
         });
-      }
-
-      // Gallery Scroll Reveal (Intersection Observer)
-      const gallerySection = document.querySelector('.gallery-section.gallery-hidden');
-      if (gallerySection) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                gallerySection.classList.remove('gallery-hidden');
-                gallerySection.classList.add('gallery-visible');
-                observer.disconnect();
-              }
-            });
-          },
-          { threshold: 0.15 }
-        );
-        observer.observe(gallerySection);
       }
     });
   </script>
