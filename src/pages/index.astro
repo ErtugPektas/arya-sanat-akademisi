@@ -351,36 +351,38 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="section gallery-section" id="gallery" aria-labelledby="galleryHeading">
-      <div class="container gallery-header-container">
-        <header class="section-header text-center-header">
-          <p class="section-tag">Sanat Atölyelerimiz</p>
-          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-          <p class="section-desc">
-            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-          </p>
-        </header>
-      </div>
+    <section class="gallery-section-pin" id="gallery" aria-labelledby="galleryHeading">
+      <div class="gallery-pin-inner">
+        <div class="container gallery-header-container">
+          <header class="section-header text-center-header">
+            <p class="section-tag">Sanat Atölyelerimiz</p>
+            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+            <p class="section-desc">
+              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+            </p>
+          </header>
+        </div>
 
-      <div class="gallery-pin-track-area">
-        <div class="gallery-panels-container">
-          {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
-            siteSettings.gallery.images.map((img, idx) => (
-              <div class="gallery-panel-item" role="listitem" tabindex="0">
-                <div class="gallery-card-inner">
-                  <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
-                  <div class="gallery-overlay">
-                    <span class="zoom-icon">🔎</span>
-                    <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
+        <div class="gallery-track-overflow">
+          <div class="gallery-panels-container">
+            {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
+              siteSettings.gallery.images.map((img, idx) => (
+                <div class="gallery-panel-item" role="listitem" tabindex="0">
+                  <div class="gallery-card-inner">
+                    <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
+                    <div class="gallery-overlay">
+                      <span class="zoom-icon">🔎</span>
+                      <span class="gallery-caption">Büyütmek İçin Tıklayın</span>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
+                <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
               </div>
-            ))
-          ) : (
-            <div style="text-align: center; padding: 3rem; background: #161622; border-radius: 12px; border: 1px dashed #2d2d3d; width: 100%;">
-              <p style="color: #b4b4c6;">Henüz galeri görseli eklenmemiş. Panelden görsel yükleyebilirsiniz! 📸</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -764,9 +766,9 @@ const schema = {
         gsap.registerPlugin(ScrollTrigger);
 
         const container = document.querySelector('.gallery-panels-container');
-        const pinArea = document.querySelector('.gallery-pin-track-area');
+        const section = document.querySelector('.gallery-section-pin');
 
-        if (container && pinArea) {
+        if (container && section) {
           const initGsapHorizontal = () => {
             const getScrollDistance = () => {
               const trackWidth = container.scrollWidth;
@@ -779,7 +781,7 @@ const schema = {
                 x: () => -getScrollDistance(),
                 ease: "none",
                 scrollTrigger: {
-                  trigger: pinArea,
+                  trigger: section,
                   pin: true,
                   scrub: 1,
                   start: "top top+=84",
