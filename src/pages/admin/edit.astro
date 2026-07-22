@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import path from 'path';
 
 export const prerender = false;
 
@@ -20,7 +21,28 @@ if (!courseId) {
   return Astro.redirect('/admin');
 }
 
-let course = await getEntry('kurslar', courseId);
+let course = null;
+try {
+  course = await getEntry('kurslar', courseId);
+} catch (e) {
+  console.error('getEntry SSR error in Vercel environment:', e);
+}
+
+if (!course) {
+  try {
+    const globCourses = import.meta.glob('../../content/kurslar/*.md', { eager: true });
+    const matchKey = Object.keys(globCourses).find(k => k.endsWith(`/${courseId}.md`));
+    if (matchKey) {
+      const mod = globCourses[matchKey];
+      course = {
+        id: courseId,
+        data: mod.frontmatter || mod
+      };
+    }
+  } catch (err) {
+    console.error('glob course match error:', err);
+  }
+}
 
 if (!course) {
   course = {

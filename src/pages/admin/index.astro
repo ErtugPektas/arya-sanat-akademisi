@@ -69,7 +69,25 @@ const activeTeacherName = Astro.cookies.has('teacher_name') ? Astro.cookies.get(
 
 let courses = [];
 if (isLoggedIn) {
-  courses = await getCollection('kurslar');
+  try {
+    courses = await getCollection('kurslar');
+  } catch (e) {
+    console.error('getCollection SSR error in Vercel environment:', e);
+  }
+  if (!courses || courses.length === 0) {
+    try {
+      const globCourses = import.meta.glob('../../content/kurslar/*.md', { eager: true });
+      courses = Object.entries(globCourses).map(([filepath, mod]) => {
+        const id = path.basename(filepath, '.md');
+        return {
+          id,
+          data: mod.frontmatter || mod
+        };
+      });
+    } catch (err) {
+      console.error('glob courses fallback error:', err);
+    }
+  }
 }
 ---
 
