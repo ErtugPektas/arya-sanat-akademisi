@@ -320,27 +320,27 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-pin-section" id="gallery" aria-labelledby="galleryHeading">
-      <div class="gallery-pin-wrapper">
-        <div class="container gallery-header-wrap">
-          <header class="section-header text-center-header">
-            <p class="section-tag">Sanat Atölyelerimiz</p>
-            <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
-            <p class="section-desc">
-              {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
-            </p>
-          </header>
-        </div>
+    <section class="section gallery-section" id="portfolio" aria-labelledby="galleryHeading">
+      <div class="container">
+        <header class="section-header text-center-header">
+          <p class="section-tag">Sanat Atölyelerimiz</p>
+          <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
+          <p class="section-desc">
+            {siteSettings.gallery ? siteSettings.gallery.desc : "Atölyelerimiz, bireysel dersliklerimiz ve sanatsal etkinliklerimizden en özel anlar."}
+          </p>
+        </header>
+      </div>
 
-        <div class="gallery-track-outer">
-          <button class="gallery-nav-btn prev" id="galleryPrevBtn" aria-label="Önceki Fotoğraflar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
+      <div class="container-fluid" style="position: relative;">
+        <button class="gallery-nav-btn prev" id="galleryPrevBtn" aria-label="Önceki Fotoğraflar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
 
-          <div class="gallery-track" id="galleryTrack">
+        <div class="horiz-gallery-wrapper">
+          <div class="horiz-gallery-strip" id="galleryTrack">
             {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
               siteSettings.gallery.images.map((img, idx) => (
-                <div class="gallery-panel-item" role="listitem" tabindex="0">
+                <div class="project-wrap" role="listitem" tabindex="0">
                   <div class="gallery-card-inner">
                     <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
                     <div class="gallery-overlay">
@@ -356,11 +356,11 @@ const schema = {
               </div>
             )}
           </div>
-
-          <button class="gallery-nav-btn next" id="galleryNextBtn" aria-label="Sonraki Fotoğraflar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
         </div>
+
+        <button class="gallery-nav-btn next" id="galleryNextBtn" aria-label="Sonraki Fotoğraflar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </section>
 
@@ -753,72 +753,68 @@ const schema = {
         });
       });
 
-      // GSAP ScrollTrigger Horizontal Pin & Nav Buttons
+      // Horizontal Scroll Gallery (CodePen GSAP Pinning)
       if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        const section = document.querySelector('.gallery-pin-section');
-        const track = document.getElementById('galleryTrack');
-        const prevBtn = document.getElementById('galleryPrevBtn');
-        const nextBtn = document.getElementById('galleryNextBtn');
+        const portfolioSec = document.getElementById("portfolio");
+        if (portfolioSec) {
+          const horizontalSections = gsap.utils.toArray(".horiz-gallery-wrapper");
 
-        if (section && track) {
-          const getScrollDistance = () => {
-            return Math.max(0, track.scrollWidth - window.innerWidth + 120);
-          };
+          horizontalSections.forEach(function (sec) {
+            const pinWrap = sec.querySelector(".horiz-gallery-strip");
+            if (!pinWrap) return;
 
-          let anim;
-          const initGsapPin = () => {
-            if (track.scrollWidth > window.innerWidth) {
-              anim = gsap.to(track, {
-                x: () => -getScrollDistance(),
-                ease: "none",
-                scrollTrigger: {
-                  trigger: section,
-                  pin: true,
-                  scrub: 1.2,
-                  start: "top top+=76",
-                  end: () => "+=" + Math.round(getScrollDistance() * 1.4),
-                  invalidateOnRefresh: true,
-                  anticipatePin: 1
+            let pinWrapWidth;
+            let horizontalScrollLength;
+
+            function refresh() {
+              pinWrapWidth = pinWrap.scrollWidth;
+              horizontalScrollLength = Math.max(0, pinWrapWidth - window.innerWidth + 100);
+            }
+
+            refresh();
+
+            const anim = gsap.to(pinWrap, {
+              x: () => -horizontalScrollLength,
+              ease: "none",
+              scrollTrigger: {
+                trigger: portfolioSec,
+                pin: portfolioSec,
+                scrub: true,
+                start: "center center",
+                end: () => `+=${pinWrapWidth}`,
+                invalidateOnRefresh: true,
+                anticipatePin: 1
+              }
+            });
+
+            ScrollTrigger.addEventListener("refreshInit", refresh);
+
+            // Left / Right Navigation Arrow Buttons
+            const prevBtn = document.getElementById('galleryPrevBtn');
+            const nextBtn = document.getElementById('galleryNextBtn');
+
+            if (prevBtn) {
+              prevBtn.addEventListener('click', () => {
+                const st = anim.scrollTrigger;
+                if (st) {
+                  const targetScroll = Math.max(st.start, st.scroll() - 400);
+                  window.scrollTo({ top: targetScroll, behavior: 'smooth' });
                 }
               });
             }
-          };
 
-          if (document.readyState === 'complete') {
-            initGsapPin();
-          } else {
-            window.addEventListener('load', () => {
-              initGsapPin();
-              ScrollTrigger.refresh();
-            });
-          }
-
-          // Arrow Buttons drive ScrollTrigger scroll position
-          if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-              if (anim && anim.scrollTrigger) {
+            if (nextBtn) {
+              nextBtn.addEventListener('click', () => {
                 const st = anim.scrollTrigger;
-                const target = Math.max(st.start, st.scroll() - 420);
-                window.scrollTo({ top: target, behavior: 'smooth' });
-              } else if (track) {
-                track.scrollBy({ left: -360, behavior: 'smooth' });
-              }
-            });
-          }
-
-          if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-              if (anim && anim.scrollTrigger) {
-                const st = anim.scrollTrigger;
-                const target = Math.min(st.end, st.scroll() + 420);
-                window.scrollTo({ top: target, behavior: 'smooth' });
-              } else if (track) {
-                track.scrollBy({ left: 360, behavior: 'smooth' });
-              }
-            });
-          }
+                if (st) {
+                  const targetScroll = Math.min(st.end, st.scroll() + 400);
+                  window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                }
+              });
+            }
+          });
         }
       }
     });
