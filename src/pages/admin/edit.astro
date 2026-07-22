@@ -14,9 +14,8 @@ if (!isLoggedIn) {
   return Astro.redirect('/admin');
 }
 
-// Get course parameter
-const url = new URL(Astro.request.url);
-const courseId = url.searchParams.get('course');
+// Get course parameter safely
+const courseId = Astro.url.searchParams.get('course');
 
 if (!courseId) {
   return Astro.redirect('/admin');

@@ -23,9 +23,8 @@ let errorMsg = '';
 const adminPassword = process.env.ADMIN_PASSWORD || 'arya2026';
 const teacherPassword = process.env.TEACHER_PASSWORD || 'egitmen2026';
 
-// Check logout
-const url = new URL(Astro.request.url);
-if (url.searchParams.get('action') === 'logout') {
+// Check logout safely
+if (Astro.url.searchParams.get('action') === 'logout') {
   Astro.cookies.delete('admin_session', { path: '/' });
   Astro.cookies.delete('teacher_name', { path: '/' });
   return Astro.redirect('/admin');
