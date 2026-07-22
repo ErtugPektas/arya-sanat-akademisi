@@ -2,7 +2,19 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import duyurular from '../content/duyurular.json';
-import siteSettings from '../content/site-settings.json';
+import defaultSiteSettings from '../content/site-settings.json';
+import fs from 'fs';
+import path from 'path';
+
+let siteSettings = defaultSiteSettings;
+try {
+  const settingsPath = path.resolve(process.cwd(), 'src/content/site-settings.json');
+  if (fs.existsSync(settingsPath)) {
+    siteSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+  }
+} catch (e) {
+  console.error("Failed to read site-settings.json dynamically:", e);
+}
 
 const courses = await getCollection('kurslar');
 
@@ -180,7 +192,6 @@ const schema = {
               class={`course-tab-pill ${idx === 0 ? 'active' : ''}`}
               role="tab"
               aria-selected={idx === 0 ? 'true' : 'false'}
-              aria-controls={`panel-${course.id}`}
               id={`tab-${course.id}`}
               data-index={idx}
             >
@@ -189,43 +200,52 @@ const schema = {
           ))}
         </div>
 
-        <!-- Course Panels -->
-        <div class="courses-panels">
-          {courses.map((course, idx) => (
-            <article
-              class={`course-panel ${idx === 0 ? 'active' : ''}`}
-              id={`panel-${course.id}`}
-              role="tabpanel"
-              aria-labelledby={`tab-${course.id}`}
-            >
-              <div class="course-panel-img">
-                <img
-                  src={course.data.image}
-                  alt={`${course.data.heroTitle} dersi`}
-                  loading="lazy"
-                  width="560"
-                  height="340"
-                />
-                <div class="course-panel-badge">{course.data.heroTitle}</div>
-              </div>
-              <div class="course-panel-body">
-                <h3 class="course-panel-title">{course.data.heroTitle}</h3>
-                <p class="course-panel-desc">{course.data.description}</p>
-                <ul class="course-panel-meta">
-                  <li><span class="meta-label">Süre</span><span class="meta-value">{course.data.duration}</span></li>
-                  <li><span class="meta-label">Sıklık</span><span class="meta-value">{course.data.frequency}</span></li>
-                  <li><span class="meta-label">Sertifika</span><span class="meta-value">{course.data.certificate}</span></li>
-                </ul>
-                <div class="course-panel-actions">
-                  <a href={`/kurslar/${course.id}`} class="btn btn-primary" id={`${course.id}Btn`}>
-                    Detaylı İncele
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                  </a>
-                  <a href="#contact" class="btn btn-outline">Ücretsiz Deneme</a>
+        <!-- Infinite Loop Courses Carousel Wrapper (RwKwLWK) -->
+        <div class="courses-carousel-wrapper">
+          <button class="courses-nav-btn prev" id="coursesPrevBtn" aria-label="Önceki Kurs">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+
+          <div class="courses-slider-viewport" id="coursesSliderViewport">
+            <div class="courses-slider-track" id="coursesSliderTrack">
+              {courses.map((course, idx) => (
+                <div class="course-card-item" data-index={idx} id={`course-card-${course.id}`}>
+                  <article class="course-card-inner">
+                    <div class="course-card-media">
+                      <img
+                        src={course.data.image}
+                        alt={`${course.data.heroTitle} dersi`}
+                        loading="lazy"
+                        width="360"
+                        height="200"
+                      />
+                      <div class="course-card-badge">{course.data.badge || course.data.heroTitle}</div>
+                    </div>
+                    <div class="course-card-body">
+                      <h3 class="course-card-title">{course.data.heroTitle}</h3>
+                      <p class="course-card-desc">{course.data.description}</p>
+                      <div class="course-card-meta-tags">
+                        <span class="meta-tag">⏱️ {course.data.duration}</span>
+                        <span class="meta-tag">📅 {course.data.frequency}</span>
+                        <span class="meta-tag">🎓 {course.data.certificate}</span>
+                      </div>
+                      <div class="course-card-actions">
+                        <a href={`/kurslar/${course.id}`} class="btn btn-primary" id={`${course.id}Btn`}>
+                          Detaylı İncele
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                        </a>
+                        <a href="#contact" class="btn btn-outline">Ücretsiz Deneme</a>
+                      </div>
+                    </div>
+                  </article>
                 </div>
-              </div>
-            </article>
-          ))}
+              ))}
+            </div>
+          </div>
+
+          <button class="courses-nav-btn next" id="coursesNextBtn" aria-label="Sonraki Kurs">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
         </div>
       </div>
     </section>
@@ -738,20 +758,173 @@ const schema = {
         });
       });
 
-      // Course Tab Switching
-      const tabs = document.querySelectorAll('.course-tab-pill');
-      const panels = document.querySelectorAll('.course-panel');
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          const targetId = tab.getAttribute('aria-controls');
-          tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-          panels.forEach(p => p.classList.remove('active'));
-          tab.classList.add('active');
-          tab.setAttribute('aria-selected', 'true');
-          const target = document.getElementById(targetId);
-          if (target) target.classList.add('active');
+      /* GSAP Horizontal Loop Helper Function (exact GreenSock RwKwLWK CodePen algorithm) */
+      function horizontalLoop(items, config) {
+        items = gsap.utils.toArray(items);
+        config = config || {};
+        let onChange = config.onChange,
+            lastIndex = 0,
+            tl = gsap.timeline({
+              repeat: config.repeat,
+              paused: config.paused,
+              defaults: { ease: "none" },
+              onUpdate: onChange && function() {
+                let i = tl.current();
+                if (i !== lastIndex) {
+                  lastIndex = i;
+                  onChange(items[i], i);
+                }
+              }
+            }),
+            length = items.length,
+            startX = items[0].offsetLeft,
+            times = [],
+            widths = [],
+            xPercents = [],
+            curIndex = 0,
+            pixelsPerSecond = (config.speed || 1) * 100,
+            snap = config.snap === false ? v => v : (typeof(config.snap) === "function" ? config.snap : gsap.utils.snap(config.snap || 1)),
+            totalWidth, curX, distanceToStart, distanceToLoop, item, i;
+        
+        gsap.set(items, {
+          xPercent: (i, el) => {
+            let w = widths[i] = parseFloat(gsap.getProperty(el, "width", "px"));
+            xPercents[i] = snap(parseFloat(gsap.getProperty(el, "x", "px")) / w * 100 + gsap.getProperty(el, "xPercent"));
+            return xPercents[i];
+          }
         });
-      });
+        gsap.set(items, { x: 0 });
+        totalWidth = items[length - 1].offsetLeft + xPercents[length - 1] / 100 * widths[length - 1] - startX + items[length - 1].offsetWidth * gsap.getProperty(items[length - 1], "scaleX") + (parseFloat(config.paddingRight) || 0);
+        for (i = 0; i < length; i++) {
+          item = items[i];
+          curX = xPercents[i] / 100 * widths[i];
+          distanceToStart = item.offsetLeft - startX;
+          distanceToLoop = distanceToStart + widths[i] * gsap.getProperty(item, "scaleX");
+          tl.to(item, { xPercent: snap((curX - distanceToLoop) / widths[i] * 100), duration: distanceToLoop / pixelsPerSecond }, 0)
+            .fromTo(item, { xPercent: snap((curX - distanceToLoop + totalWidth) / widths[i] * 100) }, { xPercent: xPercents[i], duration: (totalWidth - distanceToLoop) / pixelsPerSecond, immediateRender: false }, distanceToLoop / pixelsPerSecond)
+            .add("label" + i, distanceToStart / pixelsPerSecond);
+          times[i] = distanceToStart / pixelsPerSecond;
+        }
+        function toIndex(idx, vars) {
+          vars = vars || {};
+          (Math.abs(idx - curIndex) > length / 2) && (idx += idx > curIndex ? -length : length);
+          let newIndex = gsap.utils.wrap(0, length, idx),
+              time = times[newIndex];
+          if (time > tl.time() !== idx > curIndex) {
+            vars.modifiers = { time: gsap.utils.wrap(0, tl.duration()) };
+            time += tl.duration() * (idx > curIndex ? 1 : -1);
+          }
+          curIndex = newIndex;
+          vars.overwrite = true;
+          return tl.tweenTo(time, vars);
+        }
+        tl.next = vars => toIndex(curIndex + 1, vars);
+        tl.previous = vars => toIndex(curIndex - 1, vars);
+        tl.current = () => curIndex;
+        tl.toIndex = (index, vars) => toIndex(index, vars);
+        tl.times = times;
+        tl.progress(1, true).progress(0, true);
+        if (config.reversed) {
+          tl.vars.onReverseComplete();
+          tl.reverse();
+        }
+        if (config.draggable && typeof Draggable !== "undefined") {
+          let proxy = document.createElement("div"),
+              wrap = gsap.utils.wrap(0, 1),
+              ratio, startProgress, draggable,
+              align = () => tl.progress(wrap(startProgress + (draggable.startX - draggable.x) * ratio));
+          draggable = Draggable.create(proxy, {
+            trigger: items[0].parentNode,
+            type: "x",
+            onPress() {
+              startProgress = tl.progress();
+              tl.pause();
+              ratio = 1 / totalWidth;
+            },
+            onDrag: align,
+            onThrowUpdate: align,
+            inertia: true,
+            snap: value => {
+              let time = -(value * ratio) * tl.duration(),
+                  wrappedTime = gsap.utils.wrap(0, tl.duration(), time),
+                  snapTime = times[gsap.utils.snap(times, wrappedTime)],
+                  diff = snapTime - wrappedTime;
+              if (Math.abs(diff) > tl.duration() / 2) {
+                diff += diff < 0 ? tl.duration() : -tl.duration();
+              }
+              return (time + diff) / tl.duration() / -ratio;
+            },
+            onRelease() {
+              tl.play();
+            }
+          })[0];
+        }
+        return tl;
+      }
+
+      // Initialize Courses Infinite Horizontal Loop Slider
+      function initCoursesSlider() {
+        if (typeof gsap === 'undefined') return;
+        const courseCards = gsap.utils.toArray('.course-card-item');
+        if (courseCards.length === 0) return;
+        
+        const tabs = document.querySelectorAll('.course-tab-pill');
+        
+        const loop = horizontalLoop(courseCards, {
+          paused: false,
+          repeat: -1,
+          speed: 0.65,
+          paddingRight: 24,
+          draggable: true,
+          onChange: (element, index) => {
+            tabs.forEach((tab, i) => {
+              if (i === index) {
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+              } else {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+              }
+            });
+          }
+        });
+
+        // Pause on hover over viewport
+        const viewport = document.getElementById('coursesSliderViewport');
+        if (viewport) {
+          viewport.addEventListener('mouseenter', () => loop.pause());
+          viewport.addEventListener('mouseleave', () => loop.play());
+        }
+
+        // Next / Prev buttons
+        const nextBtn = document.getElementById('coursesNextBtn');
+        const prevBtn = document.getElementById('coursesPrevBtn');
+
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            loop.next({ duration: 0.6, ease: "power2.inOut" });
+          });
+        }
+
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            loop.previous({ duration: 0.6, ease: "power2.inOut" });
+          });
+        }
+
+        // Tab Pill Clicks -> Smooth jump to card index
+        tabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => {
+            loop.toIndex(index, { duration: 0.8, ease: "power2.inOut" });
+          });
+        });
+      }
+
+      if (document.readyState === 'complete') {
+        initCoursesSlider();
+      } else {
+        window.addEventListener('load', initCoursesSlider);
+      }
 
       // Horizontal Scroll Gallery (CodePen GSAP Pinning)
       if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {

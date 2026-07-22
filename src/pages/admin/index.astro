@@ -2,8 +2,20 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import duyurular from '../../content/duyurular.json';
-import siteSettings from '../../content/site-settings.json';
+import defaultSiteSettings from '../../content/site-settings.json';
 import erpData from '../../content/erp-data.json';
+import fs from 'fs';
+import path from 'path';
+
+let siteSettings = defaultSiteSettings;
+try {
+  const settingsPath = path.resolve(process.cwd(), 'src/content/site-settings.json');
+  if (fs.existsSync(settingsPath)) {
+    siteSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+  }
+} catch (e) {
+  console.error("Failed to read site-settings.json dynamically:", e);
+}
 
 export const prerender = false;
 
@@ -1324,7 +1336,7 @@ if (isLoggedIn) {
         if (descEl) descEl.value = settings.whyUs.desc || '';
         
         // Re-render features card blocks dynamically from cache!
-        if (settings.whyUs.features && settings.whyUs.features.length > 0) {
+        if (settings.whyUs && Array.isArray(settings.whyUs.features)) {
           const container = document.getElementById('whyus-cards-container');
           if (container) {
             container.innerHTML = '';
@@ -1383,7 +1395,7 @@ if (isLoggedIn) {
         const descEl = document.querySelector('textarea[name="teachers_desc"]');
         if (descEl) descEl.value = settings.teachersSection.desc || '';
         
-        if (settings.teachersSection.list && settings.teachersSection.list.length > 0) {
+        if (Array.isArray(settings.teachersSection.list)) {
           const container = document.getElementById('teachers-list-container');
           if (container) {
             container.innerHTML = '';
@@ -1446,7 +1458,7 @@ if (isLoggedIn) {
       }
       
       // Populate Navbar links
-      if (settings.navbar && settings.navbar.links && settings.navbar.links.length > 0) {
+      if (settings.navbar && Array.isArray(settings.navbar.links)) {
         const container = document.getElementById('navbar-links-container');
         if (container) {
           container.innerHTML = '';
@@ -1480,7 +1492,7 @@ if (isLoggedIn) {
         const descEl = document.querySelector('textarea[name="gallery_desc"]');
         if (descEl) descEl.value = settings.gallery.desc || '';
         
-        if (settings.gallery.images && settings.gallery.images.length > 0) {
+        if (Array.isArray(settings.gallery.images)) {
           const container = document.getElementById('gallery-images-container');
           if (container) {
             container.innerHTML = '';

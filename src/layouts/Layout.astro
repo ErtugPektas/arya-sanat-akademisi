@@ -1,5 +1,17 @@
 ---
-import siteSettings from '../content/site-settings.json';
+import defaultSiteSettings from '../content/site-settings.json';
+import fs from 'fs';
+import path from 'path';
+
+let siteSettings = defaultSiteSettings;
+try {
+  const settingsPath = path.resolve(process.cwd(), 'src/content/site-settings.json');
+  if (fs.existsSync(settingsPath)) {
+    siteSettings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+  }
+} catch (e) {
+  console.error("Failed to read site-settings.json dynamically:", e);
+}
 
 interface Props {
   title: string;
@@ -72,6 +84,11 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
 
   <!-- Netlify Identity (Required for Decap CMS Login) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" is:inline></script>
+
+  <!-- GSAP, ScrollTrigger & Draggable Animation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" is:inline></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" is:inline></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js" is:inline></script>
 
   <title>{title}</title>
   <slot name="head" />
@@ -268,9 +285,6 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
       </button>
 
-      <!-- GSAP & ScrollTrigger Animation Libraries -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" is:inline></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" is:inline></script>
 
       <!-- JS Files -->
       <script src="/js/audio.js" is:inline></script>
