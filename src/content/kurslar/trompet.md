@@ -39,16 +39,6 @@ curriculum:
       - "Dilde 'staccato' ve 'legato' vuruş teknikleri"
       - "Gamlar ve temel arpej çalışmaları"
       - "Klasik ve popüler trompet ezgileri"
-teacher:
-  name: "Gökhan DEMİR"
-  specialty: "Nefesli Çalgılar Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Gökhan Demir, nefesli ve bakır üflemeli çalgılar alanında konservatuvar kökenli eğitimler vermektedir."
-  bio2: "Öğrencilerine doğru nefes anatomisi ve enstrüman fiziği üzerine bilimsel yaklaşımlarla rehberlik eder."
-  tags:
-    - "Trompet"
-    - "Bakır Üflemeli"
-    - "Nefes Kontrolü"
 faq:
   - question: "Trompet çalmak dudakları çok yorar mı?"
     answer: "Evet, başlangıçta dudak kasları (embouchure) yorulabilir. Doğru egzersiz ve düzenli dinlenme ile bu kaslar kısa sürede güçlenir."

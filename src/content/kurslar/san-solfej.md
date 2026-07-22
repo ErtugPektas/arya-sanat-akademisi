@@ -39,16 +39,6 @@ curriculum:
       - "Öğrencinin ses rengine uygun şarkı seçimi ve analizi"
       - "Kafa sesi ve göğüs sesi miksleme çalışmaları"
       - "Şarkılarda nüans ve duygu aktarımı"
-teacher:
-  name: "Seda FİDAN"
-  specialty: "Şan & Solfej Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Seda Fidan, Konservatuvar mezunu profesyonel vokalist ve şan pedagojisidir."
-  bio2: "Öğrencilerine ses tellerini yormadan, sağlıklı ve uzun soluklu şarkı söyleme teknikleri aşılamaktadır."
-  tags:
-    - "Şan Eğitimi"
-    - "Ses Teknolojisi"
-    - "Solfej & Dikte"
 faq:
   - question: "Sesim güzel değilse şan dersi alabilir miyim?"
     answer: "Şan eğitimi sesinizi güzelleştirmekten ziyade, sesinizi doğru tekniklerle verimli kullanmayı öğretir. Doğru eğitimle herkes şarkı söyleyebilir."

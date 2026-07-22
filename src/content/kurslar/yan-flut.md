@@ -39,16 +39,6 @@ curriculum:
       - "Nefes kontrolünü uzatarak uzun ses çalışmaları"
       - "Klasik ve popüler müzik repertuvarından kolay parçalar"
       - "İki sesli küçük flüt düetleri"
-teacher:
-  name: "Elif SOYLU"
-  specialty: "Yan Flüt Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Elif Soylu, Güzel Sanatlar Fakültesi Müzik Bölümü Flüt mezunudur."
-  bio2: "Nefes teknikleri ve klasik müzik eğitimi alanında uzmanlaşmıştır."
-  tags:
-    - "Yan Flüt"
-    - "Nefes Teknikleri"
-    - "Diyafram"
 faq:
   - question: "Yan flüt çalmak için akciğer kapasitesi çok önemli midir?"
     answer: "Hayır. Flüt çalarken önemli olan akciğerin büyüklüğü değil, nefesi doğru kullanma tekniğidir (diyafram nefesi)."

@@ -5,7 +5,7 @@ keywords: "gitar dersi Kayseri, gitar kursu kocasinan, akustik gitar dersi, elek
 badge: "🎸 Gitar Eğitimi (Elektro, Bass)"
 heroTitle: "Gitar Dersi"
 heroTitleHighlight: "(Elektro, Bass)"
-heroDesc: "Klasik gitarın zarafetinden elektro gitarın enerjisine ve bass gitarın derin tonlarına — her stilin ustası olun. Berklee sertifikalı eğitmenimizle müzik yolculuğunuza başlayın."
+heroDesc: "Klasik gitarın zarafetinden elektro gitarın enerjisine ve bass gitarın derin tonlarına — her stilin ustası olun. Bireysel derslerle müzik yolculuğunuza başlayın."
 image: "/assets/kurslar/gitar-kurs.jpg"
 duration: "45 dk / ders"
 frequency: "Haftada 1–2 ders"
@@ -55,18 +55,6 @@ curriculum:
       - "Şarkı yazarlığı ve kompozisyon"
       - "Grup müziği ve band çalışması"
       - "Sahne ve kayıt hazırlığı"
-teacher:
-  name: "Mehmet Yılmaz"
-  specialty: "Gitar Eğitmeni"
-  image: "/assets/teacher_guitar.png"
-  bio1: "Berklee Online sertifikasına sahip olan Mehmet Yılmaz, 8 yıllık sahne ve stüdyo deneyimiyle rock, blues ve fingerstyle alanlarında uzmanlaşmıştır. Öğrencilerin kendi müzikal sesini bulmasına yardımcı olmayı temel hedef olarak belirlemektedir."
-  bio2: "Çeşitli ulusal müzisyenlerle stüdyo çalışmaları yapan Mehmet, aynı zamanda özgün bestecilik alanında da aktif olarak üretmeye devam etmektedir."
-  tags:
-    - "Akustik"
-    - "Elektro"
-    - "Klasik"
-    - "Fingerstyle"
-    - "Blues"
 faq:
   - question: "Hangi gitar türüyle başlamalıyım?"
     answer: "Bu tamamen hedeflerinize bağlıdır. Klasik ve fingerstyle için naylon telli klasik gitar; pop, rock ve folk için akustik; metal ve heavy rock için elektro gitar önerilir. İlk derste eğitmenimiz size en uygun seçeneği belirlemenize yardımcı olur."
@@ -79,6 +67,6 @@ faq:
 ---
 Arya Sanat Akademisi'ndeki gitar programımız, üç ana dal üzerine yapılandırılmıştır: Klasik Gitar, Akustik Gitar ve Elektro Gitar. Hangi stili seçerseniz seçin, sağlam bir teknik temel üzerine inşa edilen, kişiselleştirilmiş bir öğrenme deneyimi sizi bekliyor.
 
-Berklee Online sertifikasına sahip ve 8 yıllık sahne deneyimine sahip eğitmenimiz Mehmet Yılmaz; fingerstyle, pena tekniği, akor teorisi, doğaçlama ve şarkı yazarlığı konularında rehberlik eder. Dersler hem nota okuma hem de kulak eğitimini dengeli biçimde içerir.
+Dersler hem nota okuma hem de kulak eğitimini dengeli biçimde içerir.
 
 Eğitimde kullandığımız gitarlar arasında Taylor akustik, Gibson elektro ve Yamaha klasik gitarlar bulunmaktadır. Kendi gitarınızı getirebilir ya da akademimizdeki enstrümanları kullanabilirsiniz.

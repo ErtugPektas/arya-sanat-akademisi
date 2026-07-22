@@ -39,16 +39,6 @@ curriculum:
       - "Nihavend, Hicaz, Rast makamlarında kolay eserler"
       - "Dudak gevşetme ve glissando (ses bükme) çalışmaları"
       - "Klarnet etüt metotlarından egzersizler"
-teacher:
-  name: "Gökhan DEMİR"
-  specialty: "Klarnet Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Gökhan Demir, konservatuvar mezunudur. Senfoni ve TRT repertuvarlarında klarnet icracısıdır."
-  bio2: "Hem Sol (Türk) hem de Si-bemol (Batı) klarnet eğitiminde 10 yılı aşkın tecrübeye sahiptir."
-  tags:
-    - "Sol Klarnet"
-    - "Si-bemol Klarnet"
-    - "Makam Musikisi"
 faq:
   - question: "Sol Klarnet ile Si-bemol Klarnet arasındaki fark nedir?"
     answer: "Sol klarnet, perdesel ve fiziksel yapısı itibariyle Türk müziği icrasına ve komalı seslere daha uygundur. Si-bemol klarnet ise klasik batı müziği, pop ve cazda yaygın kullanılır."

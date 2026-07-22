@@ -39,16 +39,6 @@ curriculum:
       - "Popüler pop ve film müzikleri icrası"
       - "Gamlar, majör ve minör diziler"
       - "Dinamik (piyano-forte) çalışmaları"
-teacher:
-  name: "Gökhan DEMİR"
-  specialty: "Saksafon & Klarnet Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Gökhan Demir, klasik ve caz saksafon eğitiminde uzmanlaşmış çok enstrümanlı bir eğitmendir."
-  bio2: "Alto ve Tenor saksafon tekniklerinde bireysel gelişim programları sunmaktadır."
-  tags:
-    - "Saksafon"
-    - "Alto Saksafon"
-    - "Caz & Pop"
 faq:
   - question: "Hangi saksafon türü ile başlamalıyım?"
     answer: "Yeni başlayanlar için fiziksel yapısı ve kontrol edilebilirliği açısından Alto Saksafon en uygun seçenektir."

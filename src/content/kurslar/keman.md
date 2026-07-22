@@ -23,7 +23,7 @@ levels:
     title: "İleri Seviye"
     desc: "Klasik konçertolar, popüler solo performanslar ve oda müziği."
 gallery:
-  - "/assets/teacher_violin.png"
+  - "/assets/kurslar/keman-kurs.jpg"
 curriculum:
   - period: "1-3. Ay"
     title: "Duruş ve Yay Teknikleri"
@@ -39,16 +39,6 @@ curriculum:
       - "Ömer Can ve Wohlfahrt etütleri"
       - "Minuetler ve klasik dönem kolay eserleri"
       - "Enstrümana kulak aşinalığının artırılması"
-teacher:
-  name: "Seda FİDAN"
-  specialty: "Keman Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Seda Fidan, Konservatuvar Keman bölümü mezunudur. Klasik orkestralarda görev almaktadır."
-  bio2: "Çocuk ve yetişkin gruplarla 8 yılı aşkın süredir keman eğitmenliği yapmaktadır."
-  tags:
-    - "Keman"
-    - "Yay Tekniği"
-    - "Klasik Müzik"
 faq:
   - question: "Keman çalması zor bir enstrüman mıdır?"
     answer: "Keman, ilk aşamada sabır ve kulak koordinasyonu gerektirir. Doğru yönlendirmeyle düzenli egzersiz yapan herkes çalabilir."

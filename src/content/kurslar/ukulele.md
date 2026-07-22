@@ -39,16 +39,6 @@ curriculum:
       - "Farklı ritim ve senkop kalıpları"
       - "Şarkılarda arpej çalışmaları"
       - "Popüler Türkçe ve yabancı şarkılar"
-teacher:
-  name: "Can YILMAZ"
-  specialty: "Ukulele & Gitar Eğitmeni"
-  image: "/assets/teacher_guitar.png"
-  bio1: "Can Yılmaz, ukulele ve klasik gitarda çocuk pedagogisi odaklı eğitimler vermektedir."
-  bio2: "Çocukların müzikle eğlenceli bağ kurmasını hedefleyen metodolojiler geliştirmiştir."
-  tags:
-    - "Ukulele"
-    - "Klasik Gitar"
-    - "Pedagojik Eğitim"
 faq:
   - question: "Ukulele çalmaya başlamak için yaş sınırı var mı?"
     answer: "Hayır. Özellikle 5 yaşından itibaren çocuklar için parmak yapısına çok uygun bir enstrümandır."

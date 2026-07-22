@@ -39,16 +39,6 @@ curriculum:
       - "Basit usuller ve şarkı icraları"
       - "Taksim (doğaçlama) yapma mantığı"
       - "Süsleme teknikleri (tril, vibrato)"
-teacher:
-  name: "Mustafa ÇELİK"
-  specialty: "Kanun & Makam Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Mustafa Çelik, Türk Sanat Müziği konservatuvar mezunudur. Kanun icracısı ve koro şefidir."
-  bio2: "Geleneksel makam musikisini modern eğitim metotlarıyla birleştirerek dersler vermektedir."
-  tags:
-    - "Kanun"
-    - "Türk Sanat Müziği"
-    - "Makam Bilgisi"
 faq:
   - question: "Kanun çalmak için nota bilmek gerekir mi?"
     answer: "Hayır. Eğitimlerimiz solfej ve nota teorisi ile paralel ilerler, böylece sıfırdan nota okumayı öğrenirsiniz."

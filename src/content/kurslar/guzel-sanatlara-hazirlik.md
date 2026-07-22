@@ -39,16 +39,6 @@ curriculum:
       - "Dikte (duyulan melodiyi notaya aktarma) çalışmaları"
       - "Müziksel ezgi belleği (melodi tekrarı) geliştirme"
       - "Sınavda çalınacak enstrüman parçasının hazırlanması"
-teacher:
-  name: "Seda FİDAN"
-  specialty: "İşitme & Teori Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Seda Fidan, Konservatuvar mezunu olup yetenek sınavı jüri kriterleri ve işitme teorileri üzerine uzmanlaşmıştır."
-  bio2: "Onlarca öğrencisini Türkiye'nin önde gelen Güzel Sanatlar Liselerine ve Konservatuvarlarına yerleştirmiştir."
-  tags:
-    - "Müzikal İşitme"
-    - "Solfej & Dikte"
-    - "Yetenek Sınavları"
 faq:
   - question: "Yetenek sınavlarına hazırlanmaya ne zaman başlanmalı?"
     answer: "Sınavlardan en az 6-8 ay önce başlanması tavsiye edilir. Ancak öğrencinin altyapısına göre bu süre değişebilir."

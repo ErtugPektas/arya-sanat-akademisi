@@ -241,38 +241,6 @@ const schema = [
       </section>
     )}
 
-    <!-- EĞİTMEN -->
-    <section class="section" id="course-teacher" aria-labelledby="courseTeacherTitle">
-      <div class="container">
-        <header class="section-header">
-          <p class="section-tag">👨‍🏫 Uzman Kadromuz</p>
-          <h2 id="courseTeacherTitle" class="section-title">Eğitmeniniz</h2>
-        </header>
-        <div class="kurs-teacher-card">
-          <div class="kurs-teacher-img-wrapper">
-            <img
-              src={data.teacher.image}
-              alt={`${data.teacher.name} — ${data.teacher.specialty}`}
-              class="kurs-teacher-img"
-              loading="lazy"
-              width="320"
-              height="380"
-            />
-          </div>
-          <div class="kurs-teacher-body">
-            <h3 class="kurs-teacher-name">{data.teacher.name}</h3>
-            <p class="kurs-teacher-specialty">{data.teacher.specialty}</p>
-            <p class="kurs-teacher-bio">{data.teacher.bio1}</p>
-            {data.teacher.bio2 && <p class="kurs-teacher-bio">{data.teacher.bio2}</p>}
-            <div class="teacher-tags">
-              {data.teacher.tags.map(tag => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- SSS -->
     {data.faq && data.faq.length > 0 && (

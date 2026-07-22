@@ -41,7 +41,7 @@ const kurslarCollection = defineCollection({
       items: z.array(z.string())
     })),
     
-    // Teacher
+    // Teacher (optional - removed from display)
     teacher: z.object({
       name: z.string(),
       specialty: z.string(),
@@ -49,7 +49,7 @@ const kurslarCollection = defineCollection({
       bio1: z.string(),
       bio2: z.string().optional(),
       tags: z.array(z.string())
-    }),
+    }).optional(),
     
     // FAQ
     faq: z.array(z.object({

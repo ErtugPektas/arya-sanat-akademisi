@@ -39,16 +39,6 @@ curriculum:
       - "Bağlama düzeni akor eşlik denemeleri"
       - "Karadeniz, İç Anadolu ve Ege yöresi kolay türküleri"
       - "Temel solfej ve bona çalışmaları"
-teacher:
-  name: "Mustafa ÇELİK"
-  specialty: "Geleneksel Sazlar Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Mustafa Çelik, Türk Halk Müziği Konservatuvar mezunudur. Bağlama ve geleneksel halk ezgileri eğitmenidir."
-  bio2: "Öğrencilerine bağlamanın tavır ve tezene disiplinlerini aktararak yöresel repertuvar zenginliği kazandırmaktadır."
-  tags:
-    - "Kısa Sap Bağlama"
-    - "Uzun Sap Bağlama"
-    - "Halk Müziği Tavırları"
 faq:
   - question: "Kısa sap mı yoksa uzun sap bağlama ile mi başlamalıyım?"
     answer: "Yeni başlayanlar için perdelere erişim ve akort kolaylığı açısından Kısa Sap Bağlama genellikle daha çok tavsiye edilir."

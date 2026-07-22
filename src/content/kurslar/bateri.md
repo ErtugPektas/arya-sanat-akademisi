@@ -55,18 +55,6 @@ curriculum:
       - "Double bass pedal teknikleri"
       - "Stüdyo ve sahne hazırlığı"
       - "MEB sertifika sınavı hazırlığı"
-teacher:
-  name: "Mehmet Kaya"
-  specialty: "Bateri Eğitmeni"
-  image: "/assets/teacher_drums.png"
-  bio1: "Mimar Sinan Güzel Sanatlar Üniversitesi Konservatuvarı mezunu olan Mehmet Kaya, çeşitli Türk rock gruplarında aktif olarak bateri icra etmektedir. 8 yılı aşkın öğretmenlik deneyimiyle rock, jazz, blues, latin ve funk stillerinde öğrencilere rehberlik etmektedir."
-  bio2: "Her öğrencinin potansiyelini keşfetmesine yardımcı olmayı ilke edinmiş olan Mehmet, teknik doğruluğun yanı sıra müzikal duygu ve yaratıcılığı da ön planda tutar."
-  tags:
-    - "Rock"
-    - "Jazz"
-    - "Latin"
-    - "Funk"
-    - "Sahne Deneyimi"
 faq:
   - question: "Evde bateri seti olmadan ders alabilir miyim?"
     answer: "Evet, kesinlikle! Tüm dersler akademimizdeki profesyonel bateri setlerinde işlenir. Ev çalışması için başlangıçta pratik pad (egzersiz pedi) yeterlidir; ilerledikçe elektronik bateri seti düşünülebilir."
@@ -81,4 +69,4 @@ faq:
 ---
 Arya Sanat Akademisi'ndeki bateri eğitimimiz, sizi hiç enstrüman tutmamış bir noktadan sahne performansına taşıyacak sistematik bir program sunar. Her öğrencinin öğrenme hızı farklıdır; bu nedenle dersler tamamen kişiye özel olarak planlanır.
 
-Profesyonel Roland ve Pearl bateri setlerinin bulunduğu ses yalıtımlı stüdyolarımızda çalışıyorsunuz. Komşu ya da aile baskısı olmadan dilediğiniz kadar güçlü çalabilirsiniz. Eğitmenimiz Mehmet Kaya, aktif müzisyen kimliğiyle teknik ve öğretim yetenekleriyle deneyimini sizinle paylaşır.
+Profesyonel Roland ve Pearl bateri setlerinin bulunduğu ses yalıtımlı stüdyolarımızda çalışıyorsunuz. Komşu ya da aile baskısı olmadan dilediğiniz kadar güçlü çalabilirsiniz. 

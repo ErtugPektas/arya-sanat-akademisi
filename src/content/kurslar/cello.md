@@ -39,16 +39,6 @@ curriculum:
       - "2. ve 3. pozisyonlara geçiş teknikleri"
       - "Çello için yazılmış minuet ve kolay parçalar"
       - "Çift sesli kolay eşlikler"
-teacher:
-  name: "Derya ARSLAN"
-  specialty: "Çello Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Derya Arslan, konservatuvar yaylı çalgılar mezunudur. Aktif oda müziği konserleri vermektedir."
-  bio2: "Çello eğitiminde klasik metodolojilerin yanı sıra popüler müzik uygulamalarına da yer vermektedir."
-  tags:
-    - "Çello"
-    - "Viyolonsel"
-    - "Oda Müziği"
 faq:
   - question: "Çello çalmaya başlamak için fiziksel bir koşul var mı?"
     answer: "Çello oturularak çalındığı için fiziksel olarak çok konforludur. Boyunuza uygun boyutta (1/2, 3/4, 4/4) çello ile eğitime başlanır."

@@ -55,17 +55,6 @@ curriculum:
       - "Hızlı deşifre ve doğaçlama temelleri"
       - "Konservatuvar veya ABRSM Grade sınavları hazırlığı"
       - "Akademi yıl sonu konseri sahne provası"
-teacher:
-  name: "Ayşe Kaya"
-  specialty: "Piyano & Şan Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Hacettepe Üniversitesi Devlet Konservatuvarı mezunu olan Ayşe Kaya, 12 yılı aşkın süredir her yaş grubuna piyano ve şan dersleri vermektedir. Klasik piyano tekniği ve pedagoji üzerine çok sayıda uluslararası eğitime katılmıştır."
-  bio2: "Özellikle çocuk müzik eğitimi ve sınav hazırlık süreçlerinde yüksek başarı oranına sahip olup, öğrencilerine piyanoyu sevdiren yaklaşımıyla tanınır."
-  tags:
-    - "Klasik Piyano"
-    - "Şan Eğitimi"
-    - "ABRSM Hazırlık"
-    - "Çocuk Pedagojisi"
 faq:
   - question: "Evde gerçek piyano olmadan başlayabilir miyim?"
     answer: "Evet, başlangıçta 88 tuşlu, ağırlıklı tuş hassasiyetine sahip (weighted action) dijital piyanolar ev çalışmaları için yeterlidir. İlerleyen yıllarda akustik piyanoya geçiş yapabilirsiniz. Klavye seçerken eğitmenimiz size danışmanlık yapacaktır."
@@ -76,6 +65,6 @@ faq:
 ---
 Arya Sanat Akademisi'nde piyano eğitimimiz tamamen bireysel olarak planlanır. Öğrencinin yaşına, müzik zevkine ve hedeflerine uygun bir repertuvar hazırlanarak eğlenceli ve verimli bir çalışma disiplini oluşturulur.
 
-Akademimizdeki piyano odaları Steinway ve Yamaha akustik kuyruklu/konsol piyanolarla donatılmıştır. Öğrencilerimiz dijital yerine gerçek akustik tuş hassasiyetiyle eğitim alırlar. Eğitmenimiz Ayşe Kaya, Hacettepe Konservatuvarı mezuniyeti ve uzun yıllara dayanan şan/piyano pedagojisi tecrübesiyle öğrencilerimize yol gösterir.
+Akademimizdeki piyano odaları Steinway ve Yamaha akustik kuyruklu/konsol piyanolarla donatılmıştır. Öğrencilerimiz dijital yerine gerçek akustik tuş hassasiyetiyle eğitim alırlar. 
 
 Derslerimizde sadece çalmayı değil; nota okuma, armoni, solfej ve müzik teorisini de öğrenerek tam donanımlı bir müzisyen olursunuz. Ayrıca uluslararası geçerliliği olan ABRSM sınavlarına da akademimizde hazırlanabilirsiniz.

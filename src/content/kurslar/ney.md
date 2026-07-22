@@ -39,16 +39,6 @@ curriculum:
       - "Hicaz ve Nihavend makam dizileri"
       - "Kolay ilahiler ve Türk müziği şarkıları icraları"
       - "Nefes kontrolü ve uzun ses çalışmaları"
-teacher:
-  name: "Mustafa ÇELİK"
-  specialty: "Geleneksel Sazlar Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Mustafa Çelik, ney ve geleneksel Türk müziği alanında uzun yıllara dayanan koro ve eğitim tecrübesine sahiptir."
-  bio2: "Öğrencilerine ney üflerken doğru nefes felsefesi ve makam disiplinini aşılamaktadır."
-  tags:
-    - "Ney"
-    - "Tasavvuf Musikisi"
-    - "Nefes Felsefesi"
 faq:
   - question: "Neyden ses çıkarmak çok mu zordur?"
     answer: "Ney, sabır gerektiren bir enstrümandır. İlk sesin çıkması birkaç gün sürebilir. Eğitmenimizin yönlendirmesiyle bu süreci kolayca aşarsınız."

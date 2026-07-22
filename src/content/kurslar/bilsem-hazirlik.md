@@ -37,16 +37,6 @@ curriculum:
       - "Farklı tempo ve ölçülerdeki ritim kalıplarını el veya masa ile taklit etme"
       - "Kısa ezgi parçalarını (melodi belleği) hafızada tutarak tekrar söyleme"
       - "Sınav kaygısını önleyici eğlenceli odaklanma egzersizleri"
-teacher:
-  name: "Can YILMAZ"
-  specialty: "Çocuk Müzik Eğitmeni"
-  image: "/assets/teacher_guitar.png"
-  bio1: "Can Yılmaz, erken yaş müzik eğitimi ve çocuklarda müzikal işitme gelişiminde uzmanlaşmış bir eğitmedir."
-  bio2: "BİLSEM müzik sınavlarının aşamalarına ve çocuk psikolojisine uygun özel eğitim metotları uygulamaktadır."
-  tags:
-    - "BİLSEM Müzik"
-    - "Çocuk Pedagojisi"
-    - "Ritim Oyunları"
 faq:
   - question: "BİLSEM müzik sınavlarına hangi sınıflar başvurabilir?"
     answer: "Genellikle ilkokul 1, 2 ve 3. sınıf öğrencileri sınıf öğretmenlerinin aday göstermesiyle BİLSEM sınavlarına katılabilir."

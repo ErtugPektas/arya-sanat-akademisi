@@ -39,16 +39,6 @@ curriculum:
       - "Rast ve Nihavend makamlarında kolay şarkılar"
       - "Çift ses ve akor eşlik denemeleri"
       - "Kolay etütler ve kulak geliştirme"
-teacher:
-  name: "Mustafa ÇELİK"
-  specialty: "Geleneksel Sazlar Eğitmeni"
-  image: "/assets/teacher_piano.png"
-  bio1: "Mustafa Çelik, Türk Sanat Müziği Konservatuvarı mezunu olup ud ve makam teorisi eğitmenidir."
-  bio2: "Öğrencilerine udun perdesiz yapısında doğru tonları üretebilmeleri için kulak odaklı metotlar uygulamaktadır."
-  tags:
-    - "Ud"
-    - "Perdesiz Saz"
-    - "Türk Sanat Müziği"
 faq:
   - question: "Ud perdesiz olduğu için öğrenmesi çok mu zordur?"
     answer: "İlk aşamada perdelerin olmaması göz korkutabilir ancak eğitmenimizin parmak yerleştirme rehberleri ve kulak egzersizleri sayesinde kısa sürede alışırsınız."

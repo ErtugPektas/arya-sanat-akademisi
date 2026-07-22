@@ -39,16 +39,6 @@ curriculum:
       - "Akrilik boya malzemelerinin tanınması ve fırça teknikleri"
       - "Tuval üzerine peyzaj (manzara) ve doğa çalışmaları"
       - "Yaratıcı serbest konulu resim uygulamaları"
-teacher:
-  name: "Seda FİDAN"
-  specialty: "Görsel Sanatlar Eğitmeni"
-  image: "/assets/teacher_violin.png"
-  bio1: "Seda Fidan, Güzel Sanatlar Fakültesi Resim Bölümü mezunudur. Aktif olarak resim sergileri düzenlemektedir."
-  bio2: "Çocukların motor becerilerini geliştirecek ve yetişkinlerin günün stresini atabileceği atölye çalışmaları tasarlamaktadır."
-  tags:
-    - "Karakalem"
-    - "Yağlı Boya"
-    - "Tuval Çalışmaları"
 faq:
   - question: "Daha önce hiç çizim yapmadım, katılabilir miyim?"
     answer: "Evet! Resim derslerimiz sıfırdan başlar. Çizgi tutuşundan başlayarak adım adım ilerletilir."
