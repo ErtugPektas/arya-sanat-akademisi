@@ -3,29 +3,13 @@ import { getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import path from 'path';
 
-export const prerender = false;
-
-// Check session safely
-const sessionCookie = Astro.cookies.get('admin_session');
-const sessionVal = sessionCookie ? sessionCookie.value : '';
-const isLoggedIn = sessionVal === 'admin' || sessionVal === 'teacher' || sessionVal === 'true';
-
-if (!isLoggedIn) {
-  return Astro.redirect('/admin');
-}
-
-// Get course parameter safely
-const courseId = Astro.url.searchParams.get('course');
-
-if (!courseId) {
-  return Astro.redirect('/admin');
-}
-
+// Course parameter will be processed client-side or built statically
+const courseId = Astro.url.searchParams.get('course') || 'baglama';
 let course = null;
 try {
   course = await getEntry('kurslar', courseId);
 } catch (e) {
-  console.error('getEntry SSR error in Vercel environment:', e);
+  console.error('getEntry error:', e);
 }
 
 if (!course) {
@@ -245,12 +229,12 @@ const { data, body } = course;
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
               <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Adı</label>
-              <input type="text" name="teacher_name" value={data.teacher.name} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+              <input type="text" name="teacher_name" value={data.teacher?.name || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
             </div>
             
             <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
               <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Uzmanlık Alanı</label>
-              <input type="text" name="teacher_specialty" value={data.teacher.specialty} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
+              <input type="text" name="teacher_specialty" value={data.teacher?.specialty || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px;" />
             </div>
           </div>
 
@@ -259,30 +243,30 @@ const { data, body } = course;
               <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1;">
                 <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Görsel Yolu (URL veya Assets Yolu)</label>
                 <div style="display: flex; gap: 0.5rem;">
-                  <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
+                  <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher?.image || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
                   <button type="button" onclick="document.getElementById('file-teacher-image').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
                   <input type="file" id="file-teacher-image" style="display: none;" accept="image/*" onchange="uploadFile(this, 'input-teacher-image', 'preview-teacher-image')" />
                 </div>
               </div>
               <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 1px solid #2d2d3d; background: #101016; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <img id="preview-teacher-image" src={data.teacher.image} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
+                <img id="preview-teacher-image" src={data.teacher?.image || '/assets/teachers/default.jpg'} style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%\' height=\'100%\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23888\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' ry=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg>'" />
               </div>
             </div>
             
             <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
               <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Etiketleri (Virgülle Ayırın)</label>
-              <input type="text" name="teacher_tags" value={data.teacher.tags ? data.teacher.tags.join(', ') : ''} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; height: 42px; margin-top: 1.5rem;" />
+              <input type="text" name="teacher_tags" value={data.teacher?.tags ? data.teacher.tags.join(', ') : ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; height: 42px; margin-top: 1.5rem;" />
             </div>
           </div>
 
           <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
             <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Biyografisi (Paragraf 1)</label>
-            <textarea name="teacher_bio1" rows="3" required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher.bio1}</textarea>
+            <textarea name="teacher_bio1" rows="3" style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher?.bio1 || ''}</textarea>
           </div>
 
           <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
             <label style="font-weight: 500; font-size: 0.9rem; color: #b4b4c6;">Eğitmen Biyografisi (Paragraf 2 - Opsiyonel)</label>
-            <textarea name="teacher_bio2" rows="3" style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher.bio2 || ''}</textarea>
+            <textarea name="teacher_bio2" rows="3" style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%; font-family: sans-serif; resize: vertical;">{data.teacher?.bio2 || ''}</textarea>
           </div>
         </fieldset>
 

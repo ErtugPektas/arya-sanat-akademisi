@@ -17,78 +17,32 @@ try {
   console.error("Failed to read site-settings.json dynamically:", e);
 }
 
-export const prerender = false;
-
 let errorMsg = '';
 const adminPassword = process.env.ADMIN_PASSWORD || 'arya2026';
 const teacherPassword = process.env.TEACHER_PASSWORD || 'egitmen2026';
 
-// Check logout safely
-if (Astro.url.searchParams.get('action') === 'logout') {
-  Astro.cookies.delete('admin_session', { path: '/' });
-  Astro.cookies.delete('teacher_name', { path: '/' });
-  return Astro.redirect('/admin');
-}
-
-// Handle login post
-if (Astro.request.method === 'POST') {
-  try {
-    const data = await Astro.request.formData();
-    const rawPass = (data.get('password') || '').toString().trim();
-    const passLower = rawPass.toLowerCase();
-    
-    if (passLower === adminPassword.toLowerCase() || passLower === 'arya2026') {
-      Astro.cookies.set('admin_session', 'admin', { path: '/', maxAge: 86400, sameSite: 'lax' });
-      return Astro.redirect('/admin');
-    } else {
-      // Check teachers collection dynamically
-      const teachersList = erpData.teachers || [];
-      const matchedTeacher = teachersList.find(t => (t.password || '').toString().trim().toLowerCase() === passLower);
-      
-      if (matchedTeacher) {
-        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, sameSite: 'lax' });
-        Astro.cookies.set('teacher_name', matchedTeacher.name, { path: '/', maxAge: 86400, sameSite: 'lax' });
-        return Astro.redirect('/admin');
-      } else if (passLower === teacherPassword.toLowerCase() || passLower === 'egitmen2026') {
-        Astro.cookies.set('admin_session', 'teacher', { path: '/', maxAge: 86400, sameSite: 'lax' });
-        Astro.cookies.set('teacher_name', 'Elif SÖNMEZ', { path: '/', maxAge: 86400, sameSite: 'lax' });
-        return Astro.redirect('/admin');
-      } else {
-        errorMsg = 'Geçersiz şifre, lütfen tekrar deneyin.';
-      }
-    }
-  } catch (e) {
-    errorMsg = 'Bir hata oluştu.';
-  }
-}
-
-// Check session safely
-const sessionCookie = Astro.cookies.get('admin_session');
-const role = sessionCookie ? sessionCookie.value : '';
-const isLoggedIn = Boolean(role);
-const teacherCookie = Astro.cookies.get('teacher_name');
-const activeTeacherName = teacherCookie ? teacherCookie.value : '';
+const isLoggedIn = false;
+const role = '';
+const activeTeacherName = '';
 
 let courses = [];
-if (isLoggedIn) {
+try {
+  courses = await getCollection('kurslar');
+} catch (e) {
+  console.error('getCollection error:', e);
+}
+if (!courses || courses.length === 0) {
   try {
-    courses = await getCollection('kurslar');
-  } catch (e) {
-    console.error('getCollection SSR error in Vercel environment:', e);
-  }
-  if (!courses || courses.length === 0) {
-    try {
-      const globCourses = import.meta.glob('../../content/kurslar/*.md', { eager: true });
-      courses = Object.entries(globCourses).map(([filepath, mod]) => {
-        const id = path.basename(filepath, '.md');
-        return {
-          id,
-          data: mod.frontmatter || mod
-        };
-      });
-    } catch (err) {
-      console.error('glob courses fallback error:', err);
-    }
+    const globCourses = import.meta.glob('../../content/kurslar/*.md', { eager: true });
+    courses = Object.entries(globCourses).map(([filepath, mod]) => {
+      const id = path.basename(filepath, '.md');
+      return {
+        id,
+        data: mod.frontmatter || mod
+      };
+    });
+  } catch (err) {
+    console.error('glob courses fallback error:', err);
   }
 }
 ---
@@ -107,176 +61,231 @@ if (isLoggedIn) {
   <div class="admin-container" style="min-height: 100vh; padding: 0 0 4rem 0; background: #07070a; color: #fff; font-family: sans-serif;">
     
     <!-- CUSTOM ADMIN TOPBAR -->
-    {isLoggedIn && (
-      <div class="admin-topbar" style="background: #101016; border-bottom: 1px solid #1f1f2e; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-          <span style="font-size: 1.5rem; color: #d4af37;">♩</span>
-          <div>
-            <strong style="color: #fff; font-size: 1.05rem; display: block; font-weight: 700;">Arya Sanat</strong>
-            <span style="color: #d4af37; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Yönetim Paneli</span>
-          </div>
-        </div>
-        <div class="admin-topbar-actions" style="display: flex; align-items: center; gap: 1.5rem;">
-          <a href="/" target="_blank" style="color: #b4b4c6; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#b4b4c6'"> Canlı Siteyi Gör 🌐</a>
-          <a 
-            href="/admin?action=logout" 
-            style="background: rgba(239, 68, 68, 0.12); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.25); padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: all 0.2s;"
-            onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.borderColor='rgba(239,68,68,0.4)';"
-            onmouseout="this.style.background='rgba(239, 68, 68, 0.12)'; this.style.borderColor='rgba(239,68,68,0.25)';"
-          >
-            Güvenli Çıkış 🚪
-          </a>
+    <div id="admin-topbar-wrapper" class="admin-topbar" style="display: none; background: #101016; border-bottom: 1px solid #1f1f2e; padding: 1rem 2rem; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.5rem; color: #d4af37;">♩</span>
+        <div>
+          <strong style="color: #fff; font-size: 1.05rem; display: block; font-weight: 700;">Arya Sanat</strong>
+          <span style="color: #d4af37; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">Yönetim Paneli</span>
         </div>
       </div>
-    )}
+      <div class="admin-topbar-actions" style="display: flex; align-items: center; gap: 1.5rem;">
+        <a href="/" target="_blank" style="color: #b4b4c6; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#b4b4c6'"> Canlı Siteyi Gör 🌐</a>
+        <button 
+          type="button"
+          onclick="handleAdminLogout()" 
+          style="background: rgba(239, 68, 68, 0.12); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.25); padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'; this.style.borderColor='rgba(239,68,68,0.4)';"
+          onmouseout="this.style.background='rgba(239, 68, 68, 0.12)'; this.style.borderColor='rgba(239,68,68,0.25)';"
+        >
+          Güvenli Çıkış 🚪
+        </button>
+      </div>
+    </div>
 
     <div style="max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem;">
       
-      {!isLoggedIn ? (
-        // PREMIUM LOGIN FORM
-        <div style="max-width: 420px; margin: 4rem auto; background: #101016; padding: 3rem 2.5rem; border-radius: 16px; border: 1px solid #1f1f2e; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden;">
-          <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #d4af37, #f5a623);"></div>
-          
-          <div style="text-align: center; margin-bottom: 2.5rem;">
-            <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 50%; background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.15); margin-bottom: 1rem;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(212,175,55,0.35));"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            </div>
-            <h1 style="font-size: 1.75rem; margin-top: 1.25rem; color: #fff; font-weight: 800; letter-spacing: -0.02em;">Yönetici Girişi</h1>
-            <p style="color: #8b8b9f; font-size: 0.875rem; margin-top: 0.5rem; line-height: 1.5;">İçerikleri düzenlemek ve web sitesini güncellemek için şifrenizi girin</p>
+      <!-- LOGIN BOX WRAPPER -->
+      <div id="login-box-wrapper" style="max-width: 420px; margin: 4rem auto; background: #101016; padding: 3rem 2.5rem; border-radius: 16px; border: 1px solid #1f1f2e; box-shadow: 0 20px 50px rgba(0,0,0,0.6); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #d4af37, #f5a623);"></div>
+        
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 50%; background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.15); margin-bottom: 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(212,175,55,0.35));"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h1 style="font-size: 1.75rem; margin-top: 1.25rem; color: #fff; font-weight: 800; letter-spacing: -0.02em;">Yönetici Girişi</h1>
+          <p style="color: #8b8b9f; font-size: 0.875rem; margin-top: 0.5rem; line-height: 1.5;">İçerikleri düzenlemek ve web sitesini güncellemek için şifrenizi girin</p>
+        </div>
+        
+        <div id="login-error-msg" style="display: none; background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 2rem; font-size: 0.85rem; text-align: center; font-weight: 500;">
+          ⚠️ Geçersiz şifre, lütfen tekrar deneyin.
+        </div>
+        
+        <form id="login-form" method="POST" onsubmit="return false;" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label for="password" style="font-size: 0.8rem; color: #a4a4b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Giriş Şifresi</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              required 
+              style="background: #161622; border: 1px solid #232335; color: #fff; padding: 0.9rem 1.1rem; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s;"
+              placeholder="••••••••"
+            />
           </div>
           
-          {errorMsg && (
-            <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 2rem; font-size: 0.85rem; text-align: center; font-weight: 500;">
-              ⚠️ {errorMsg}
-            </div>
-          )}
-          
-          <form id="login-form" method="POST" style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <label for="password" style="font-size: 0.8rem; color: #a4a4b6; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Giriş Şifresi</label>
-              <input 
-                type="password" 
-                id="password" 
-                name="password" 
-                required 
-                style="background: #161622; border: 1px solid #232335; color: #fff; padding: 0.9rem 1.1rem; border-radius: 8px; font-size: 1rem; outline: none; transition: border-color 0.2s;"
-                placeholder="••••••••"
-              />
-            </div>
-            
-            <button 
-              type="submit" 
-              style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 1rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212,175,55,0.25);"
-              onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(212,175,55,0.4)';"
-              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(212,175,55,0.25)';"
-            >
-              Giriş Yap
-            </button>
-          </form>
+          <button 
+            type="submit" 
+            style="background: linear-gradient(135deg, #d4af37 0%, #aa841c 100%); color: #000; border: none; padding: 1rem; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212,175,55,0.25);"
+            onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(212,175,55,0.4)';"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(212,175,55,0.25)';"
+          >
+            Giriş Yap
+          </button>
+        </form>
 
-          <script is:inline>
-            (function() {
-              const form = document.getElementById('login-form');
-              if (form) {
-                form.addEventListener('submit', function(e) {
-                  const passInput = document.getElementById('password');
-                  if (!passInput) return;
-                  const passVal = passInput.value.trim();
-                  const passLower = passVal.toLowerCase();
-                  
-                  if (passLower === 'arya2026') {
-                    e.preventDefault();
-                    document.cookie = "admin_session=admin; path=/; max-age=86400; SameSite=Lax";
-                    window.location.href = '/admin';
-                    return;
-                  }
-                  if (passLower === 'egitmen2026') {
-                    e.preventDefault();
-                    document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
-                    document.cookie = "teacher_name=" + encodeURIComponent('Elif SÖNMEZ') + "; path=/; max-age=86400; SameSite=Lax";
-                    window.location.href = '/admin';
-                    return;
-                  }
-                  try {
-                    const erpDataStr = localStorage.getItem('arya_erp_data');
-                    if (erpDataStr) {
-                      const dataObj = JSON.parse(erpDataStr);
-                      const teachers = dataObj.teachers || [];
-                      const matched = teachers.find(t => (t.password || '').toString().trim().toLowerCase() === passLower);
-                      if (matched) {
-                        e.preventDefault();
-                        document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
-                        document.cookie = "teacher_name=" + encodeURIComponent(matched.name) + "; path=/; max-age=86400; SameSite=Lax";
-                        window.location.href = '/admin';
-                        return;
-                      }
-                    }
-                  } catch (err) {
-                    console.error('Client login intercept error:', err);
-                  }
-                });
+        <script is:inline>
+          (function() {
+            window.handleAdminLogout = function() {
+              document.cookie = "admin_session=; path=/; max-age=0;";
+              document.cookie = "teacher_name=; path=/; max-age=0;";
+              localStorage.removeItem('admin_session');
+              localStorage.removeItem('teacher_name');
+              window.location.reload();
+            };
+
+            function checkClientSession() {
+              const getCookie = (name) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+                return '';
+              };
+              
+              const session = getCookie('admin_session') || localStorage.getItem('admin_session');
+              const teacherName = getCookie('teacher_name') || localStorage.getItem('teacher_name');
+              
+              const topbar = document.getElementById('admin-topbar-wrapper');
+              const loginBox = document.getElementById('login-box-wrapper');
+              const dashboard = document.getElementById('admin-dashboard-wrapper');
+              const welcomeTitle = document.getElementById('admin-welcome-title');
+              const welcomeDesc = document.getElementById('admin-welcome-desc');
+              const tabCourses = document.getElementById('tab-courses');
+              const tabAnnouncements = document.getElementById('tab-announcements');
+              const tabAnalytics = document.getElementById('tab-analytics');
+              const tabSettings = document.getElementById('tab-settings');
+
+              if (session === 'admin' || session === 'teacher' || session === 'true') {
+                if (topbar) topbar.style.display = 'flex';
+                if (loginBox) loginBox.style.display = 'none';
+                if (dashboard) dashboard.style.display = 'block';
+                
+                if (session === 'teacher') {
+                  if (welcomeTitle) welcomeTitle.innerText = 'Eğitmen Çalışma Masası 👨‍🏫 (' + (teacherName || 'Eğitmen') + ')';
+                  if (welcomeDesc) welcomeDesc.innerText = 'Öğrencileriniz, katılım listeleri ve haftalık ders takviminiz';
+                  if (tabCourses) tabCourses.style.display = 'none';
+                  if (tabAnnouncements) tabAnnouncements.style.display = 'none';
+                  if (tabAnalytics) tabAnalytics.style.display = 'none';
+                  if (tabSettings) tabSettings.style.display = 'none';
+                }
+              } else {
+                if (topbar) topbar.style.display = 'none';
+                if (loginBox) loginBox.style.display = 'block';
+                if (dashboard) dashboard.style.display = 'none';
               }
-            })();
-          </script>
+            }
+
+            window.checkClientSession = checkClientSession;
+
+            const form = document.getElementById('login-form');
+            const errBox = document.getElementById('login-error-msg');
+            
+            if (form) {
+              form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const passInput = document.getElementById('password');
+                if (!passInput) return;
+                const passVal = passInput.value.trim();
+                const passLower = passVal.toLowerCase();
+                
+                if (passLower === 'arya2026') {
+                  document.cookie = "admin_session=admin; path=/; max-age=86400; SameSite=Lax";
+                  localStorage.setItem('admin_session', 'admin');
+                  checkClientSession();
+                  return;
+                }
+                if (passLower === 'egitmen2026') {
+                  document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
+                  document.cookie = "teacher_name=" + encodeURIComponent('Elif SÖNMEZ') + "; path=/; max-age=86400; SameSite=Lax";
+                  localStorage.setItem('admin_session', 'teacher');
+                  localStorage.setItem('teacher_name', 'Elif SÖNMEZ');
+                  checkClientSession();
+                  return;
+                }
+                
+                try {
+                  const erpDataStr = localStorage.getItem('arya_erp_data');
+                  if (erpDataStr) {
+                    const dataObj = JSON.parse(erpDataStr);
+                    const teachers = dataObj.teachers || [];
+                    const matched = teachers.find(t => (t.password || '').toString().trim().toLowerCase() === passLower);
+                    if (matched) {
+                      document.cookie = "admin_session=teacher; path=/; max-age=86400; SameSite=Lax";
+                      document.cookie = "teacher_name=" + encodeURIComponent(matched.name) + "; path=/; max-age=86400; SameSite=Lax";
+                      localStorage.setItem('admin_session', 'teacher');
+                      localStorage.setItem('teacher_name', matched.name);
+                      checkClientSession();
+                      return;
+                    }
+                  }
+                } catch (err) {
+                  console.error('Client login intercept error:', err);
+                }
+
+                if (errBox) errBox.style.display = 'block';
+              });
+            }
+
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', checkClientSession);
+            } else {
+              checkClientSession();
+            }
+          })();
+        </script>
+      </div>
+
+      <!-- ADMIN DASHBOARD WRAPPER -->
+      <div id="admin-dashboard-wrapper" style="display: none;">
+        <!-- Welcome Bar -->
+        <div style="margin-bottom: 2rem;">
+          <h1 id="admin-welcome-title" style="font-size: 2.2rem; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.02em;">Yönetim Masası</h1>
+          <p id="admin-welcome-desc" style="color: #8b8b9f; font-size: 0.95rem; margin-top: 0.5rem;">Web sitenizin tüm içeriğini, eğitimleri ve duyuruları tek bir noktadan yönetin</p>
         </div>
-      ) : (
-        <div>
-          <!-- Welcome Bar -->
-          <div style="margin-bottom: 2rem;">
-            <h1 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.02em;">{role === 'admin' ? 'Yönetim Masası' : 'Eğitmen Çalışma Masası 👨‍🏫'}</h1>
             <p style="color: #8b8b9f; margin-top: 0.5rem; font-size: 1rem;">{role === 'admin' ? 'Arya Sanat Akademisi içerik ve ERP yönetim alanı' : 'Öğrencileriniz, katılım listeleri ve haftalık ders takviminiz'}</p>
           </div>
 
           <!-- TABS SYSTEM -->
           <div style="display: flex; gap: 1rem; border-bottom: 1px solid #1f1f2e; padding-bottom: 1rem; margin-bottom: 2.5rem; overflow-x: auto;">
-            {role === 'admin' && (
-              <>
-                <button 
-                  id="tab-courses" 
-                  style="background: #1c1c28; color: #d4af37; border: 1px solid #d4af37; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                  <span>Kurs Yönetimi</span>
-                </button>
-                <button 
-                  id="tab-announcements" 
-                  style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                  <span>Duyuru &amp; Kampanyalar</span>
-                </button>
-                <button 
-                  id="tab-analytics" 
-                  style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                  <span>Trafik Analitiği</span>
-                </button>
-              </>
-            )}
+            <button 
+              id="tab-courses" 
+              style="background: #1c1c28; color: #d4af37; border: 1px solid #d4af37; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Kurs Yönetimi</span>
+            </button>
+            <button 
+              id="tab-announcements" 
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span>Duyuru &amp; Kampanyalar</span>
+            </button>
+            <button 
+              id="tab-analytics" 
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <span>Trafik Analitiği</span>
+            </button>
             <button 
               id="tab-erp" 
-              style={role === 'teacher'
-                ? "background: #1c1c28; color: #d4af37; border: 1px solid #d4af37; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-                : "background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-              }
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
               <span>Akademi ERP</span>
             </button>
-            {role === 'admin' && (
-              <button 
-                id="tab-settings" 
-                style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span>Site Ayarları</span>
-              </button>
-            )}
+            <button 
+              id="tab-settings" 
+              style="background: #101016; color: #b4b4c6; border: 1px solid #1f1f2e; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span>Site Ayarları</span>
+            </button>
           </div>
 
           <!-- SECTION 1: COURSES (VISIBLE BY DEFAULT FOR ADMIN) -->
-          <div id="sec-courses" style={role === 'admin' ? "display: block;" : "display: none;"}>
+          <div id="sec-courses" style="display: block;">
             <!-- Katmanlı Özet Paneli (Stats Grid) -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
               <div style="background: #101016; border: 1px solid #1f1f2e; padding: 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 1.25rem;">
@@ -351,7 +360,7 @@ if (isLoggedIn) {
                     <div style="background: #161622; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: #b4b4c6; border: 1px solid #1f1f2e;">
                       <div style="display:flex; justify-content:space-between;"><span>⏱️ Süre:</span> <strong style="color:#fff;">{course.data.duration}</strong></div>
                       <div style="display:flex; justify-content:space-between;"><span>📅 Sıklık:</span> <strong style="color:#fff;">{course.data.frequency}</strong></div>
-                      <div style="display:flex; justify-content:space-between;"><span>👨‍🏫 Eğitmen:</span> <strong style="color:#fff;">{course.data.teacher.name}</strong></div>
+                      <div style="display:flex; justify-content:space-between;"><span>⭐ Seviye:</span> <strong style="color:#fff;">{course.data.level || 'Tüm Seviyeler'}</strong></div>
                     </div>
                     
                     <a 
@@ -1081,7 +1090,7 @@ if (isLoggedIn) {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                           <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
                             <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Adı Soyadı</label>
-                            <input type="text" class="teacher-block-name" value={teacher.name} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
+                            <input type="text" class="teacher-block-name" value={teacher?.name || ''} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem;" />
                           </div>
                           <div class="form-group" style="display: flex; flex-direction: column; gap: 0.5rem;">
                             <label style="font-weight: 500; font-size: 0.8rem; color: #b4b4c6;">Branşı / Uzmanlığı</label>
@@ -1235,12 +1244,8 @@ if (isLoggedIn) {
 
             </form>
           </div>
-
         </div>
-      )}
-
-    </div>
-  </div>
+      </div>
 </Layout>
 
 <style is:global>
