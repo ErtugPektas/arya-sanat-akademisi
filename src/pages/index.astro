@@ -167,102 +167,72 @@ const schema = {
     <!-- ===== COURSES SECTION ===== -->
     <section class="section courses-section" id="courses" aria-labelledby="coursesHeading">
       <div class="container">
-        <header class="section-header">
+        <header class="section-header text-center-header">
           <p class="section-tag">Eğitim Programlarımız</p>
           <h2 id="coursesHeading" class="section-title">Eğitimlerimiz</h2>
-          <p class="section-desc">
-            Her seviyeye uygun, uzman eğitmenler eşliğinde kapsamlı müzik eğitimleri.
-            Başlangıçtan profesyonele giden yolda yanınızdayız.
-          </p>
+          <p class="section-desc">Her seviyeye uygun, uzman eğitmenler eşliğinde kapsamlı müzik eğitimleri.</p>
         </header>
 
-        <div class="courses-grid" role="list">
-          {courses.map((course) => (
-            <article class="course-card" id={`card-${course.id}`} role="listitem" aria-label={`${course.data.heroTitle} eğitimi kartı`}>
-              <a href={`/kurslar/${course.id}`} class="card-img-link" aria-label={`${course.data.heroTitle} dersi hakkında detaylı bilgi`}>
-                <div class="card-img-wrapper">
-                  <img
-                    src={course.data.image}
-                    alt={`${course.data.heroTitle} dersi — Arya Sanat Akademisi`}
-                    class="card-img"
-                    loading="lazy"
-                    width="420"
-                    height="240"
-                  />
-                  {course.data.videoPreview && (
-                    <video 
-                      src={course.data.videoPreview} 
-                      loop 
-                      muted 
-                      playsinline 
-                      class="card-video-preview"
-                    ></video>
-                  )}
-                  <div class="card-img-overlay" aria-hidden="true"></div>
-                </div>
-              </a>
-              <div class="card-body">
-                <div class="card-icon" aria-hidden="true">
-                  {course.id === 'bateri' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <ellipse cx="12" cy="7" rx="9" ry="3"/>
-                      <path d="M3 7v10c0 1.66 4 3 9 3s9-1.34 9-3V7"/>
-                      <path d="M7 7v10"/>
-                      <path d="M17 7v10"/>
-                      <path d="m14 3 6-2"/>
-                      <path d="m10 3-6-2"/>
-                    </svg>
-                  )}
-                  {course.id === 'gitar' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M9 18a3.5 3.5 0 0 0 6.1-2.25 3.5 3.5 0 0 0-2.2-6.1A3.5 3.5 0 0 0 9 12a3.5 3.5 0 0 0 0 6Z"/>
-                      <path d="m14.5 10.5 6.5-6.5"/>
-                      <path d="m18 5 1-1"/>
-                      <path d="m16 7 1-1"/>
-                      <path d="m15.5 10.5-3-3"/>
-                    </svg>
-                  )}
-                  {course.id === 'piyano' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="3" width="20" height="18" rx="2"/>
-                      <path d="M6 14v7"/>
-                      <path d="M10 14v7"/>
-                      <path d="M14 14v7"/>
-                      <path d="M18 14v7"/>
-                      <path d="M2 14h20"/>
-                      <rect x="5" y="3" width="2" height="7" fill="currentColor"/>
-                      <rect x="9" y="3" width="2" height="7" fill="currentColor"/>
-                      <rect x="13" y="3" width="2" height="7" fill="currentColor"/>
-                      <rect x="17" y="3" width="2" height="7" fill="currentColor"/>
-                    </svg>
-                  )}
-                  {course.id === 'telli-uflemeli' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 2v20"/>
-                      <path d="M17 5a3 3 0 0 0-3 3c0 2.5 3 3.5 3 6a3 3 0 0 1-6 0"/>
-                      <path d="M7 5a3 3 0 0 1 3 3c0 2.5-3 3.5-3 6a3 3 0 0 0 6 0"/>
-                      <circle cx="12" cy="18" r="1" fill="currentColor"/>
-                    </svg>
-                  )}
-                </div>
-                <h3 class="card-title">{course.data.heroTitle}</h3>
-                <p class="card-desc">
-                  {course.data.description}
-                </p>
-                <ul class="card-features" aria-label={`${course.data.heroTitle} eğitim detayları`}>
-                  <li><strong>Süre:</strong> {course.data.duration}</li>
-                  <li><strong>Sıklık:</strong> {course.data.frequency}</li>
-                  <li><strong>Sertifika:</strong> {course.data.certificate}</li>
+        <!-- Pill Tab Bar -->
+        <div class="courses-tabs" role="tablist" aria-label="Kurs kategorileri" id="coursesTabs">
+          {courses.map((course, idx) => (
+            <button
+              class={`course-tab-pill ${idx === 0 ? 'active' : ''}`}
+              role="tab"
+              aria-selected={idx === 0 ? 'true' : 'false'}
+              aria-controls={`panel-${course.id}`}
+              id={`tab-${course.id}`}
+              data-index={idx}
+            >
+              {course.data.heroTitle}
+            </button>
+          ))}
+        </div>
+
+        <!-- Course Panels -->
+        <div class="courses-panels">
+          {courses.map((course, idx) => (
+            <article
+              class={`course-panel ${idx === 0 ? 'active' : ''}`}
+              id={`panel-${course.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${course.id}`}
+              hidden={idx !== 0}
+            >
+              <div class="course-panel-img">
+                <img
+                  src={course.data.image}
+                  alt={`${course.data.heroTitle} dersi`}
+                  loading="lazy"
+                  width="560"
+                  height="340"
+                />
+                <div class="course-panel-badge">{course.data.heroTitle}</div>
+              </div>
+              <div class="course-panel-body">
+                <h3 class="course-panel-title">{course.data.heroTitle}</h3>
+                <p class="course-panel-desc">{course.data.description}</p>
+                <ul class="course-panel-meta">
+                  <li><span class="meta-label">Süre</span><span class="meta-value">{course.data.duration}</span></li>
+                  <li><span class="meta-label">Sıklık</span><span class="meta-value">{course.data.frequency}</span></li>
+                  <li><span class="meta-label">Sertifika</span><span class="meta-value">{course.data.certificate}</span></li>
                 </ul>
-                <a href={`/kurslar/${course.id}`} class="btn btn-card" id={`${course.id}Btn`}>Detaylı İncele →</a>
+                <div class="course-panel-actions">
+                  <a href={`/kurslar/${course.id}`} class="btn btn-primary" id={`${course.id}Btn`}>
+                    Detaylı İncele
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </a>
+                  <a href="#contact" class="btn btn-outline">Ücretsiz Deneme</a>
+                </div>
               </div>
             </article>
           ))}
-        </div><!-- /.courses-grid -->
+        </div>
       </div>
     </section>
 
     <!-- ===== WHY ARYA SECTION ===== -->
+
     <section class="section why-section" id="why-arya" aria-labelledby="whyHeading">
       <div class="container">
         <header class="section-header">
@@ -754,6 +724,21 @@ const schema = {
               setTimeout(() => modal.remove(), 300);
             }
           });
+        });
+      });
+
+      // Course Tab Switching
+      const tabs = document.querySelectorAll('.course-tab-pill');
+      const panels = document.querySelectorAll('.course-panel');
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const targetId = tab.getAttribute('aria-controls');
+          tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+          panels.forEach(p => { p.classList.remove('active'); p.hidden = true; });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          const target = document.getElementById(targetId);
+          if (target) { target.classList.add('active'); target.hidden = false; }
         });
       });
 
