@@ -351,9 +351,9 @@ const schema = {
     </section>
 
     <!-- ===== GALLERY SECTION ===== -->
-    <section class="gallery-section" id="gallery" aria-labelledby="galleryHeading">
+    <section class="gallery-section gallery-hidden" id="gallery" aria-labelledby="galleryHeading">
       <div class="container">
-        <header class="section-header text-center-header">
+        <header class="section-header text-center-header gallery-header-reveal">
           <p class="section-tag">Sanat Atölyelerimiz</p>
           <h2 id="galleryHeading" class="section-title">{siteSettings.gallery ? siteSettings.gallery.title : "Akademimizden Kareler"}</h2>
           <p class="section-desc">
@@ -365,7 +365,7 @@ const schema = {
       <div class="gallery-scroller">
         {siteSettings.gallery && siteSettings.gallery.images && siteSettings.gallery.images.length > 0 ? (
           siteSettings.gallery.images.map((img, idx) => (
-            <div class="gallery-panel-item" role="listitem" tabindex="0">
+            <div class="gallery-panel-item gallery-item-hidden" role="listitem" tabindex="0" style={`--item-index: ${idx}`}>
               <div class="gallery-card-inner">
                 <img src={img} alt={`Arya Sanat Galeri Görseli ${idx + 1}`} loading="lazy" />
                 <div class="gallery-overlay">
@@ -779,6 +779,24 @@ const schema = {
           const walk = (x - startX) * 1.5;
           scroller.scrollLeft = scrollLeftStart - walk;
         });
+      }
+
+      // Gallery Scroll Reveal (Intersection Observer)
+      const gallerySection = document.querySelector('.gallery-section.gallery-hidden');
+      if (gallerySection) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                gallerySection.classList.remove('gallery-hidden');
+                gallerySection.classList.add('gallery-visible');
+                observer.disconnect();
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        observer.observe(gallerySection);
       }
     });
   </script>
