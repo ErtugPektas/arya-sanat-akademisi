@@ -283,7 +283,8 @@ const schema = {
                     src={feat.videoPreview} 
                     loop 
                     muted 
-                    playsinline 
+                    playsinline
+                    preload="none" 
                     class="card-video-preview" 
                     style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 0;"
                   ></video>
@@ -733,30 +734,31 @@ const schema = {
         }
       }
 
-      // Lightbox logic
-      const galleryItems = document.querySelectorAll('.gallery-panel-item, .gallery-item, .project-wrap');
-      galleryItems.forEach(item => {
-        item.addEventListener('click', () => {
-          const img = item.querySelector('img');
-          if (!img) return;
-          const imgUrl = img.src;
-          const modal = document.createElement('div');
-          modal.className = 'lightbox-modal';
-          modal.innerHTML = `
-            <div class="lightbox-content">
-              <img src="${imgUrl}" alt="Galeri Büyütülmüş Görsel" />
-              <button class="lightbox-close" aria-label="Kapat">&times;</button>
-            </div>
-          `;
-          document.body.appendChild(modal);
-          setTimeout(() => modal.classList.add('open'), 10);
-          
-          modal.addEventListener('click', (e) => {
-            if (e.target === modal || e.target.classList.contains('lightbox-close')) {
-              modal.classList.remove('open');
-              setTimeout(() => modal.remove(), 300);
-            }
-          });
+      // Lightbox logic (Event Delegation for all gallery items)
+      document.body.addEventListener('click', (e) => {
+        const item = e.target.closest('.gallery-panel-item, .gallery-item, .project-wrap');
+        if (!item) return;
+        
+        const img = item.querySelector('img');
+        if (!img) return;
+        
+        const imgUrl = img.src;
+        const modal = document.createElement('div');
+        modal.className = 'lightbox-modal';
+        modal.innerHTML = `
+          <div class="lightbox-content">
+            <img src="${imgUrl}" alt="Galeri Büyütülmüş Görsel" />
+            <button class="lightbox-close" aria-label="Kapat">&times;</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('open'), 10);
+        
+        modal.addEventListener('click', (ev) => {
+          if (ev.target === modal || ev.target.classList.contains('lightbox-close')) {
+            modal.classList.remove('open');
+            setTimeout(() => modal.remove(), 300);
+          }
         });
       });
 
