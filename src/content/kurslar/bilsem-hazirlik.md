@@ -3,11 +3,11 @@ order: 7
 title: "BİLSEM Sınavlarına Hazırlık Kursu Kayseri | Arya Sanat"
 description: "Kayseri Kocasinan BİLSEM müzik yetenek sınavına hazırlık — Arya Sanat Akademisi. İlkokul öğrencileri için müzikal işitme, ritim ve melodi tekrarı eğitimi."
 keywords: "BİLSEM hazırlık Kayseri, BİLSEM müzik sınavı Kocasinan, BİLSEM yetenek sınavı, ritim tekrarı BİLSEM, çocuk müzik kulağı testi"
-badge: "🎓 BİLSEM Müzik Hazırlık"
+badge: "🎓 BİLSEM Hazırlık"
 heroTitle: "BİLSEM Müzik"
 heroTitleHighlight: "Sınavlarına Hazırlık"
 heroDesc: "BİLSEM (Bilim ve Sanat Merkezleri) Müzik Yetenek Sınavları için çocuk pedagojisine uygun, eğlenceli ve %100 sınav odaklı hazırlık programı."
-image: "/assets/kurslar/bilsem-kurs.jpg"
+image: ""
 duration: "45 dk / ders"
 frequency: "Haftada 1–2 ders"
 level: "Sınava Yönelik"
@@ -43,5 +43,7 @@ faq:
     answer: "Genellikle ilkokul 1, 2 ve 3. sınıf öğrencileri sınıf öğretmenlerinin aday göstermesiyle BİLSEM sınavlarına katılabilir."
   - question: "Sınav içeriği nasıldır?"
     answer: "Sınavda çocuklardan piyanodan verilen tek/çift sesleri taklit etmeleri, çalınan ritim kalıplarını ve melodileri tekrarlamaları istenir. Enstrüman çalma şartı aranmaz."
+
+videoPreview: ""
 ---
 BİLSEM müzik hazırlık programımız, çocukların doğal müzik yeteneklerini kaygı duymadan özgürce sergileyebilmelerini sağlar.
