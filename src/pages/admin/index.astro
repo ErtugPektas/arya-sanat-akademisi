@@ -367,7 +367,7 @@ if (!courses || courses.length === 0) {
                     </div>
                     
                     <a 
-                      href={`/admin/edit?course=${course.id}`}
+                      href={`/admin/edit/${course.id}`}
                       style="display: block; text-align: center; background: #1c1c28; color: #fff; border: 1px solid #232335; padding: 0.85rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.25s; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
                       onmouseover="this.style.background='#d4af37'; this.style.color='#000'; this.style.borderColor='#d4af37'; this.style.boxShadow='0 4px 12px rgba(212,175,55,0.3)';"
                       onmouseout="this.style.background='#1c1c28'; this.style.color='#fff'; this.style.borderColor='#232335'; this.style.boxShadow='none';"
@@ -1032,6 +1032,7 @@ if (!courses || courses.length === 0) {
                             <div style="display: flex; gap: 0.5rem;">
                               <input type="text" id={`whyus-card-video-path-${index}`} class="whyus-card-video" value={feat.videoPreview || ''} style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('whyus-card-video-prev-${index}').src = this.value`} />
                               <button type="button" onclick={`document.getElementById('whyus-card-video-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                               <input type="file" id={`whyus-card-video-file-${index}`} style="display: none;" accept="video/*" onchange={`uploadFile(this, 'whyus-card-video-path-${index}', 'whyus-card-video-prev-${index}')`} />
                             </div>
                             <video id={`whyus-card-video-prev-${index}`} src={feat.videoPreview} loop muted autoplay style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: feat.videoPreview ? 'block' : 'none';" onerror="this.style.display='none'" onloadeddata="this.style.display='block'"></video>
@@ -1108,6 +1109,7 @@ if (!courses || courses.length === 0) {
                             <div style="display: flex; gap: 0.5rem;">
                               <input type="text" id={`teacher-img-path-${index}`} class="teacher-block-image" value={teacher.image} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('teacher-img-prev-${index}').src = this.value`} />
                               <button type="button" onclick={`document.getElementById('teacher-img-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                               <input type="file" id={`teacher-img-file-${index}`} style="display: none;" accept="image/*" onchange={`uploadFile(this, 'teacher-img-path-${index}', 'teacher-img-prev-${index}')`} />
                             </div>
                           </div>
@@ -1122,6 +1124,7 @@ if (!courses || courses.length === 0) {
                             <div style="display: flex; gap: 0.5rem;">
                               <input type="text" id={`teacher-video-path-${index}`} class="teacher-block-video" value={teacher.videoPreview || ''} style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('teacher-video-prev-${index}').src = this.value`} />
                               <button type="button" onclick={`document.getElementById('teacher-video-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                               <input type="file" id={`teacher-video-file-${index}`} style="display: none;" accept="video/*" onchange={`uploadFile(this, 'teacher-video-path-${index}', 'teacher-video-prev-${index}')`} />
                             </div>
                           </div>
@@ -1181,6 +1184,7 @@ if (!courses || courses.length === 0) {
                           <div style="display: flex; gap: 0.5rem;">
                             <input type="text" id={`gallery-img-path-${index}`} class="gallery-image-path" value={img} required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('gallery-img-prev-${index}').src = this.value`} />
                             <button type="button" onclick={`document.getElementById('gallery-img-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                             <input type="file" id={`gallery-img-file-${index}`} style="display: none;" accept="image/*" onchange={`uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')`} />
                           </div>
                         </div>
@@ -1418,7 +1422,7 @@ if (!courses || courses.length === 0) {
       
       const settings = JSON.parse(cached);
       
-      // Populate SEO
+      try { // Populate SEO
       if (settings.seo) {
         const titleEl = document.querySelector('input[name="seo_title"]');
         if (titleEl) titleEl.value = settings.seo.title || '';
@@ -1426,7 +1430,8 @@ if (!courses || courses.length === 0) {
         if (descEl) descEl.value = settings.seo.description || '';
       }
       
-      // Populate Contact
+       } catch (e) { console.error('Error syncing SEO:', e); }
+      try { // Populate Contact
       if (settings.contact) {
         document.querySelectorAll('[name^="contact_"]').forEach(el => {
           const key = el.name.replace('contact_', '');
@@ -1436,7 +1441,8 @@ if (!courses || courses.length === 0) {
         });
       }
       
-      // Populate Stats
+       } catch (e) { console.error('Error syncing Contact:', e); }
+      try { // Populate Stats
       if (settings.stats) {
         document.querySelectorAll('[name^="stats_"]').forEach(el => {
           const key = el.name.replace('stats_', '');
@@ -1451,7 +1457,8 @@ if (!courses || courses.length === 0) {
         });
       }
       
-      // Populate Hero
+       } catch (e) { console.error('Error syncing Stats:', e); }
+      try { // Populate Hero
       if (settings.hero) {
         document.querySelectorAll('[name^="hero_"]').forEach(el => {
           const key = el.name.replace('hero_', '');
@@ -1462,7 +1469,8 @@ if (!courses || courses.length === 0) {
         });
       }
       
-      // Populate Why Us Header
+       } catch (e) { console.error('Error syncing Hero:', e); }
+      try { // Populate Why Us Header
       if (settings.whyUs) {
         const tagEl = document.querySelector('input[name="why_tag"]');
         if (tagEl) tagEl.value = settings.whyUs.tag || '';
@@ -1524,7 +1532,8 @@ if (!courses || courses.length === 0) {
         }
       }
       
-      // Populate Teachers Header & List
+       } catch (e) { console.error('Error syncing WhyUs:', e); }
+      try { // Populate Teachers Header & List
       if (settings.teachersSection) {
         const tagEl = document.querySelector('input[name="teachers_tag"]');
         if (tagEl) tagEl.value = settings.teachersSection.tag || '';
@@ -1560,6 +1569,7 @@ if (!courses || courses.length === 0) {
                     <div style="display: flex; gap: 0.5rem;">
                       <input type="text" id="teacher-img-path-${index}" class="teacher-block-image" value="${teacher.image || ''}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-img-prev-${index}').src = this.value" />
                       <button type="button" onclick="document.getElementById('teacher-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                       <input type="file" id="teacher-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'teacher-img-path-${index}', 'teacher-img-prev-${index}')" />
                     </div>
                   </div>
@@ -1573,6 +1583,7 @@ if (!courses || courses.length === 0) {
                     <div style="display: flex; gap: 0.5rem;">
                       <input type="text" id="teacher-video-path-${index}" class="teacher-block-video" value="${teacher.videoPreview || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-video-prev-${index}').src = this.value" />
                       <button type="button" onclick="document.getElementById('teacher-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                       <input type="file" id="teacher-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'teacher-video-path-${index}', 'teacher-video-prev-${index}')" />
                     </div>
                   </div>
@@ -1595,7 +1606,8 @@ if (!courses || courses.length === 0) {
         }
       }
       
-      // Populate Navbar links
+       } catch (e) { console.error('Error syncing Teachers:', e); }
+      try { // Populate Navbar links
       if (settings.navbar && Array.isArray(settings.navbar.links)) {
         const container = document.getElementById('navbar-links-container');
         if (container) {
@@ -1623,6 +1635,7 @@ if (!courses || courses.length === 0) {
         }
       }
       
+       } catch (e) { console.error('Error syncing Navbar:', e); }
       // Populate Gallery Header & List
       if (settings.gallery) {
         const titleEl = document.querySelector('input[name="gallery_title"]');
@@ -1644,6 +1657,7 @@ if (!courses || courses.length === 0) {
                   <div style="display: flex; gap: 0.5rem;">
                     <input type="text" id="gallery-img-path-${index}" class="gallery-image-path" value="${img}" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('gallery-img-prev-${index}').src = this.value" />
                     <button type="button" onclick="document.getElementById('gallery-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                     <input type="file" id="gallery-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')" />
                   </div>
                 </div>
@@ -2827,6 +2841,7 @@ if (!courses || courses.length === 0) {
           <div style="display: flex; gap: 0.5rem;">
             <input type="text" id="teacher-img-path-${index}" class="teacher-block-image" required style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-img-prev-${index}').src = this.value" placeholder="/assets/teachers/default.jpg" />
             <button type="button" onclick="document.getElementById('teacher-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
             <input type="file" id="teacher-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'teacher-img-path-${index}', 'teacher-img-prev-${index}')" />
           </div>
         </div>
@@ -2841,6 +2856,7 @@ if (!courses || courses.length === 0) {
           <div style="display: flex; gap: 0.5rem;">
             <input type="text" id="teacher-video-path-${index}" class="teacher-block-video" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('teacher-video-prev-${index}').src = this.value" placeholder="/assets/teachers/video.mp4" />
             <button type="button" onclick="document.getElementById('teacher-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
             <input type="file" id="teacher-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'teacher-video-path-${index}', 'teacher-video-prev-${index}')" />
           </div>
         </div>
@@ -2879,6 +2895,7 @@ if (!courses || courses.length === 0) {
           <div style="display: flex; gap: 0.5rem;">
             <input type="text" id="gallery-img-path-${index}" class="gallery-image-path" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('gallery-img-prev-${index}').src = this.value" placeholder="/assets/gallery/resim.jpg" />
             <button type="button" onclick="document.getElementById('gallery-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
             <input type="file" id="gallery-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'gallery-img-path-${index}', 'gallery-img-prev-${index}')" />
           </div>
         </div>

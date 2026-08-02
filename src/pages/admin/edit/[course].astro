@@ -2,11 +2,11 @@
 export const prerender = false;
 
 import { getEntry } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../../../layouts/Layout.astro';
 import path from 'path';
 
 // Course parameter will be processed client-side or built statically
-const courseId = Astro.url.searchParams.get('course') || 'baglama';
+const courseId = Astro.params.course || 'baglama';
 let course = null;
 try {
   course = await getEntry('kurslar', courseId);
@@ -16,7 +16,7 @@ try {
 
 if (!course) {
   try {
-    const globCourses = import.meta.glob('../../content/kurslar/*.md', { eager: true });
+    const globCourses = import.meta.glob('../../../content/kurslar/*.md', { eager: true });
     const matchKey = Object.keys(globCourses).find(k => k.endsWith(`/${courseId}.md`));
     if (matchKey) {
       const mod = globCourses[matchKey];
@@ -167,6 +167,7 @@ const { data, body } = course;
               <div style="display: flex; gap: 0.5rem;">
                 <input type="text" id="input-image" name="image" value={data.image} required style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-image').src = this.value" />
                 <button type="button" onclick="document.getElementById('file-course-image').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                 <input type="file" id="file-course-image" style="display: none;" accept="image/*" onchange="uploadFile(this, 'input-image', 'preview-image')" />
               </div>
             </div>
@@ -181,6 +182,7 @@ const { data, body } = course;
               <div style="display: flex; gap: 0.5rem;">
                 <input type="text" id="input-video-preview" name="videoPreview" value={data.videoPreview || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.95rem; width: 100%;" oninput="document.getElementById('preview-video').src = this.value" />
                 <button type="button" onclick="document.getElementById('file-course-video').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Video Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                 <input type="file" id="file-course-video" style="display: none;" accept="video/*" onchange="uploadFile(this, 'input-video-preview', 'preview-video')" />
               </div>
             </div>
@@ -247,6 +249,7 @@ const { data, body } = course;
                 <div style="display: flex; gap: 0.5rem;">
                   <input type="text" id="input-teacher-image" name="teacher_image" value={data.teacher?.image || ''} style="background: #1a1a24; border: 1px solid #2d2d3d; color: #fff; padding: 0.75rem 1rem; border-radius: 6px; width: 100%;" oninput="document.getElementById('preview-teacher-image').src = this.value" />
                   <button type="button" onclick="document.getElementById('file-teacher-image').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Görsel Yükle 📁</button>
+<button type="button" onclick="const p=this.previousElementSibling.previousElementSibling; p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                   <input type="file" id="file-teacher-image" style="display: none;" accept="image/*" onchange="uploadFile(this, 'input-teacher-image', 'preview-teacher-image')" />
                 </div>
               </div>
