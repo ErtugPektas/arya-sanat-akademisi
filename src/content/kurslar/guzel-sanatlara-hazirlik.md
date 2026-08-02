@@ -1,4 +1,5 @@
 ---
+order: 6
 title: "Güzel Sanatlara Hazırlık Kursu Kayseri | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan Güzel Sanatlara hazırlık kursu — Arya Sanat Akademisi. Güzel sanatlar lisesi ve fakültesi müzik bölümlerine hazırlık. Yetenek sınavı eğitimi."
 keywords: "güzel sanatlara hazırlık Kayseri, yetenek sınavı kursu Kocasinan, güzel sanatlar lisesine hazırlık, müzik bölümü yetenek sınavı, konservatuvara hazırlık"

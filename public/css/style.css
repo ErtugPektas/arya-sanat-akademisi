@@ -2532,9 +2532,8 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 
 @media (max-width: 480px) {
   .course-card-item {
-    width: 84vw;
-    min-width: 250px;
-    max-width: 310px;
+    width: 90vw;
+    max-width: 320px;
   }
   .course-card-body {
     padding: 1.15rem 1rem;

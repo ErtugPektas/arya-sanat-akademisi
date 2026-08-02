@@ -27,7 +27,8 @@ const activeTeacherName = '';
 
 let courses = [];
 try {
-  courses = await getCollection('kurslar');
+  const coursesRaw = await getCollection('kurslar');
+  courses = coursesRaw.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
 } catch (e) {
   console.error('getCollection error:', e);
 }
@@ -1309,7 +1310,15 @@ if (!courses || courses.length === 0) {
 
   async function safeFetchJson(url, options) {
     try {
-      const response = await fetch(url, options);
+      const token = localStorage.getItem('admin_session') || '';
+      const finalOptions = {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${token}`
+        }
+      };
+      const response = await fetch(url, finalOptions);
       const text = await response.text();
       let data = {};
       try {
@@ -1837,14 +1846,12 @@ if (!courses || courses.length === 0) {
       btnSave.innerText = 'Yayınlanıyor... 🚀';
       
       try {
-        const res = await fetch('/api/save-announcements', {
+        const data = await safeFetchJson('/api/save-announcements', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ announcements: announcementsList })
         });
-        
-        const data = await res.json();
-        if (data.success) {
+        if (data.ok && data.success) {
           alert('Duyurular başarıyla güncellendi ve GitHub üzerinden yayına alındı! Değişikliklerin canlı sitede görünmesi yaklaşık 30-40 saniye sürecektir.');
         } else {
           alert('Kaydetme hatası: ' + data.error);

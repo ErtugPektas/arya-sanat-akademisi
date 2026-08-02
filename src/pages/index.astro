@@ -16,7 +16,8 @@ try {
   console.error("Failed to read site-settings.json dynamically:", e);
 }
 
-const courses = await getCollection('kurslar');
+const coursesRaw = await getCollection('kurslar');
+const courses = coursesRaw.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
 
 const cleanPhone = siteSettings.contact.phone.replace(/[^\d+]/g, '');
 
@@ -520,6 +521,7 @@ const schema = {
                   <option value="keman">Keman</option>
                   <option value="flut">Yan Flüt</option>
                   <option value="klarnet">Klarnet</option>
+                  <option value="diger">Diğer Dersler</option>
                 </select>
               </div>
 
@@ -873,7 +875,7 @@ const schema = {
         const loop = horizontalLoop(courseCards, {
           paused: false,
           repeat: -1,
-          speed: 0.65,
+          speed: 0.35,
           paddingRight: 24,
           draggable: true,
           onChange: (element, index) => {

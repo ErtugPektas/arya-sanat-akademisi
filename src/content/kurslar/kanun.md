@@ -1,4 +1,5 @@
 ---
+order: 16
 title: "Kanun Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan kanun dersi — Arya Sanat Akademisi. Geleneksel Türk Sanat Müziği eğitimi. Bireysel kanun dersleri ve makam solfeji."
 keywords: "kanun dersi Kayseri, kanun kursu Kocasinan, kanun eğitimi, Türk sanat müziği, kanun çalmayı öğrenme"

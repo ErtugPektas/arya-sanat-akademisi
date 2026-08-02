@@ -1,4 +1,5 @@
 ---
+order: 8
 title: "Bağlama (Saz) Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan bağlama dersi — Arya Sanat Akademisi. Kısa sap ve uzun sap bağlama eğitimi. Bireysel dersler, halk müziği solfeji ve tezene teknikleri."
 keywords: "bağlama dersi Kayseri, saz kursu Kocasinan, bağlama eğitimi, kısa sap bağlama, uzun sap saz, halk müziği dersi"

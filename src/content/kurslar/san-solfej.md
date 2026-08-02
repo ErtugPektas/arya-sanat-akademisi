@@ -1,9 +1,10 @@
 ---
-title: "Şan ve Solfej Dersi Kayseri | Arya Sanat Akademisi"
+order: 10
+title: "Solfej (Şan Dersi) Kayseri | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan şan dersleri — Arya Sanat Akademisi. Bireysel şan ve ses eğitimi. Doğru nefes, ses açma, diyafram ve nota solfej dersleri."
 keywords: "şan dersi Kayseri, ses eğitimi Kocasinan, şan kursu, diyafram nefesi şan, şan solfej eğitimi kayseri"
 badge: "🎤 Şan & Ses Eğitimi"
-heroTitle: "Şan ve Solfej"
+heroTitle: "Solfej (Şan Dersi)"
 heroTitleHighlight: "Ses Eğitimi"
 heroDesc: "Kendi sesinizin potansiyelini keşfedin! Doğru diyafram nefesi, ses telleri koruma teknikleri, vokal egzersizleri ve temel nota okuma (solfej) eğitimi."
 image: "/assets/kurslar/san-kurs.jpg"

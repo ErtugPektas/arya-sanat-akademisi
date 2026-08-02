@@ -6,7 +6,10 @@ export const prerender = false;
 export async function POST({ request, cookies }) {
   const sessionCookie = cookies.get('admin_session');
   const sessionVal = sessionCookie ? sessionCookie.value : null;
-  const isLoggedIn = sessionVal === 'admin' || sessionVal === 'teacher' || sessionVal === 'true';
+  const authHeader = request.headers.get('Authorization');
+  const authVal = authHeader ? authHeader.replace('Bearer ', '').trim() : null;
+  const finalSession = sessionVal || authVal;
+  const isLoggedIn = finalSession === 'admin' || finalSession === 'teacher' || finalSession === 'true';
 
   if (!isLoggedIn) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {

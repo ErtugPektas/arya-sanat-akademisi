@@ -1,4 +1,5 @@
 ---
+order: 3
 title: "Gitar Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan gitar dersi — Arya Sanat Akademisi. Klasik, akustik ve elektro gitar eğitimi. Başlangıçtan ileri seviyeye bireysel dersler. MEB onaylı sertifika. Ücretsiz deneme dersi!"
 keywords: "gitar dersi Kayseri, gitar kursu kocasinan, akustik gitar dersi, elektro gitar kursu, klasik gitar dersi kayseri, gitar öğrenmek"

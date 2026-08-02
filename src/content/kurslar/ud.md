@@ -1,4 +1,5 @@
 ---
+order: 14
 title: "Ud Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan ud dersi — Arya Sanat Akademisi. Geleneksel Türk Musikisi eğitimi. Mızrap teknikleri, makam bilgisi ve ud dersleri."
 keywords: "ud dersi Kayseri, ud kursu Kocasinan, ud eğitimi, Türk sanat müziği ud, ud çalmayı öğrenme"

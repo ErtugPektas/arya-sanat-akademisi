@@ -1,4 +1,5 @@
 ---
+order: 5
 title: "Resim ve Görsel Sanatlar Dersi Kayseri | Arya Sanat"
 description: "Kayseri Kocasinan resim dersleri — Arya Sanat Akademisi. Çocuklar ve yetişkinler için resim eğitimi. Karakalem, yağlı boya, akrilik ve çizim atölyeleri."
 keywords: "resim dersi Kayseri, resim kursu Kocasinan, karakalem eğitimi, yağlı boya dersleri, hobi resim kursu"

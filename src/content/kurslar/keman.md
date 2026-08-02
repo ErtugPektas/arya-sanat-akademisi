@@ -1,4 +1,5 @@
 ---
+order: 2
 title: "Keman Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan keman dersi — Arya Sanat Akademisi. Klasik ve popüler keman eğitimi. Her yaş grubu için keman dersleri."
 keywords: "keman dersi Kayseri, keman kursu Kocasinan, keman eğitimi, keman çalmayı öğrenme, klasik müzik eğitimi"

@@ -1,4 +1,5 @@
 ---
+order: 13
 title: "Trompet Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan trompet dersi — Arya Sanat Akademisi. Bakır üflemeli trompet eğitimi. Dudak pozisyonu, nefes teknikleri ve caz/klasik trompet dersleri."
 keywords: "trompet dersi Kayseri, trompet kursu Kocasinan, trompet eğitimi, bakır üflemeli çalgı dersleri, caz trompet"

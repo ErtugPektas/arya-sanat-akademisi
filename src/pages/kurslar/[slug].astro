@@ -3,7 +3,8 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const courses = await getCollection('kurslar');
+  const coursesRaw = await getCollection('kurslar');
+  const courses = coursesRaw.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
   return courses.map(course => ({
     params: { slug: course.id },
     props: { course },
@@ -292,6 +293,33 @@ const schema = [
         document.querySelectorAll('.faq-answer').forEach(a => { a.hidden = true; });
         document.querySelectorAll('.faq-question').forEach(b => b.setAttribute('aria-expanded', 'false'));
         if (!isOpen) { answer.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+
+    // Lightbox logic
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        if (!img) return;
+        const imgUrl = img.src;
+        const modal = document.createElement('div');
+        modal.className = 'lightbox-modal';
+        modal.innerHTML = `
+          <div class="lightbox-content">
+            <img src="${imgUrl}" alt="Galeri Büyütülmüş Görsel" />
+            <button class="lightbox-close" aria-label="Kapat">&times;</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('open'), 10);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal || e.target.classList.contains('lightbox-close')) {
+            modal.classList.remove('open');
+            setTimeout(() => modal.remove(), 300);
+          }
+        });
       });
     });
   </script>

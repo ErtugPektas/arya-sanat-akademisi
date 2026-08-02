@@ -1,4 +1,5 @@
 ---
+order: 1
 title: "Piyano Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
 description: "Kayseri Kocasinan piyano dersi — Arya Sanat Akademisi. Klasik ve modern piyano eğitimi. Çocuklar ve yetişkinler için bireysel dersler. MEB onaylı sertifika. Ücretsiz deneme dersi!"
 keywords: "piyano dersi kayseri, piyano kursu kocasinan, klasik piyano eğitimi, modern piyano dersi, piyano öğrenmek, çocuk piyano kursu"

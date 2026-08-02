@@ -146,17 +146,17 @@ const AudioManager = (() => {
    * Audio zamanlaması için nota planlayıcı
    */
   function scheduleNote(noteIndex, chordIndex, time) {
-    // Sol el eşlik arpeji (Çok derinden ve hafif: 0.006 ses seviyesi)
+    // Sol el eşlik arpeji (Daha belirgin)
     const baseFreq = CHORDS[chordIndex][noteIndex];
-    playPianoTone(baseFreq, time, 0.45, 0.006, 0.15, 0.3, 0.4);
+    playPianoTone(baseFreq, time, 0.45, 0.04, 0.15, 0.3, 0.4);
 
-    // Sağ el melodi notası (Bir tık daha belirgin ama yine de dinlendirici: 0.008 ses seviyesi)
+    // Sağ el melodi notası (Daha belirgin)
     if (noteIndex === 0) {
       const melodyFreq = MELODY_BEAT_0[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.008, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.06, 0.2, 0.4, 0.8);
     } else if (noteIndex === 4) {
       const melodyFreq = MELODY_BEAT_4[chordIndex];
-      playPianoTone(melodyFreq, time, 1.2, 0.008, 0.2, 0.4, 0.8);
+      playPianoTone(melodyFreq, time, 1.2, 0.06, 0.2, 0.4, 0.8);
     }
   }
 
