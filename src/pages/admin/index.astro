@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import duyurular from '../../content/duyurular.json';
@@ -1019,6 +1021,7 @@ if (!courses || courses.length === 0) {
                             <div style="display: flex; gap: 0.5rem;">
                               <input type="text" id={`whyus-card-img-path-${index}`} class="whyus-card-image" value={feat.image || ''} style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput={`document.getElementById('whyus-card-img-prev-${index}').src = this.value`} />
                               <button type="button" onclick={`document.getElementById('whyus-card-img-file-${index}').click()`} style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                              <button type="button" onclick="const p=document.getElementById('erp-new-student-name'); p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                               <input type="file" id={`whyus-card-img-file-${index}`} style="display: none;" accept="image/*" onchange={`uploadFile(this, 'whyus-card-img-path-${index}', 'whyus-card-img-prev-${index}')`} />
                             </div>
                             <img id={`whyus-card-img-prev-${index}`} src={feat.image} style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: feat.image ? 'block' : 'none';" onerror="this.style.display='none'" onload="this.style.display='block'" />
@@ -1498,6 +1501,7 @@ if (!courses || courses.length === 0) {
                     <div style="display: flex; gap: 0.5rem;">
                       <input type="text" id="whyus-card-img-path-${index}" class="whyus-card-image" value="${feat.image || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-img-prev-${index}').src = this.value" />
                       <button type="button" onclick="document.getElementById('whyus-card-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                              <button type="button" onclick="const p=document.getElementById('whyus-card-img-path-${index}'); p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                       <input type="file" id="whyus-card-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'whyus-card-img-path-${index}', 'whyus-card-img-prev-${index}')" />
                     </div>
                     <img id="whyus-card-img-prev-${index}" src="${feat.image || ''}" style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: ${feat.image ? 'block' : 'none'};" onerror="this.style.display='none'" onload="this.style.display='block'" />
@@ -1507,6 +1511,7 @@ if (!courses || courses.length === 0) {
                     <div style="display: flex; gap: 0.5rem;">
                       <input type="text" id="whyus-card-video-path-${index}" class="whyus-card-video" value="${feat.videoPreview || ''}" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-video-prev-${index}').src = this.value" />
                       <button type="button" onclick="document.getElementById('whyus-card-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                              <button type="button" onclick="const p=document.getElementById('whyus-card-video-path-${index}'); p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
                       <input type="file" id="whyus-card-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'whyus-card-video-path-${index}', 'whyus-card-video-prev-${index}')" />
                     </div>
                     <video id="whyus-card-video-prev-${index}" src="${feat.videoPreview || ''}" loop muted autoplay style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: ${feat.videoPreview ? 'block' : 'none'};" onerror="this.style.display='none'" onloadeddata="this.style.display='block'"></video>
@@ -2730,6 +2735,7 @@ if (!courses || courses.length === 0) {
           <div style="display: flex; gap: 0.5rem;">
             <input type="text" id="whyus-card-img-path-${index}" class="whyus-card-image" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-img-prev-${index}').src = this.value" placeholder="/assets/whyus/default.jpg" />
             <button type="button" onclick="document.getElementById('whyus-card-img-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                              <button type="button" onclick="const p=document.getElementById('teacher-img-path-${index}'); p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
             <input type="file" id="whyus-card-img-file-${index}" style="display: none;" accept="image/*" onchange="uploadFile(this, 'whyus-card-img-path-${index}', 'whyus-card-img-prev-${index}')" />
           </div>
           <img id="whyus-card-img-prev-${index}" src="" style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: none;" onerror="this.style.display='none'" onload="this.style.display='block'" />
@@ -2740,6 +2746,7 @@ if (!courses || courses.length === 0) {
           <div style="display: flex; gap: 0.5rem;">
             <input type="text" id="whyus-card-video-path-${index}" class="whyus-card-video" style="background: #101016; border: 1px solid #1f1f2e; color: #fff; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.875rem; width: 100%;" oninput="document.getElementById('whyus-card-video-prev-${index}').src = this.value" placeholder="/assets/whyus/video.mp4" />
             <button type="button" onclick="document.getElementById('whyus-card-video-file-${index}').click()" style="background: #1c1c28; color: #d4af37; border: 1px solid #2d2d3d; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">Seç 📁</button>
+                              <button type="button" onclick="const p=document.getElementById('whyus-card-video-path-${index}'); p.value=''; p.dispatchEvent(new Event('input'))" style="background: #2a1111; color: #fca5a5; border: 1px solid #4a1515; padding: 0.55rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; margin-left: 0.25rem;">Sil ❌</button>
             <input type="file" id="whyus-card-video-file-${index}" style="display: none;" accept="video/*" onchange="uploadFile(this, 'whyus-card-video-path-${index}', 'whyus-card-video-prev-${index}')" />
           </div>
           <video id="whyus-card-video-prev-${index}" src="" loop muted autoplay style="width: 100%; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #1f1f2e; margin-top: 0.25rem; display: none;" onerror="this.style.display='none'" onloadeddata="this.style.display='block'"></video>
