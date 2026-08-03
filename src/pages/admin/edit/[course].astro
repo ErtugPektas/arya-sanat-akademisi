@@ -359,7 +359,7 @@ const { data, body } = course;
     }
   }
 
-  async async function uploadFile(inputEl, textInputId, previewImgId) {
+  async function uploadFile(inputEl, textInputId, previewImgId) {
       if (!inputEl.files || !inputEl.files[0]) return;
       
       const file = inputEl.files[0];
