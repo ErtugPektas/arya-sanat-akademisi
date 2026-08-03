@@ -1346,7 +1346,7 @@ if (!courses || courses.length === 0) {
     if (!inputEl.files || !inputEl.files[0]) return;
     
     const originalFile = inputEl.files[0];
-    const btn = inputEl.previousElementSibling;
+    const btn = inputEl.previousElementSibling && inputEl.previousElementSibling.previousElementSibling ? inputEl.previousElementSibling.previousElementSibling : inputEl.previousElementSibling;
     const originalText = btn ? btn.innerText : 'Yükle';
     if (btn) {
       btn.disabled = true;
