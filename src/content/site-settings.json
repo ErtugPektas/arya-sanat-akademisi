@@ -4,7 +4,7 @@
     "description": "Kayseri Kocasinan'da profesyonel müzik eğitimi. Bateri, Gitar, Elektro gitar, Bass Gitar, Ukulele, Keman, Çello, Kanun, Yan Flüt, Klarnet, Saksafon, Trompet, Güzel Sanatlar Lisesine Ve Fakültesine Hazırlık, Bilsem Sınavlarına Hazırlık, Resim, Şan (Solfej), Ud, Ney, Bağlama ve Piyano dersleri."
   },
   "contact": {
-    "phone": "0552 611 21 01 / 0850 227 89 22",
+    "phone": "+90 552 611 21 01",
     "email": "aryasanatakademisi@gmail.com",
     "address": "Erciyesevler, Tuna Cd. No:22 / 1 , 38020 Kocasinan/Kayseri",
     "workingHours": "Salı - Pazar: 10:00 - 19:00",
@@ -38,14 +38,6 @@
       },
       {
         "id": "feature-1",
-        "title": "Modern ve İlham Verici Atölyeler",
-        "desc": "Sanat, doğru atmosferde filizlenir. Arya Sanat bünyesindeki tüm sınıflar ve atölyeler, öğrencilerimizin yaratıcılığını tetikleyecek, konforlu ve en güncel ekipmanlarla donatılmış bir yapıda tasarlanmıştır.",
-        "items": "Ses yalıtımlı stüdyolar, Kayıt ekipmanları, Konser salonu",
-        "image": "/assets/uploads/1784759155937_WhatsApp_Image_2026-07-19_at_8.52.36_PM.jpeg",
-        "videoPreview": ""
-      },
-      {
-        "id": "feature-2",
         "title": "MEB Onaylı Sertifika",
         "desc": "Milli Eğitim Bakanlığı onaylı sertifikalarımız, müzik kariyerinizde resmi bir adım atmanızı sağlar. Uluslararası geçerliliği olan sınav hazırlık programlarımız da mevcuttur.",
         "items": "MEB onaylı belgeler, ABRSM sınav hazırlığı, Dijital sertifika sistemi",
@@ -53,12 +45,20 @@
         "videoPreview": "/assets/uploads/1784759059136_WhatsApp_Video_2026-07-19_at_8.55.41_PM.mp4"
       },
       {
-        "id": "feature-3",
+        "id": "feature-2",
         "title": "Sanatla Büyüyen Özgüven",
         "desc": " Amacımız sadece enstrüman çalmayı veya resim yapmayı öğretmek değil. Sanat aracılığıyla öğrencilerimizin odaklanma becerilerini geliştirmeyi, problem çözme yeteneklerini artırmayı ve en önemlisi hayata karşı güçlü bir özgüven kazanmalarını sağlıyoruz.",
         "items": "",
         "image": "/assets/uploads/1784759002215_WhatsApp_Image_2026-07-19_at_8.52.36_PM.jpeg",
         "videoPreview": "/assets/uploads/1784759085361_WhatsApp_Video_2026-07-19_at_8.52.53_PM__3_.mp4"
+      },
+      {
+        "id": "feature-3",
+        "title": "Sahnede Parıldama Fırsatı",
+        "desc": "Öğrenilen her detayın bir başarı hikayesine dönüşmesini önemsiyoruz. Yıl sonu gösterileri, sergiler ve dynamic dinletilerle öğrencilerimize emeklerini sahnede sergileme ve alkışlanmanın gururunu yaşatıyoruz.",
+        "items": "",
+        "image": "/assets/uploads/1784759009059_WhatsApp_Image_2026-07-19_at_8.52.36_PM.jpeg",
+        "videoPreview": "/assets/uploads/1784759101513_WhatsApp_Video_2026-07-19_at_8.52.53_PM__1_.mp4"
       }
     ]
   },
@@ -77,11 +77,7 @@
       "/assets/uploads/1784653485522_WhatsApp_Image_2026-07-19_at_8.52.40_PM__1_.jpeg",
       "/assets/uploads/1784559027245_WhatsApp_Image_2026-07-19_at_8.52.36_PM.jpeg",
       "/assets/uploads/1784737072231_WhatsApp_Image_2026-07-19_at_8.52.45_PM.jpeg",
-      "/assets/uploads/1784737095634_WhatsApp_Image_2026-07-19_at_8.52.41_PM.jpeg",
-      "/assets/uploads/1785714066335_ChatGPT_Image_22_Tem_2026_19_31_13.jpg",
-      "/assets/uploads/1785715136902_WhatsApp_Image_2026-07-19_at_8.52.48_PM.jpeg",
-      "/assets/uploads/1785715253855_WhatsApp_Image_2026-07-19_at_8.52.47_PM__2_.jpeg",
-      "/assets/uploads/1785715265931_WhatsApp_Image_2026-07-19_at_8.52.50_PM__2_.jpeg"
+      "/assets/uploads/1784737095634_WhatsApp_Image_2026-07-19_at_8.52.41_PM.jpeg"
     ]
   },
   "navbar": {
@@ -100,8 +96,8 @@
         "url": "/#why-arya"
       },
       {
-        "text": "Akademimizden Kareler",
-        "url": "#gallery"
+        "text": "Eğitmenler",
+        "url": "/#teachers"
       },
       {
         "text": "İletişim",
