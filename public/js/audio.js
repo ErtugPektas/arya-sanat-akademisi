@@ -180,19 +180,21 @@ const AudioManager = (() => {
   /**
    * Sürekli akan dinlendirici piyano müziğini başlat
    */
+  let bgAudio = null;
+
   function startBackgroundMusic() {
     if (isMuted) return;
-    if (!schedulerTimer) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      nextNoteTime = audioCtx.currentTime + 0.1;
-      schedulerTimer = setInterval(scheduler, 50);
+    if (!bgAudio) {
+      bgAudio = new Audio('/assets/einaudi.mp3');
+      bgAudio.loop = true;
+      bgAudio.volume = 0.4;
     }
+    bgAudio.play().catch(e => console.log('Audio play blocked:', e));
   }
 
   function stopBackgroundMusic() {
-    if (schedulerTimer) {
-      clearInterval(schedulerTimer);
-      schedulerTimer = null;
+    if (bgAudio) {
+      bgAudio.pause();
     }
   }
 
