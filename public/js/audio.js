@@ -180,21 +180,19 @@ const AudioManager = (() => {
   /**
    * Sürekli akan dinlendirici piyano müziğini başlat
    */
-  let bgAudio = null;
-
   function startBackgroundMusic() {
     if (isMuted) return;
-    if (!bgAudio) {
-      bgAudio = new Audio('/assets/piyano.mp3');
-      bgAudio.loop = true;
-      bgAudio.volume = 0.4;
+    if (!schedulerTimer) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      nextNoteTime = audioCtx.currentTime + 0.1;
+      schedulerTimer = setInterval(scheduler, 50);
     }
-    bgAudio.play().catch(e => console.log('Audio play blocked:', e));
   }
 
   function stopBackgroundMusic() {
-    if (bgAudio) {
-      bgAudio.pause();
+    if (schedulerTimer) {
+      clearInterval(schedulerTimer);
+      schedulerTimer = null;
     }
   }
 

@@ -2686,3 +2686,12 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
   color: #08080c;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
 }
+
+@media (max-width: 768px) {
+  .courses-nav-btn {
+    display: none !important;
+  }
+  .courses-carousel-wrapper {
+    gap: 0 !important;
+  }
+}
