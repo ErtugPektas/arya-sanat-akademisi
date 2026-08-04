@@ -2526,14 +2526,15 @@ h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); font-weight: 600; }
 
 @media (max-width: 768px) {
   .course-card-item {
-    width: clamp(260px, 82vw, 310px);
+    width: calc(100vw - 3rem);
+    max-width: none;
   }
 }
 
 @media (max-width: 480px) {
   .course-card-item {
-    width: 90vw;
-    max-width: 320px;
+    width: calc(100vw - 1.75rem);
+    max-width: none;
   }
   .course-card-body {
     padding: 1.15rem 1rem;
