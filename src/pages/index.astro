@@ -56,7 +56,6 @@ const schema = {
   "sameAs": [
     "https://www.instagram.com/aryasanatakademisi"
   ],
-  "priceRange": "$$",
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": 38.7337,
@@ -98,6 +97,9 @@ const schema = {
           alt="Profesyonel müzik akademisi — sahne aydınlatması altında kuyruklu piyano"
           class="hero-img"
           loading="eager"
+          decoding="async"
+          width="1920"
+          height="1080"
           fetchpriority="high"
         />
         <div class="hero-overlay" aria-hidden="true"></div>
@@ -214,8 +216,9 @@ const schema = {
                     <div class="course-card-media">
                       <img
                         src={course.data.image}
-                        alt={`${course.data.heroTitle} dersi`}
-                        loading="eager"
+                        alt={`${course.data.heroTitle} kursu Kayseri`}
+                        loading="lazy"
+                        decoding="async"
                         width="360"
                         height="200"
                       />

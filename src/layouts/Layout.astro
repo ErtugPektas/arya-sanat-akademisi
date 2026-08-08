@@ -268,7 +268,7 @@ const baseOrganizationSchema = JSON.stringify({
             <div class="footer-contact">
               <h3 class="footer-heading">İletişim</h3>
               <address class="footer-address" aria-label="Kısa iletişim bilgileri">
-                <p>📍 {siteSettings.contact.address}</p>
+                <p>📍 <a href="https://www.google.com/maps/dir//Arya+Sanat+Akademisi,+Ünal+Ap,+Erciyesevler,+Tuna+Cd.+No:22%2F1,+38020+Kocasinan%2FKayseri/@40.2176408,28.848028,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x152b132eb361bf39:0xe48ac7563d43e1de!2m2!1d35.517411!2d38.733996?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">{siteSettings.contact.address}</a></p>
                 <p><a href={`tel:${siteSettings.contact.phone.split('/')[0].replace(/[^\d+]/g, '')}`}>📞 {siteSettings.contact.phone}</a></p>
                 <p><a href={`mailto:${siteSettings.contact.email}`}>✉️ {siteSettings.contact.email}</a></p>
               </address>
