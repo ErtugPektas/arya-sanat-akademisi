@@ -249,10 +249,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         formSuccess.hidden = false;
+
+        // WhatsApp Yönlendirmesi
+        const message = document.getElementById('message') ? document.getElementById('message').value.trim() : '';
+        const waText = `Merhaba, yetenek testi için form doldurdum.%0A%0AAd Soyad: ${fullName}%0ATelefon: ${phone}%0AEnstrüman: ${instrument}%0AMesaj: ${message}`;
+        window.open(`https://wa.me/905526112101?text=${waText}`, '_blank');
+
         contactForm.reset();
         submitBtn.disabled = false;
         submitBtn.innerHTML = `
-          Ücretsiz Ders Talep Et
+          Yetenek Testi İçin Tıkla
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="2.5"
                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
