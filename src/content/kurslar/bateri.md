@@ -8,7 +8,7 @@ heroTitle: "Bateri Dersi"
 heroTitleHighlight: "Kayseri Kocasinan"
 heroDesc: "Rock'tan jazz'a, latin'den funk'a — her tarzda ritim ustası olun. Deneyimli eğitmenlerimizle başlangıçtan profesyonele uzanan bir yolculuk sizi bekliyor."
 image: "/assets/kurslar/bateri-kurs.jpg"
-duration: "45 dk / ders"
+duration: "45 dk"
 frequency: "Haftada 1–2 ders"
 level: "Başlangıç → İleri"
 certificate: "MEB Onaylı"
@@ -25,8 +25,8 @@ levels:
     desc: "Sahne ve stüdyo performansına hazırlık programı."
 gallery:
   - "/assets/kurslar/bateri-kurs.jpg"
-  - "/assets/kurslar/bateri-galeri-2.jpg"
-  - "/assets/kurslar/bateri-galeri-3.jpg"
+  - "/assets/kurslar/bateri-kurs.jpg"
+  - "/assets/kurslar/bateri-kurs.jpg"
 curriculum:
   - period: "1–3. Ay"
     title: "Temel Ritim ve Koordinasyon"
@@ -70,4 +70,4 @@ faq:
 ---
 Arya Sanat Akademisi'ndeki bateri eğitimimiz, sizi hiç enstrüman tutmamış bir noktadan sahne performansına taşıyacak sistematik bir program sunar. Her öğrencinin öğrenme hızı farklıdır; bu nedenle dersler tamamen kişiye özel olarak planlanır.
 
-Profesyonel Roland ve Pearl bateri setlerinin bulunduğu ses yalıtımlı stüdyolarımızda çalışıyorsunuz. Komşu ya da aile baskısı olmadan dilediğiniz kadar güçlü çalabilirsiniz. 
+ 

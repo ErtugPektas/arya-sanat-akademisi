@@ -8,7 +8,7 @@ heroTitle: "Gitar Dersi"
 heroTitleHighlight: "(Elektro, Bass)"
 heroDesc: "Klasik gitarın zarafetinden elektro gitarın enerjisine ve bass gitarın derin tonlarına — her stilin ustası olun. Bireysel derslerle müzik yolculuğunuza başlayın."
 image: "/assets/kurslar/gitar-kurs.jpg"
-duration: "45 dk / ders"
+duration: "45 dk"
 frequency: "Haftada 1–2 ders"
 level: "Başlangıç → İleri"
 certificate: "Klasik / Akustik / Elektro"
@@ -25,8 +25,8 @@ levels:
     desc: "Performans, doğaçlama ve kayıt teknikleri odaklı ileri program."
 gallery:
   - "/assets/kurslar/gitar-kurs.jpg"
-  - "/assets/kurslar/gitar-galeri-2.jpg"
-  - "/assets/kurslar/gitar-galeri-3.jpg"
+  - "/assets/kurslar/gitar-kurs.jpg"
+  - "/assets/kurslar/gitar-kurs.jpg"
 curriculum:
   - period: "1–3. Ay"
     title: "Temel Teknik ve Akorlar"
@@ -70,4 +70,4 @@ Arya Sanat Akademisi'ndeki gitar programımız, üç ana dal üzerine yapıland�
 
 Dersler hem nota okuma hem de kulak eğitimini dengeli biçimde içerir.
 
-Eğitimde kullandığımız gitarlar arasında Taylor akustik, Gibson elektro ve Yamaha klasik gitarlar bulunmaktadır. Kendi gitarınızı getirebilir ya da akademimizdeki enstrümanları kullanabilirsiniz.
+
