@@ -1,8 +1,8 @@
 ---
 order: 7
-title: "BİLSEM Sınavlarına Hazırlık Kursu Kayseri | Arya Sanat"
-description: "Kayseri Kocasinan BİLSEM müzik yetenek sınavına hazırlık — Arya Sanat Akademisi. İlkokul öğrencileri için müzikal işitme, ritim ve melodi tekrarı eğitimi."
-keywords: "BİLSEM hazırlık Kayseri, BİLSEM müzik sınavı Kocasinan, BİLSEM yetenek sınavı, ritim tekrarı BİLSEM, çocuk müzik kulağı testi"
+title: "Kayseri BİLSEM Hazırlık Kursu | Müzik ve Resim Yetenek Sınavı"
+description: "Kayseri BİLSEM müzik ve resim yetenek sınavlarına hazırlık. Uzman kadro ile garantili ve disiplinli BİLSEM eğitimleri."
+keywords: "kayseri bilsem hazırlık, bilsem müzik sınavı hazırlık kayseri, bilsem resim kursu kayseri"
 badge: "🎓 BİLSEM Hazırlık"
 heroTitle: "BİLSEM Hazırlık"
 heroTitleHighlight: "Sınavlarına Hazırlık"

@@ -1,6 +1,6 @@
 ---
 order: 15
-title: "Ney Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Ney Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan ney dersi — Arya Sanat Akademisi. Tasavvuf musikisi ve ney üfleme eğitimi. Bireysel ney dersleri ve makam teorisi."
 keywords: "ney dersi Kayseri, ney kursu Kocasinan, ney eğitimi, tasavvuf müziği, ney üflemeyi öğrenme"
 badge: "🎼 Ney Eğitimi"

@@ -1,0 +1,23 @@
+﻿---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Sayfa Bulunamadı - 404 | Arya Sanat Akademisi"
+  description="Aradığınız sayfa bulunamadı. Kayseri Arya Sanat Akademisi ana sayfasına veya kurslarımıza geri dönebilirsiniz."
+  canonical="https://www.aryasanatakademisi.com/404"
+>
+  <main class="error-page" style="text-align: center; padding: 120px 20px; min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h1 style="font-size: 6rem; color: var(--primary); margin-bottom: 20px;">404</h1>
+    <h2 style="font-size: 2rem; margin-bottom: 30px;">Aradığınız Sayfa Bulunamadı</h2>
+    <p style="font-size: 1.2rem; color: var(--text-light); max-width: 600px; margin: 0 auto 40px;">
+      Görünüşe göre ulaşmaya çalıştığınız sayfa taşınmış veya silinmiş olabilir. Aşağıdaki bağlantıları kullanarak aradığınız içeriğe ulaşabilirsiniz.
+    </p>
+    
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+      <a href="/" class="btn btn-primary">Ana Sayfaya Dön</a>
+      <a href="/#courses" class="btn btn-outline">Tüm Kurslarımız</a>
+      <a href="/#contact" class="btn btn-outline">İletişime Geç</a>
+    </div>
+  </main>
+</Layout>

@@ -1,6 +1,6 @@
 ---
 order: 12
-title: "Saksafon Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Saksafon Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan saksafon dersi — Arya Sanat Akademisi. Alto ve Tenor saksafon eğitimi. Caz, pop ve klasik müzik saksafon dersleri."
 keywords: "saksafon dersi Kayseri, saksafon kursu Kocasinan, saksafon eğitimi, alto saksafon çalmak, caz müzik dersi"
 badge: "🎷 Saksafon Eğitimi"

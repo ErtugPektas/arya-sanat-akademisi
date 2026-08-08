@@ -27,17 +27,44 @@ interface Props {
 const {
   title = siteSettings.seo.title,
   description = siteSettings.seo.description,
-  keywords = "müzik kursu kayseri, gitar dersi kayseri, piyano dersi kayseri, bateri dersi kayseri, keman dersi kayseri, müzik okulu kayseri, Arya Sanat Akademisi, MEB onaylı müzik sertifikası",
-  canonical = "https://arya-sanat-akademisi.vercel.app/",
+  keywords = "müzik kursu kayseri, sanat akademisi kayseri, gitar dersi kayseri, piyano dersi kayseri, bateri dersi kayseri, keman dersi kayseri, güzel sanatlara hazırlık kayseri, bilsem hazırlık kayseri, Arya Sanat Akademisi",
+  canonical,
   ogTitle,
   ogDescription,
-  ogImage = "https://arya-sanat-akademisi.vercel.app/assets/hero_bg.png",
+  ogImage = "https://www.aryasanatakademisi.com/assets/hero_bg.png",
   schemaJson
 } = Astro.props;
 
 const currentOgTitle = ogTitle || title;
 const currentOgDescription = ogDescription || description;
 const isAdmin = Astro.url.pathname.startsWith('/admin');
+
+// Ensure trailing slash for canonical unless it has an extension
+let currentCanonical = canonical || new URL(Astro.url.pathname, "https://www.aryasanatakademisi.com/").href;
+if (!currentCanonical.endsWith('/') && !currentCanonical.match(/\.[a-z]+$/i)) {
+  currentCanonical += '/';
+}
+
+const baseOrganizationSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Arya Sanat Akademisi",
+  "url": "https://www.aryasanatakademisi.com/",
+  "logo": "https://www.aryasanatakademisi.com/assets/favicon.svg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Tuna Cd. No:22/1",
+    "addressLocality": "Kocasinan",
+    "addressRegion": "Kayseri",
+    "postalCode": "38020",
+    "addressCountry": "TR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+90-850-227-8922",
+    "contactType": "customer service"
+  }
+});
 ---
 
 <!DOCTYPE html>
@@ -53,14 +80,14 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
   <meta name="keywords" content={keywords} />
   <meta name="author" content="Arya Sanat Akademisi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <link rel="canonical" href={canonical} />
+  <link rel="canonical" href={currentCanonical} />
   
   <!-- Open Graph / Facebook -->
   <meta property="og:title" content={currentOgTitle} />
   <meta property="og:description" content={currentOgDescription} />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="tr_TR" />
-  <meta property="og:url" content={canonical} />
+  <meta property="og:url" content={currentCanonical} />
   <meta property="og:image" content={ogImage} />
   <meta property="og:site_name" content="Arya Sanat Akademisi" />
 
@@ -80,6 +107,7 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
 
   <!-- Dynamic Schema.org injection -->
+  <script type="application/ld+json" set:html={baseOrganizationSchema} />
   {schemaJson && <script type="application/ld+json" set:html={schemaJson} />}
 
   <!-- Netlify Identity (Required for Decap CMS Login) -->
@@ -228,10 +256,10 @@ const isAdmin = Astro.url.pathname.startsWith('/admin');
             <nav class="footer-nav" aria-label="Kurs Bağlantıları">
               <h3 class="footer-heading">Kurslarımız</h3>
               <ul class="footer-links" role="list">
-                <li><a href="/kurslar/piyano" class="footer-link">Piyano Dersi</a></li>
-                <li><a href="/kurslar/keman" class="footer-link">Keman Dersi</a></li>
-                <li><a href="/kurslar/gitar" class="footer-link">Gitar Dersi</a></li>
-                <li><a href="/kurslar/bateri" class="footer-link">Bateri Dersi</a></li>
+                <li><a href="/piyano-kursu-kayseri" class="footer-link">Piyano Dersi</a></li>
+                <li><a href="/keman-kursu-kayseri" class="footer-link">Keman Dersi</a></li>
+                <li><a href="/gitar-kursu-kayseri" class="footer-link">Gitar Dersi</a></li>
+                <li><a href="/bateri-kursu-kayseri" class="footer-link">Bateri Dersi</a></li>
                 <li><a href="/#courses" class="footer-link">Tüm Dersler &rarr;</a></li>
               </ul>
             </nav>

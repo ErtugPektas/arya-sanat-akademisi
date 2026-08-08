@@ -1,6 +1,6 @@
 ---
 order: 11
-title: "Klarnet Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Klarnet Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan klarnet dersi — Arya Sanat Akademisi. Sol klarnet ve Si-bemol klarnet eğitimi. Türk müziği ve batı müziği klarnet teknikleri."
 keywords: "klarnet dersi Kayseri, klarnet kursu Kocasinan, klarnet eğitimi, sol klarnet dersi, klarnet çalmayı öğrenme"
 badge: "💨 Klarnet Eğitimi"

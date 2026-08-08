@@ -1,8 +1,8 @@
 ---
 order: 4
-title: "Bateri Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
-description: "Kayseri Kocasinan bateri dersi — Arya Sanat Akademisi. Başlangıçtan ileri seviyeye rock, jazz, latin bateri eğitimi. MEB onaylı sertifika. Ücretsiz deneme dersi için hemen kayıt olun."
-keywords: "bateri dersi Kayseri, bateri kursu Kocasinan, bateri eğitimi, davul dersi Kayseri, rock bateri, jazz bateri, MEB onaylı bateri sertifikası"
+title: "Kayseri Bateri Kursu | Ritim ve Davul Eğitimi | Arya Sanat"
+description: "Kayseri Kocasinan bateri kursu. Rock, jazz ve pop tarzlarında davul eğitimleri. Ses yalıtımlı stüdyolarda bireysel bateri dersi."
+keywords: "kayseri bateri kursu, bateri dersi kayseri, davul kursu kayseri, kocasinan bateri eğitimi"
 badge: "🥁 Bateri Eğitimi"
 heroTitle: "Bateri Dersi"
 heroTitleHighlight: "Kayseri Kocasinan"

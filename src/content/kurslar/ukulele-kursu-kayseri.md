@@ -1,6 +1,6 @@
 ---
 order: 17
-title: "Ukulele Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Ukulele Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan ukulele dersi — Arya Sanat Akademisi. Çocuklar ve yetişkinler için eğlenceli ukulele eğitimi. Bireysel dersler ve grup atölyeleri."
 keywords: "ukulele dersi Kayseri, ukulele kursu Kocasinan, ukulele eğitimi, kolay enstrüman öğrenme, çocuklar için müzik kursu"
 badge: "🎸 Ukulele Eğitimi"

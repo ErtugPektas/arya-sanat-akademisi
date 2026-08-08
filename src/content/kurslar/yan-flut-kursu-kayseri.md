@@ -1,6 +1,6 @@
 ---
 order: 9
-title: "Yan Flüt Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Yan Flüt Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan yan flüt dersi — Arya Sanat Akademisi. Bireysel yan flüt eğitimleri. Üfleme teknikleri, duruş ve klasik/pop eser çalışmaları."
 keywords: "yan flüt dersi Kayseri, yan flüt kursu Kocasinan, yan flüt eğitimi, flüt çalmayı öğrenme, üflemeli çalgı eğitimi"
 badge: "💨 Yan Flüt Eğitimi"

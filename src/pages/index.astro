@@ -26,9 +26,9 @@ const schema = {
   "@type": "MusicSchool",
   "name": "Arya Sanat Akademisi",
   "description": siteSettings.seo.description,
-  "url": "https://arya-sanat-akademisi.vercel.app",
-  "logo": "https://arya-sanat-akademisi.vercel.app/assets/favicon.svg",
-  "image": "https://arya-sanat-akademisi.vercel.app/assets/hero_bg.png",
+  "url": "https://www.aryasanatakademisi.com",
+  "logo": "https://www.aryasanatakademisi.com/assets/favicon.svg",
+  "image": "https://www.aryasanatakademisi.com/assets/hero_bg.png",
   "telephone": cleanPhone,
   "email": siteSettings.contact.email,
   "address": {
@@ -54,8 +54,7 @@ const schema = {
     "closes": "21:00"
   },
   "sameAs": [
-    "https://www.instagram.com/aryasanatakademisi",
-    "https://www.facebook.com/aryasanatakademisi"
+    "https://www.instagram.com/aryasanatakademisi"
   ],
   "priceRange": "$$",
   "geo": {
@@ -75,7 +74,7 @@ const schema = {
         "provider": {
           "@type": "LocalBusiness",
           "name": "Arya Sanat Akademisi",
-          "url": "https://arya-sanat-akademisi.vercel.app"
+          "url": "https://www.aryasanatakademisi.com"
         }
       }
     }))
@@ -84,9 +83,9 @@ const schema = {
 ---
 
 <Layout
-  title="Arya Sanat Akademisi — Profesyonel Müzik Eğitimi | Kayseri "
-  description="Kayseri Kocasinan'ın en iyi müzik akademisi. Bateri, Gitar, Piyano, Keman eğitimleri. MEB onaylı sertifika. Ücretsiz deneme dersi!"
-  keywords="müzik kursu kayseri, gitar dersi kocasinan, piyano dersi kayseri, bateri dersi, keman dersi kayseri, müzik okulu kocasinan, Arya Sanat Akademisi, MEB onaylı müzik sertifikası, çocuk müzik kursu"
+  title="Arya Sanat Akademisi | Kayseri Sanat ve Müzik Kursları"
+  description="Kayseri Kocasinan'da Arya Sanat Akademisi ile piyano, gitar, keman, resim, şan, BİLSEM ve güzel sanatlar hazırlık eğitimleri. Deneyimli eğitmenlerle sanat eğitimi."
+  keywords="Arya Sanat Akademisi Kayseri, Kayseri sanat akademisi, Kayseri sanat kursu, Kayseri güzel sanatlar kursu, Kayseri müzik kursu, piyano dersi kayseri, gitar dersi kocasinan, BİLSEM hazırlık"
   schemaJson={JSON.stringify(schema)}
 >
   <main id="main-content">
@@ -231,7 +230,7 @@ const schema = {
                         <span class="meta-tag">🎓 {course.data.certificate}</span>
                       </div>
                       <div class="course-card-actions">
-                        <a href={`/kurslar/${course.id}`} class="btn btn-primary" id={`${course.id}Btn`}>
+                        <a href={`/${course.id}`} class="btn btn-primary" id={`${course.id}Btn`}>
                           Detaylı İncele
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </a>

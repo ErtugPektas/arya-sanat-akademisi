@@ -1,6 +1,6 @@
 ---
 order: 100
-title: "Çello (Viyolonsel) Dersi Kayseri | Arya Sanat Akademisi — Kocasinan"
+title: "Kayseri Çello Kursu | Arya Sanat Akademisi"
 description: "Kayseri Kocasinan çello dersi — Arya Sanat Akademisi. Bireysel viyolonsel eğitimleri. Uzman hocalardan klasik ve modern çello eğitimi."
 keywords: "çello dersi Kayseri, viyolonsel kursu Kocasinan, çello eğitimi, çello çalmak, klasik müzik dersleri"
 badge: "🎻 Çello Eğitimi"

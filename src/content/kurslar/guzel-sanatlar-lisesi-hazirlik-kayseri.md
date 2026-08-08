@@ -1,8 +1,8 @@
 ---
 order: 6
-title: "Güzel Sanatlara Hazırlık Kursu Kayseri | Arya Sanat Akademisi"
-description: "Kayseri Kocasinan Güzel Sanatlara hazırlık kursu — Arya Sanat Akademisi. Güzel sanatlar lisesi ve fakültesi müzik bölümlerine hazırlık. Yetenek sınavı eğitimi."
-keywords: "güzel sanatlara hazırlık Kayseri, yetenek sınavı kursu Kocasinan, güzel sanatlar lisesine hazırlık, müzik bölümü yetenek sınavı, konservatuvara hazırlık"
+title: "Kayseri Güzel Sanatlar Lisesi Hazırlık Kursu | Arya Sanat"
+description: "Kayseri'de Güzel Sanatlar Lisesi sınavlarına hazırlık. Resim, desen, işitme ve yetenek sınavlarına yönelik profesyonel eğitim."
+keywords: "kayseri güzel sanatlar lisesi hazırlık, kayseri güzel sanatlar kursu, kayseri resim hazırlık kursu, yetenek sınavı hazırlık kayseri"
 badge: "🎓 Güzel Sanatlara Hazırlık"
 heroTitle: "Güzel Sanatlara Hazırlık"
 heroTitleHighlight: "Lise ve Fakülte"
